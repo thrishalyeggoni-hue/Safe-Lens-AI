@@ -1,0 +1,15 @@
+{
+  "dataset": "UCI SMS Spam Collection (Held-Out Benchmark)",
+  "sample_size": 100,
+  "true_negatives": 50,
+  "false_positives": 0,
+  "false_negatives": 43,
+  "true_positives": 7,
+  "precision": 1.0,
+  "recall": 0.14,
+  "f1_score": 0.2456,
+  "scope_limitations": [
+    "Dataset is historical English SMS and does not cover modern UPI payment scams or Indian multilingual threats.",
+    "Text heuristics prioritize conservative caution: some promotional ham messages may be flagged for review."
+  ]
+}

@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 320" fill="none">
+  <defs>
+    <!-- Server Drive Unit Gradient -->
+    <linearGradient id="driveTop" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="60%" stop-color="#f1f3f6"/>
+      <stop offset="100%" stop-color="#dce1e8"/>
+    </linearGradient>
+
+    <linearGradient id="driveSide" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4b5059"/>
+      <stop offset="50%" stop-color="#32363d"/>
+      <stop offset="100%" stop-color="#1f2126"/>
+    </linearGradient>
+
+    <linearGradient id="driveFront" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#e2e6eb"/>
+      <stop offset="50%" stop-color="#c8ced6"/>
+      <stop offset="100%" stop-color="#9da5b0"/>
+    </linearGradient>
+
+    <!-- Vibrant Yellow/Lime 3D Gear Gradient -->
+    <linearGradient id="gearFace" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff866"/>
+      <stop offset="40%" stop-color="#eaf725"/>
+      <stop offset="100%" stop-color="#b6c208"/>
+    </linearGradient>
+
+    <linearGradient id="gearSide" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#9da508"/>
+      <stop offset="100%" stop-color="#697003"/>
+    </linearGradient>
+
+    <!-- Gear Hub Bevel -->
+    <radialGradient id="gearHub" cx="45%" cy="45%" r="55%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="65%" stop-color="#eaf725"/>
+      <stop offset="100%" stop-color="#8c9405"/>
+    </radialGradient>
+
+    <!-- Drop Shadow Filter -->
+    <filter id="serverShadow" x="-20%" y="-20%" width="150%" height="150%">
+      <feDropShadow dx="-5" dy="18" stdDeviation="15" flood-color="#000000" flood-opacity="0.55"/>
+    </filter>
+
+    <filter id="gearShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="-4" dy="10" stdDeviation="10" flood-color="#000000" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#serverShadow)" transform="translate(15, 20)">
+    <!-- SERVER DRIVE 3 (Bottom) -->
+    <g transform="translate(0, 110)">
+      <!-- Left dark side -->
+      <path d="M45 45 C35 45 25 55 25 70 C25 85 35 95 45 95 L140 135 L140 85 Z" fill="url(#driveSide)"/>
+      <!-- Top surface -->
+      <path d="M45 45 L260 20 C275 18 290 28 290 40 L165 75 L45 45 Z" fill="url(#driveTop)"/>
+      <!-- Front face -->
+      <path d="M140 85 L290 40 C305 40 315 50 315 65 L315 75 C315 90 300 100 285 102 L140 135 C125 135 120 120 120 110 L140 85 Z" fill="url(#driveFront)"/>
+      <rect x="235" y="80" width="18" height="4" rx="2" fill="#1e2229"/>
+      <circle x="270" cy="72" r="2.5" fill="#22c55e"/>
+    </g>
+
+    <!-- SERVER DRIVE 2 (Middle) -->
+    <g transform="translate(0, 55)">
+      <!-- Left dark side -->
+      <path d="M45 45 C35 45 25 55 25 70 C25 85 35 95 45 95 L140 135 L140 85 Z" fill="url(#driveSide)"/>
+      <!-- Top surface -->
+      <path d="M45 45 L260 20 C275 18 290 28 290 40 L165 75 L45 45 Z" fill="url(#driveTop)"/>
+      <!-- Front face -->
+      <path d="M140 85 L290 40 C305 40 315 50 315 65 L315 75 C315 90 300 100 285 102 L140 135 C125 135 120 120 120 110 L140 85 Z" fill="url(#driveFront)"/>
+      <rect x="235" y="80" width="18" height="4" rx="2" fill="#1e2229"/>
+      <circle x="270" cy="72" r="2.5" fill="#38bdf8"/>
+    </g>
+
+    <!-- SERVER DRIVE 1 (Top) -->
+    <g transform="translate(0, 0)">
+      <!-- Left dark side -->
+      <path d="M45 45 C35 45 25 55 25 70 C25 85 35 95 45 95 L140 135 L140 85 Z" fill="url(#driveSide)"/>
+      <!-- Top surface -->
+      <path d="M45 45 L260 20 C275 18 290 28 290 40 L165 75 L45 45 Z" fill="url(#driveTop)"/>
+      <!-- Front face -->
+      <path d="M140 85 L290 40 C305 40 315 50 315 65 L315 75 C315 90 300 100 285 102 L140 135 C125 135 120 120 120 110 L140 85 Z" fill="url(#driveFront)"/>
+      <rect x="235" y="80" width="18" height="4" rx="2" fill="#1e2229"/>
+      <circle x="270" cy="72" r="2.5" fill="#22c55e"/>
+    </g>
+  </g>
+
+  <!-- 3D YELLOW MECHANICAL GEAR (IN FRONT) -->
+  <g filter="url(#gearShadow)" transform="translate(130, 85)">
+    <!-- Gear Extrusion 3D Sides -->
+    <path d="M 0 -58 L 12 -58 L 17 -44 L 38 -49 L 46 -38 L 38 -24 L 54 -9 L 60 5 L 47 15 L 53 36 L 42 47 L 27 41 L 14 55 L -1 58 L -7 44 L -28 48 L -38 37 L -31 23 L -46 9 L -51 -5 L -38 -15 L -44 -36 L -33 -47 L -18 -41 Z" 
+          transform="translate(4, 8)" fill="url(#gearSide)"/>
+
+    <!-- Gear Front Face -->
+    <path d="M 0 -58 L 12 -58 L 17 -44 L 38 -49 L 46 -38 L 38 -24 L 54 -9 L 60 5 L 47 15 L 53 36 L 42 47 L 27 41 L 14 55 L -1 58 L -7 44 L -28 48 L -38 37 L -31 23 L -46 9 L -51 -5 L -38 -15 L -44 -36 L -33 -47 L -18 -41 Z" 
+          fill="url(#gearFace)"/>
+
+    <!-- Inner Hollow Hub Hole Rim -->
+    <circle cx="2" cy="0" r="22" fill="url(#gearSide)"/>
+    <!-- Inner Hollow Hole -->
+    <circle cx="0" cy="-2" r="20" fill="url(#gearHub)"/>
+    <circle cx="0" cy="-2" r="14" fill="#ffffff" opacity="0.95"/>
+    <circle cx="0" cy="-2" r="10" fill="#2d3139"/>
+  </g>
+</svg>

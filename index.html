@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SafeLens AI — Before You Click.</title>
+  <meta name="description" content="SafeLens AI is an intelligent visual security scanner that finds cyber vulnerabilities, phishing links, and deceptive media before you click." />
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <!-- Custom Magnetic Cursor (Dot is Dead Center of Outer Circle) -->
+  <div class="custom-cursor" id="customCursor"></div>
+  <div class="cursor-follower" id="cursorFollower"></div>
+
+  <!-- Main Viewport / Device Container -->
+  <div class="site-wrapper">
+
+    <!-- HERO VIEWPORT CONTAINER (Ivory Card with Inverted Cutouts) -->
+    <header class="hero-card-container" id="heroSection">
+      
+      <!-- Top Bar with Integrated Corner Notches -->
+      <nav class="hero-top-nav">
+        <!-- Top Left Brand Notch: SafeLens AI -->
+        <div class="nav-notch-left">
+          <a href="#" class="brand-logo" id="brandLogo">
+            <img src="/shield-lens.svg" alt="SafeLens AI" class="brand-shield-logo" />
+            <div class="brand-text-block">
+              <span class="brand-name">SafeLens AI</span>
+              <span class="brand-tagline">Before you click.</span>
+            </div>
+          </a>
+          <!-- Mathematically exact concave inverted fillets -->
+          <svg class="notch-fillet notch-fillet-tr" width="28" height="28" viewBox="0 0 28 28" aria-hidden="true">
+            <path d="M -0.5 -0.5 H 28 A 28 28 0 0 0 -0.5 28 Z" fill="#0f1013" />
+          </svg>
+          <svg class="notch-fillet notch-fillet-bl" width="28" height="28" viewBox="0 0 28 28" aria-hidden="true">
+            <path d="M -0.5 -0.5 H 28 A 28 28 0 0 0 -0.5 28 Z" fill="#0f1013" />
+          </svg>
+        </div>
+
+        <!-- Center Nav Pill: Exact Menu Bar from specification -->
+        <div class="nav-center-pill">
+          <ul class="nav-links">
+            <li><a href="#" class="nav-link nav-link-pill active">Home</a></li>
+            
+            <!-- Check Dropdown with Seven Threat Modules -->
+            <li class="nav-dropdown-item" id="checkDropdownItem">
+              <button class="nav-link nav-link-pill dropdown-trigger" id="checkDropdownBtn" aria-expanded="false">
+                <span>Check</span>
+                <svg class="dropdown-chevron" viewBox="0 0 10 6" width="10" height="6">
+                  <path d="M1 5L5 1L9 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </svg>
+              </button>
+
+              <!-- Seven Threat Modules Dropdown Panel -->
+              <div class="threat-modules-menu" id="threatModulesMenu">
+                <div class="threat-menu-header">
+                  <span>SEVEN THREAT MODULES</span>
+                </div>
+                <div class="threat-menu-list">
+                  <!-- 1. Link Check -->
+                  <a href="#/check/link" class="threat-item">
+                    <div class="threat-icon-box bg-blue-soft">
+                      <svg viewBox="0 0 24 24" width="18" height="18" stroke="#2563eb" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                      </svg>
+                    </div>
+                    <div class="threat-text">
+                      <span class="threat-title">Link Check</span>
+                      <span class="threat-desc">URLs &amp; redirects</span>
+                    </div>
+                  </a>
+
+                  <!-- 2. Message Check -->
+                  <a href="#/check/message" class="threat-item">
+                    <div class="threat-icon-box bg-blue-soft">
+                      <svg viewBox="0 0 24 24" width="18" height="18" stroke="#2563eb" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                      </svg>
+                    </div>
+                    <div class="threat-text">
+                      <span class="threat-title">Message Check</span>
+                      <span class="threat-desc">SMS &amp; chat lures</span>
+                    </div>
+                  </a>
+
+                  <!-- 3. Screenshot Check -->
+                  <a href="#/check/screenshot" class="threat-item">
+                    <div class="threat-icon-box bg-blue-soft">
+                      <svg viewBox="0 0 24 24" width="18" height="18" stroke="#2563eb" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                        <circle cx="8.5" cy="8.5" r="1.5"/>
+                        <polyline points="21 15 16 10 5 21"/>
+                      </svg>
+                    </div>
+                    <div class="threat-text">
+                      <span class="threat-title">Screenshot Check</span>
+                      <span class="threat-desc">Payment slips</span>
+                    </div>
+                  </a>
+
+                  <!-- 4. QR Check -->
+                  <a href="#/check/qr" class="threat-item">
+                    <div class="threat-icon-box bg-blue-soft">
+                      <svg viewBox="0 0 24 24" width="18" height="18" stroke="#2563eb" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="7" height="7"/>
+                        <rect x="14" y="3" width="7" height="7"/>
+                        <rect x="14" y="14" width="7" height="7"/>
+                        <rect x="3" y="14" width="7" height="7"/>
+                      </svg>
+                    </div>
+                    <div class="threat-text">
+                      <span class="threat-title">QR Check</span>
+                      <span class="threat-desc">Matrix decoding</span>
+                    </div>
+                  </a>
+
+                  <!-- 5. Document Check -->
+                  <a href="#/check/document" class="threat-item">
+                    <div class="threat-icon-box bg-blue-soft">
+                      <svg viewBox="0 0 24 24" width="18" height="18" stroke="#2563eb" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                        <polyline points="10 9 9 9 8 9"/>
+                      </svg>
+                    </div>
+                    <div class="threat-text">
+                      <span class="threat-title">Document Check</span>
+                      <span class="threat-desc">Invoices &amp; PDFs</span>
+                    </div>
+                  </a>
+
+                  <!-- 6. Media Check -->
+                  <a href="#/check/media" class="threat-item">
+                    <div class="threat-icon-box bg-blue-soft">
+                      <svg viewBox="0 0 24 24" width="18" height="18" stroke="#2563eb" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="23 7 16 12 23 17 23 7"/>
+                        <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+                      </svg>
+                    </div>
+                    <div class="threat-text">
+                      <span class="threat-title">Media Check</span>
+                      <span class="threat-desc">Image &amp; video origin</span>
+                    </div>
+                  </a>
+
+                  <!-- 7. Offer Check -->
+                  <a href="#/check/offer" class="threat-item">
+                    <div class="threat-icon-box bg-blue-soft">
+                      <svg viewBox="0 0 24 24" width="18" height="18" stroke="#2563eb" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                      </svg>
+                    </div>
+                    <div class="threat-text">
+                      <span class="threat-title">Offer Check</span>
+                      <span class="threat-desc">Gigs &amp; yields</span>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </li>
+
+            <li><a href="#/dashboard" class="nav-link nav-link-pill">Dashboard</a></li>
+            <li><a href="#/history" class="nav-link nav-link-pill">History</a></li>
+            <li><a href="#/help" class="nav-link nav-link-pill">Help</a></li>
+          </ul>
+        </div>
+
+        <!-- Top Right Actions Notch -->
+        <div class="nav-notch-right">
+          <!-- Mathematically exact concave inverted fillets -->
+          <svg class="notch-fillet notch-fillet-tl" width="28" height="28" viewBox="0 0 28 28" aria-hidden="true">
+            <path d="M 28.5 -0.5 H 0 A 28 28 0 0 1 28.5 28 Z" fill="#0f1013" />
+          </svg>
+          <svg class="notch-fillet notch-fillet-br" width="28" height="28" viewBox="0 0 28 28" aria-hidden="true">
+            <path d="M 28.5 -0.5 H 0 A 28 28 0 0 1 28.5 28 Z" fill="#0f1013" />
+          </svg>
+
+          <!-- Replay Intro Button -->
+          <button class="btn-replay-intro" id="btnReplayIntro" title="Replay 3D Intro Animation">
+            <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+              <path d="M3 3v5h5"/>
+            </svg>
+            <span class="hidden-mobile">Replay intro</span>
+          </button>
+
+          <!-- Start Checking CTA -->
+          <button class="btn-connect" id="btnConnect">
+            <span class="btn-arrow-circle">
+              <svg viewBox="0 0 16 16" width="12" height="12">
+                <path d="M6 3.5L10.5 8L6 12.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              </svg>
+            </span>
+            <span>Start checking</span>
+          </button>
+        </div>
+      </nav>
+
+      <!-- Hero Main Content Grid -->
+      <div class="hero-content-grid">
+        <!-- Hero Left Column: Typography & CTAs (SafeLens AI Specification) -->
+        <div class="hero-left-col">
+          <!-- Clarity pill badge -->
+          <div class="clarity-pill-badge">
+            <span class="clarity-status-dot"></span>
+            <span>Clarity before you click</span>
+          </div>
+
+          <h1 class="hero-headline">
+            <span class="headline-row">See clearly.</span>
+            <span class="headline-row">Before you <span class="highlight-blue">click.</span></span>
+          </h1>
+
+          <p class="hero-subtext">
+            Check suspicious links, messages and uploads with evidence you can understand.
+          </p>
+
+          <!-- Action buttons row -->
+          <div class="hero-buttons-row">
+            <button class="btn-start-checking" id="heroStartCheckingBtn">
+              <span>Start checking</span>
+              <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 8h10M9 4l4 4-4 4"/>
+              </svg>
+            </button>
+
+            <button class="btn-how-it-works" id="heroHowItWorksBtn">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+              <span>How it works</span>
+            </button>
+          </div>
+
+          <!-- Divider line -->
+          <div class="hero-feature-divider"></div>
+
+          <!-- Feature badges row -->
+          <div class="hero-feature-badges">
+            <div class="feature-badge-item">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+              <span>Local in-browser analysis</span>
+            </div>
+
+            <div class="feature-badge-item">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                <path d="m9 12 2 2 4-4"/>
+              </svg>
+              <span>Client-side QR decoding</span>
+            </div>
+
+            <div class="feature-badge-item">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <circle cx="11.5" cy="14.5" r="2.5"/>
+                <path d="m13.5 16.5 2 2"/>
+              </svg>
+              <span>Private local history</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero Right Column: 4K Interactive 3D Canvas / Sequence -->
+        <div class="hero-right-col" id="heroCanvasContainer">
+          <div class="canvas-3d-wrapper">
+            <canvas id="heroCanvas" class="hero-canvas"></canvas>
+            
+            <!-- Crazy Mode Cyber HUD overlay -->
+            <div class="crazy-hud" id="crazyHud">
+              <div class="hud-ring ring-1"></div>
+              <div class="hud-ring ring-2"></div>
+              <div class="hud-laser"></div>
+              <div class="hud-grid"></div>
+              <div class="hud-readout">SAFELENS 4K ENGINE // OPTICAL SCAN 120 FPS</div>
+            </div>
+            
+            <div class="canvas-hint" id="canvasHint">
+              <span class="hint-dot"></span> Drag or move cursor to rotate 4K lens
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Right Notch: Crazy Mode Toggle -->
+      <div class="hero-bottom-notch">
+        <!-- Mathematically exact concave inverted fillets -->
+        <svg class="notch-fillet notch-fillet-bottom-tr" width="28" height="28" viewBox="0 0 28 28" aria-hidden="true">
+          <path d="M 28.5 28.5 V 0 A 28 28 0 0 1 0 28.5 Z" fill="#0f1013" />
+        </svg>
+        <svg class="notch-fillet notch-fillet-bottom-bl" width="28" height="28" viewBox="0 0 28 28" aria-hidden="true">
+          <path d="M 28.5 28.5 H 0 A 28 28 0 0 0 28.5 0 Z" fill="#0f1013" />
+        </svg>
+
+        <div class="crazy-mode-toggle-group">
+          <span class="crazy-label">Crazy mode:</span>
+          <div class="toggle-pill" id="crazyToggle">
+            <button class="toggle-opt" id="crazyOn" data-val="on">On</button>
+            <button class="toggle-opt active" id="crazyOff" data-val="off">Off</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- SECTION 2: SUPPORTED INTAKE TYPES (Obsidian Dark Theme) -->
+    <section class="partners-section intake-section" id="partners">
+      <div class="section-container">
+        <div class="section-header-row">
+          <h2 class="section-title">Supported Intake Types</h2>
+        </div>
+        <div class="section-divider"></div>
+
+        <!-- Intake Types Cards Horizontal Track / Moving Animation Boxes -->
+        <div class="partners-track-wrapper">
+          <div class="partners-track" id="partnersTrack">
+            <!-- 1. URLs & Domains -->
+            <div class="partner-card intake-card">
+              <div class="intake-card-inner">
+                <div class="intake-icon-badge" style="--accent: #60a5fa; --accent-glow: rgba(96, 165, 250, 0.18);">
+                  <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                  </svg>
+                </div>
+                <div class="intake-card-info">
+                  <span class="intake-card-title">URLs &amp; Domains</span>
+                  <span class="intake-card-desc">Web Links &amp; Redirects</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. SMS & Chats -->
+            <div class="partner-card intake-card">
+              <div class="intake-card-inner">
+                <div class="intake-icon-badge" style="--accent: #818cf8; --accent-glow: rgba(129, 140, 248, 0.18);">
+                  <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                  </svg>
+                </div>
+                <div class="intake-card-info">
+                  <span class="intake-card-title">SMS &amp; Chats</span>
+                  <span class="intake-card-desc">Smishing &amp; Chat Lures</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3. PNG · JPG · Screenshots -->
+            <div class="partner-card intake-card">
+              <div class="intake-card-inner">
+                <div class="intake-icon-badge" style="--accent: #2dd4bf; --accent-glow: rgba(45, 212, 191, 0.18);">
+                  <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                    <polyline points="21 15 16 10 5 21"/>
+                  </svg>
+                </div>
+                <div class="intake-card-info">
+                  <span class="intake-card-title">PNG · JPG · Screenshots</span>
+                  <span class="intake-card-desc">Payment Slips &amp; UI Captures</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 4. QR Matrices -->
+            <div class="partner-card intake-card">
+              <div class="intake-card-inner">
+                <div class="intake-icon-badge" style="--accent: #38bdf8; --accent-glow: rgba(56, 189, 248, 0.18);">
+                  <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="7" height="7"/>
+                    <rect x="14" y="3" width="7" height="7"/>
+                    <rect x="14" y="14" width="7" height="7"/>
+                    <rect x="3" y="14" width="7" height="7"/>
+                  </svg>
+                </div>
+                <div class="intake-card-info">
+                  <span class="intake-card-title">QR Matrices</span>
+                  <span class="intake-card-desc">Matrix &amp; Optical Decoding</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 5. PDF Documents -->
+            <div class="partner-card intake-card">
+              <div class="intake-card-inner">
+                <div class="intake-icon-badge" style="--accent: #34d399; --accent-glow: rgba(52, 211, 153, 0.18);">
+                  <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                    <polyline points="10 9 9 9 8 9"/>
+                  </svg>
+                </div>
+                <div class="intake-card-info">
+                  <span class="intake-card-title">PDF Documents</span>
+                  <span class="intake-card-desc">Invoices, Forms &amp; Docs</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 6. Client-Side & Stateless -->
+            <div class="partner-card intake-card">
+              <div class="intake-card-inner">
+                <div class="intake-icon-badge" style="--accent: #DBF94E; --accent-glow: rgba(219, 249, 78, 0.18);">
+                  <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  </svg>
+                </div>
+                <div class="intake-card-info">
+                  <span class="intake-card-title">Client-Side &amp; Stateless</span>
+                  <span class="intake-card-desc">Zero Server Retention</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- DUPLICATE SET FOR INFINITE SMOOTH MARQUEE -->
+            <!-- 1. URLs & Domains -->
+            <div class="partner-card intake-card">
+              <div class="intake-card-inner">
+                <div class="intake-icon-badge" style="--accent: #60a5fa; --accent-glow: rgba(96, 165, 250, 0.18);">
+                  <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                  </svg>
+                </div>
+                <div class="intake-card-info">
+                  <span class="intake-card-title">URLs &amp; Domains</span>
+                  <span class="intake-card-desc">Web Links &amp; Redirects</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. SMS & Chats -->
+            <div class="partner-card intake-card">
+              <div class="intake-card-inner">
+                <div class="intake-icon-badge" style="--accent: #818cf8; --accent-glow: rgba(129, 140, 248, 0.18);">
+                  <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                  </svg>
+                </div>
+                <div class="intake-card-info">
+                  <span class="intake-card-title">SMS &amp; Chats</span>
+                  <span class="intake-card-desc">Smishing &amp; Chat Lures</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3. PNG · JPG · Screenshots -->
+            <div class="partner-card intake-card">
+              <div class="intake-card-inner">
+                <div class="intake-icon-badge" style="--accent: #2dd4bf; --accent-glow: rgba(45, 212, 191, 0.18);">
+                  <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                    <polyline points="21 15 16 10 5 21"/>
+                  </svg>
+                </div>
+                <div class="intake-card-info">
+                  <span class="intake-card-title">PNG · JPG · Screenshots</span>
+                  <span class="intake-card-desc">Payment Slips &amp; UI Captures</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 4. QR Matrices -->
+            <div class="partner-card intake-card">
+              <div class="intake-card-inner">
+                <div class="intake-icon-badge" style="--accent: #38bdf8; --accent-glow: rgba(56, 189, 248, 0.18);">
+                  <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="7" height="7"/>
+                    <rect x="14" y="3" width="7" height="7"/>
+                    <rect x="14" y="14" width="7" height="7"/>
+                    <rect x="3" y="14" width="7" height="7"/>
+                  </svg>
+                </div>
+                <div class="intake-card-info">
+                  <span class="intake-card-title">QR Matrices</span>
+                  <span class="intake-card-desc">Matrix &amp; Optical Decoding</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 5. PDF Documents -->
+            <div class="partner-card intake-card">
+              <div class="intake-card-inner">
+                <div class="intake-icon-badge" style="--accent: #34d399; --accent-glow: rgba(52, 211, 153, 0.18);">
+                  <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                    <polyline points="10 9 9 9 8 9"/>
+                  </svg>
+                </div>
+                <div class="intake-card-info">
+                  <span class="intake-card-title">PDF Documents</span>
+                  <span class="intake-card-desc">Invoices, Forms &amp; Docs</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 6. Client-Side & Stateless -->
+            <div class="partner-card intake-card">
+              <div class="intake-card-inner">
+                <div class="intake-icon-badge" style="--accent: #DBF94E; --accent-glow: rgba(219, 249, 78, 0.18);">
+                  <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  </svg>
+                </div>
+                <div class="intake-card-info">
+                  <span class="intake-card-title">Client-Side &amp; Stateless</span>
+                  <span class="intake-card-desc">Zero Server Retention</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: THREAT MODULES (What would you like to check? — 7 Services from Image 2) -->
+    <section class="services-section" id="services">
+      <div class="section-container">
+        <!-- Threat Modules Centered Header from Specification -->
+        <div class="threat-modules-header">
+          <div class="threat-modules-pill">
+            <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <span>Threat Modules</span>
+          </div>
+          <h2 class="section-title threat-headline">What would you like to check?</h2>
+          <p class="threat-subtext">
+            Select a threat surface below. SafeLens evaluates deceptive patterns, lookalike characters, and hidden payloads.
+          </p>
+        </div>
+
+        <!-- 7 Threat Services Cards: Row 1 (4 cards) + Row 2 (3 cards) with 1st Image 3D Style & Lime Active Back -->
+        <div class="threat-services-container">
+          <!-- Row 1: 4 Cards (/ 01 to / 04) -->
+          <div class="threat-services-row-4">
+            <!-- 1. Link Check -->
+            <div class="threat-service-card stepped-threat-card" data-service="link" tabindex="0">
+              <!-- Front Face (Dark 3D Style from 1st Image) -->
+              <div class="card-front">
+                <div class="card-tab-header">
+                  <span class="tab-index">/ 01</span>
+                </div>
+                <div class="card-check-pill">
+                  <span>Check</span>
+                  <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 8h10M9 4l4 4-4 4"/>
+                  </svg>
+                </div>
+                <div class="card-visual-area">
+                  <img src="/assets/link-3d.svg" alt="Link Check" class="card-3d-asset" />
+                </div>
+                <div class="card-bottom-info">
+                  <h3 class="service-card-title">Link Check</h3>
+                  <p class="service-card-desc">Inspect suspicious URLs for phishing &amp; hidden redirects.</p>
+                  <div class="card-meta-row">
+                    <span class="service-tagline">Look before you click.</span>
+                    <span class="service-format-tag">URLs · HTTPS</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Back Face (Electric Lime Green when clicked) -->
+              <div class="card-back-lime">
+                <div class="card-tab-header lime-tab">
+                  <span class="tab-index dark-text">/ 01</span>
+                </div>
+                <div class="lime-content-body">
+                  <h4 class="lime-service-title">Link &amp; URL Scanner</h4>
+                  <p class="lime-service-desc">
+                    Inspect suspicious URLs for phishing, domain typosquatting, credential harvesting, and hidden redirects before opening them.
+                  </p>
+                  <div class="lime-format-tag">URLs · HTTPS · Shorteners</div>
+                  <div class="lime-action-row">
+                    <button class="btn-lime-launch" type="button" data-service="link">
+                      <span>Run Link Check</span>
+                      <span class="lime-arrow-circle">→</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. Message Check -->
+            <div class="threat-service-card stepped-threat-card" data-service="message" tabindex="0">
+              <!-- Front Face -->
+              <div class="card-front">
+                <div class="card-tab-header">
+                  <span class="tab-index">/ 02</span>
+                </div>
+                <div class="card-check-pill">
+                  <span>Check</span>
+                  <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 8h10M9 4l4 4-4 4"/>
+                  </svg>
+                </div>
+                <div class="card-visual-area">
+                  <img src="/assets/message-3d.svg" alt="Message Check" class="card-3d-asset" />
+                </div>
+                <div class="card-bottom-info">
+                  <h3 class="service-card-title">Message Check</h3>
+                  <p class="service-card-desc">Analyse SMS and chat lures for artificial urgency &amp; OTP scams.</p>
+                  <div class="card-meta-row">
+                    <span class="service-tagline">Read between the lines.</span>
+                    <span class="service-format-tag">SMS · WhatsApp</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Back Face -->
+              <div class="card-back-lime">
+                <div class="card-tab-header lime-tab">
+                  <span class="tab-index dark-text">/ 02</span>
+                </div>
+                <div class="lime-content-body">
+                  <h4 class="lime-service-title">Message &amp; Phishing Check</h4>
+                  <p class="lime-service-desc">
+                    Analyse SMS and chat lures for artificial urgency, OTP prompts, impersonation, and fraudulent payment links.
+                  </p>
+                  <div class="lime-format-tag">SMS · WhatsApp · Telegram</div>
+                  <div class="lime-action-row">
+                    <button class="btn-lime-launch" type="button" data-service="message">
+                      <span>Check Message</span>
+                      <span class="lime-arrow-circle">→</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3. Screenshot Check -->
+            <div class="threat-service-card stepped-threat-card" data-service="screenshot" tabindex="0">
+              <!-- Front Face -->
+              <div class="card-front">
+                <div class="card-tab-header">
+                  <span class="tab-index">/ 03</span>
+                </div>
+                <div class="card-check-pill">
+                  <span>Check</span>
+                  <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 8h10M9 4l4 4-4 4"/>
+                  </svg>
+                </div>
+                <div class="card-visual-area">
+                  <img src="/assets/camera.svg" alt="Screenshot Check" class="card-3d-asset cam-asset" />
+                </div>
+                <div class="card-bottom-info">
+                  <h3 class="service-card-title">Screenshot Check</h3>
+                  <p class="service-card-desc">Inspect payment slips and receipts for pixel forgery.</p>
+                  <div class="card-meta-row">
+                    <span class="service-tagline">See the hidden clues.</span>
+                    <span class="service-format-tag">PNG · JPG Receipts</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Back Face -->
+              <div class="card-back-lime">
+                <div class="card-tab-header lime-tab">
+                  <span class="tab-index dark-text">/ 03</span>
+                </div>
+                <div class="lime-content-body">
+                  <h4 class="lime-service-title">Screenshot &amp; Slip Review</h4>
+                  <p class="lime-service-desc">
+                    Inspect payment slips, balance confirmations, and marketplace proofs for visual forgery, clone stamps, and altered digits.
+                  </p>
+                  <div class="lime-format-tag">PNG · JPG · WebP Images</div>
+                  <div class="lime-action-row">
+                    <button class="btn-lime-launch" type="button" data-service="screenshot">
+                      <span>Review Screenshot</span>
+                      <span class="lime-arrow-circle">→</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 4. QR Check -->
+            <div class="threat-service-card stepped-threat-card" data-service="qr" tabindex="0">
+              <!-- Front Face -->
+              <div class="card-front">
+                <div class="card-tab-header">
+                  <span class="tab-index">/ 04</span>
+                </div>
+                <div class="card-check-pill">
+                  <span>Check</span>
+                  <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 8h10M9 4l4 4-4 4"/>
+                  </svg>
+                </div>
+                <div class="card-visual-area">
+                  <img src="/assets/qr-3d.svg" alt="QR Check" class="card-3d-asset" />
+                </div>
+                <div class="card-bottom-info">
+                  <h3 class="service-card-title">QR Check</h3>
+                  <p class="service-card-desc">Decode QR matrices locally in browser before opening.</p>
+                  <div class="card-meta-row">
+                    <span class="service-tagline">Know where it leads.</span>
+                    <span class="service-format-tag">Matrix Decode</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Back Face -->
+              <div class="card-back-lime">
+                <div class="card-tab-header lime-tab">
+                  <span class="tab-index dark-text">/ 04</span>
+                </div>
+                <div class="lime-content-body">
+                  <h4 class="lime-service-title">QR &amp; Matrix Decoding</h4>
+                  <p class="lime-service-desc">
+                    Decode QR matrices locally in your browser before opening unknown destinations or connecting to rogue networks.
+                  </p>
+                  <div class="lime-format-tag">QR Code · Barcode · Matrix</div>
+                  <div class="lime-action-row">
+                    <button class="btn-lime-launch" type="button" data-service="qr">
+                      <span>Decode QR Matrix</span>
+                      <span class="lime-arrow-circle">→</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 2: 3 Cards (/ 05 to / 07) -->
+          <div class="threat-services-row-3">
+            <!-- 5. Document Check -->
+            <div class="threat-service-card stepped-threat-card" data-service="document" tabindex="0">
+              <!-- Front Face -->
+              <div class="card-front">
+                <div class="card-tab-header">
+                  <span class="tab-index">/ 05</span>
+                </div>
+                <div class="card-check-pill">
+                  <span>Check</span>
+                  <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 8h10M9 4l4 4-4 4"/>
+                  </svg>
+                </div>
+                <div class="card-visual-area">
+                  <img src="/assets/document-3d.svg" alt="Document Check" class="card-3d-asset" />
+                </div>
+                <div class="card-bottom-info">
+                  <h3 class="service-card-title">Document Check</h3>
+                  <p class="service-card-desc">Scan invoices and PDFs for fee-fraud keywords &amp; macros.</p>
+                  <div class="card-meta-row">
+                    <span class="service-tagline">Check the fine print.</span>
+                    <span class="service-format-tag">PDF · DOCX</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Back Face -->
+              <div class="card-back-lime">
+                <div class="card-tab-header lime-tab">
+                  <span class="tab-index dark-text">/ 05</span>
+                </div>
+                <div class="lime-content-body">
+                  <h4 class="lime-service-title">Document &amp; Invoice Check</h4>
+                  <p class="lime-service-desc">
+                    Scan invoices, employment contracts, and PDFs for advance-fee fraud keywords, hidden hyperlinks, and suspicious macros.
+                  </p>
+                  <div class="lime-format-tag">PDF · DOCX · XLS</div>
+                  <div class="lime-action-row">
+                    <button class="btn-lime-launch" type="button" data-service="document">
+                      <span>Scan Document</span>
+                      <span class="lime-arrow-circle">→</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 6. Media Check -->
+            <div class="threat-service-card stepped-threat-card" data-service="media" tabindex="0">
+              <!-- Front Face -->
+              <div class="card-front">
+                <div class="card-tab-header">
+                  <span class="tab-index">/ 06</span>
+                </div>
+                <div class="card-check-pill">
+                  <span>Check</span>
+                  <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 8h10M9 4l4 4-4 4"/>
+                  </svg>
+                </div>
+                <div class="card-visual-area">
+                  <img src="/assets/media-3d.svg" alt="Media Check" class="card-3d-asset" />
+                </div>
+                <div class="card-bottom-info">
+                  <h3 class="service-card-title">Media Check</h3>
+                  <p class="service-card-desc">Examine video and image containers &amp; visual anomalies.</p>
+                  <div class="card-meta-row">
+                    <span class="service-tagline">Look beyond the surface.</span>
+                    <span class="service-format-tag">Video · Audio</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Back Face -->
+              <div class="card-back-lime">
+                <div class="card-tab-header lime-tab">
+                  <span class="tab-index dark-text">/ 06</span>
+                </div>
+                <div class="lime-content-body">
+                  <h4 class="lime-service-title">Media Origin Analysis</h4>
+                  <p class="lime-service-desc">
+                    Examine video and image containers, visual compression anomalies, audio dub synthetic signatures, and origin metadata.
+                  </p>
+                  <div class="lime-format-tag">MP4 · MOV · Audio · EXIF</div>
+                  <div class="lime-action-row">
+                    <button class="btn-lime-launch" type="button" data-service="media">
+                      <span>Analyze Media</span>
+                      <span class="lime-arrow-circle">→</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 7. Offer Check -->
+            <div class="threat-service-card stepped-threat-card" data-service="offer" tabindex="0">
+              <!-- Front Face -->
+              <div class="card-front">
+                <div class="card-tab-header">
+                  <span class="tab-index">/ 07</span>
+                </div>
+                <div class="card-check-pill">
+                  <span>Check</span>
+                  <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 8h10M9 4l4 4-4 4"/>
+                  </svg>
+                </div>
+                <div class="card-visual-area">
+                  <img src="/assets/shield.svg" alt="Offer Check" class="card-3d-asset" />
+                </div>
+                <div class="card-bottom-info">
+                  <h3 class="service-card-title">Offer Check</h3>
+                  <p class="service-card-desc">Assess work-from-home gigs &amp; upfront deposit demands.</p>
+                  <div class="card-meta-row">
+                    <span class="service-tagline">Pause before the promise.</span>
+                    <span class="service-format-tag">Job · Yield Pitch</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Back Face -->
+              <div class="card-back-lime">
+                <div class="card-tab-header lime-tab">
+                  <span class="tab-index dark-text">/ 07</span>
+                </div>
+                <div class="lime-content-body">
+                  <h4 class="lime-service-title">Offer &amp; Gig Validation</h4>
+                  <p class="lime-service-desc">
+                    Assess work-from-home gigs, guaranteed investment yields, upfront equipment deposits, and deceptive recruitment pitches.
+                  </p>
+                  <div class="lime-format-tag">Contracts · Pitches · Telegram Gigs</div>
+                  <div class="lime-action-row">
+                    <button class="btn-lime-launch" type="button" data-service="offer">
+                      <span>Validate Offer</span>
+                      <span class="lime-arrow-circle">→</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: HOW SAFELENS PROTECTS YOU (Exact from Screenshot 2) -->
+    <section class="protects-section" id="process">
+      <div class="section-container">
+        <!-- Process Pill & Header -->
+        <div class="protects-header">
+          <div class="process-pill-badge">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#0d9488" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+            <span>Process</span>
+          </div>
+          <h2 class="protects-title">How SafeLens protects you</h2>
+          <p class="protects-subtitle">
+            Three connected steps designed to give you clarity without requiring security expertise.
+          </p>
+        </div>
+
+        <!-- 3 Connected Process Cards Grid -->
+        <div class="protects-cards-grid">
+          <!-- CARD 1: 01 / INTAKE -->
+          <div class="process-card">
+            <!-- Visual Preview Box -->
+            <div class="process-preview-box preview-intake">
+              <div class="preview-url-line">
+                <span class="preview-dot blue-dot"></span>
+                <span class="preview-url-text">https://suspicious-pay.com/veri..</span>
+              </div>
+              <div class="preview-bottom-bar">
+                <span class="preview-mode-tag">Intake Mode: Client-Side</span>
+                <span class="preview-ready-status">Ready to scan</span>
+              </div>
+            </div>
+
+            <!-- Stage & Meta -->
+            <div class="process-stage-meta">
+              <span class="stage-code text-blue">01 / INTAKE</span>
+              <span class="stage-label">Input Stage</span>
+            </div>
+
+            <!-- Title & Description -->
+            <h3 class="process-card-title">1. Bring the content</h3>
+            <p class="process-card-desc">
+              Paste any link, message text, or drop a screenshot or PDF. Data is evaluated locally in your browser or through stateless transparent evaluation.
+            </p>
+
+            <!-- Bottom Tagline -->
+            <div class="process-card-sub">
+              <span>No registration or tracking required</span>
+            </div>
+          </div>
+
+          <!-- CARD 2: 02 / ANALYSIS -->
+          <div class="process-card">
+            <!-- Visual Preview Box with Typosquatting Highlight -->
+            <div class="process-preview-box preview-analysis">
+              <div class="preview-url-line">
+                <span class="preview-url-text">paypa <span class="typo-accent">l-secur</span> e.net</span>
+                <svg class="preview-warn-icon" viewBox="0 0 24 24" width="16" height="16" stroke="#f59e0b" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+                  <line x1="12" y1="9" x2="12" y2="13"/>
+                  <line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
+              </div>
+              <div class="preview-bottom-bar">
+                <span class="preview-signal-tag">
+                  <span class="preview-dot orange-dot"></span>
+                  <span>Typosquatting &amp; Unverified Host</span>
+                </span>
+              </div>
+            </div>
+
+            <!-- Stage & Meta -->
+            <div class="process-stage-meta">
+              <span class="stage-code text-amber">02 / ANALYSIS</span>
+              <span class="stage-label">Inspection Stage</span>
+            </div>
+
+            <!-- Title & Description -->
+            <h3 class="process-card-title">2. Review the evidence</h3>
+            <p class="process-card-desc">
+              SafeLens spotlights concrete signals: lookalike character substitutions, artificial urgency, and unexpected redirect hops.
+            </p>
+
+            <!-- Bottom Tagline -->
+            <div class="process-card-sub">
+              <span>Explainable red flags · No opaque scoring</span>
+            </div>
+          </div>
+
+          <!-- CARD 3: 03 / GUIDANCE -->
+          <div class="process-card">
+            <!-- Visual Preview Box with Definitive Verdict -->
+            <div class="process-preview-box preview-guidance">
+              <div class="preview-verdict-line">
+                <span class="verdict-label">Definitive Verdict</span>
+                <span class="verdict-badge-high">High Risk</span>
+              </div>
+              <div class="preview-bottom-bar">
+                <span class="preview-rule-tag">
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#059669" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                  <span>Rule: Do not enter credentials</span>
+                </span>
+              </div>
+            </div>
+
+            <!-- Stage & Meta -->
+            <div class="process-stage-meta">
+              <span class="stage-code text-teal">03 / GUIDANCE</span>
+              <span class="stage-label">Decision Stage</span>
+            </div>
+
+            <!-- Title & Description -->
+            <h3 class="process-card-title">3. Choose your next step</h3>
+            <p class="process-card-desc">
+              Receive an authoritative verdict (Low Risk, Caution, or High Risk) accompanied by clear, actionable protective safeguards.
+            </p>
+
+            <!-- Bottom Tagline -->
+            <div class="process-card-sub">
+              <span>Clear actions to protect yourself</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: EVIDENCE YOU CAN INSPECT, UNDERSTAND AND TRUST (Exact from Screenshot 3) -->
+    <section class="evidence-section" id="architecture">
+      <div class="section-container">
+        <div class="evidence-card-shell">
+          <!-- Result Architecture Pill -->
+          <div class="evidence-header">
+            <div class="arch-pill-badge">
+              <svg viewBox="0 0 24 24" width="14" height="14" stroke="#2563eb" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+                <polyline points="2 17 12 22 22 17"/>
+                <polyline points="2 12 12 17 22 12"/>
+              </svg>
+              <span>Result Architecture</span>
+            </div>
+            <h2 class="evidence-title">Evidence you can inspect, understand and trust</h2>
+            <p class="evidence-subtitle">
+              Every SafeLens assessment breaks down its reasoning into concrete findings, verified checks, and explicit limitations.
+            </p>
+          </div>
+
+          <!-- Live Dynamic Assessment Card Shell -->
+          <div class="assessment-breakdown-card" id="liveEvidenceContainer">
+            <!-- Default Empty State -->
+            <div class="evidence-empty-state" id="evidenceEmptyState">
+              <div class="evidence-empty-icon">
+                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                  <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+              </div>
+              <h3 class="evidence-empty-title">No Active Assessment Selected</h3>
+              <p class="evidence-empty-desc">
+                Select any threat check above or click "Start Check" to inspect a suspicious link, message, screenshot, QR, document, media, or offer. Real backend analysis findings and evidence will appear here.
+              </p>
+              <button class="btn-primary-action" id="btnLaunchNewCheck">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <span>Run a Threat Check</span>
+              </button>
+            </div>
+
+            <!-- Active Assessment Display (Hidden by default, shown when assessmentData is loaded) -->
+            <div id="evidenceActiveState" style="display: none;">
+              <!-- Header Row -->
+              <div class="breakdown-header-row">
+                <div class="breakdown-title-group">
+                  <span class="intake-type-pill" id="evidenceModuleBadge">MODULE</span>
+                  <h3 class="breakdown-main-title" id="evidenceTitle">Assessment Breakdown</h3>
+                  <span id="evidenceRiskBadge" class="item-status-badge badge-caution">Analyzing</span>
+                </div>
+                <span class="breakdown-ref-text" id="evidenceTimestamp">Just now</span>
+              </div>
+
+              <!-- Input Summary Banner -->
+              <div class="url-excerpt-box" style="margin-bottom: 20px;">
+                <span style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; display: block; margin-bottom: 4px;">Analyzed Submission</span>
+                <code id="evidenceInputSummary" style="font-size: 13.5px; color: #0f172a;">https://example.com</code>
+              </div>
+
+              <!-- Evidence Tabs Navigation -->
+              <div class="evidence-tabs">
+                <button class="evidence-tab-btn active" data-tab="tab-findings">Findings &amp; Anomalies (<span id="findingsCount">0</span>)</button>
+                <button class="evidence-tab-btn" data-tab="tab-checks">Checks Status (<span id="checksCount">0</span>)</button>
+                <button class="evidence-tab-btn" data-tab="tab-safeguards">Safeguards &amp; Actions</button>
+              </div>
+
+              <!-- Tab 1: Findings & Anomalies -->
+              <div class="evidence-tab-pane active" id="tab-findings">
+                <div id="findingsContainer">
+                  <!-- Dynamic findings populated by JS -->
+                </div>
+              </div>
+
+              <!-- Tab 2: Checks Status -->
+              <div class="evidence-tab-pane" id="tab-checks">
+                <div class="check-status-list" id="checksListContainer">
+                  <!-- Dynamic checks populated by JS -->
+                </div>
+              </div>
+
+              <!-- Tab 3: Safeguards & Actions -->
+              <div class="evidence-tab-pane" id="tab-safeguards">
+                <div class="breakdown-subgroup">
+                  <h4 class="safeguards-heading" style="margin-bottom: 12px;">Recommended Actions &amp; Immediate Safeguards:</h4>
+                  <ul class="safeguards-list" id="safeguardsList">
+                    <!-- Dynamic safeguards populated by JS -->
+                  </ul>
+                  <div class="transparent-evidence-note" style="margin-top: 20px;">
+                    <p id="evidencePolicyDisclaimer">SafeLens combines heuristic rules, DNS verification, and local machine learning to identify risks. Missing or inconclusive checks are explicitly reported.</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Assessment Action Bar -->
+              <div class="evidence-action-bar">
+                <button class="btn-secondary-action" id="btnCopyDestination" style="display: none;">
+                  <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <span>Copy Destination</span>
+                </button>
+                <button class="btn-secondary-action" id="btnCheckAnother">
+                  <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="1 4 1 10 7 10"></polyline>
+                    <polyline points="23 20 23 14 17 14"></polyline>
+                    <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path>
+                  </svg>
+                  <span>Check Another</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: RECENT ASSESSMENTS & SESSION TELEMETRY (Exact from Screenshot 1) -->
+    <section class="dashboard-section" id="history">
+      <div class="section-container">
+        <div class="dashboard-grid">
+          <!-- Left Column: Recent Assessments -->
+          <div class="dashboard-card recent-assessments-card">
+            <div class="dash-card-header">
+              <div class="dash-header-title">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                </svg>
+                <h3 class="dash-title-text">Recent Assessments</h3>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span class="dash-view-all-link" id="btnViewAllHistory">Session History (<span id="historyCountBadge">0</span>)</span>
+                <button class="dash-clear-btn" id="btnClearHistory" title="Clear all local session records" style="display: none;">Clear</button>
+              </div>
+            </div>
+
+            <!-- List of Dynamic Assessments -->
+            <div class="assessment-items-list" id="recentAssessmentsList">
+              <div class="evidence-empty-state" style="padding: 30px 10px;" id="historyEmptyPlaceholder">
+                <p style="font-size: 13.5px; color: #94a3b8; margin: 0;">
+                  No checks recorded in this session. All assessments are private, device-local, and purged on reset.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Session Telemetry & Safety Rule of Thumb -->
+          <div class="dashboard-col-right">
+            <!-- Card 1: Session Telemetry -->
+            <div class="dashboard-card session-telemetry-card">
+              <h3 class="telemetry-title">Session Telemetry</h3>
+              <div class="telemetry-metrics-grid">
+                <div class="metric-box box-total">
+                  <span class="metric-value" id="telemetryTotal">0</span>
+                  <span class="metric-label">Total</span>
+                </div>
+                <div class="metric-box box-caution">
+                  <span class="metric-value" id="telemetryCaution">0</span>
+                  <span class="metric-label">Caution</span>
+                </div>
+                <div class="metric-box box-highrisk">
+                  <span class="metric-value" id="telemetryHighRisk">0</span>
+                  <span class="metric-label">High Risk</span>
+                </div>
+              </div>
+              <p class="telemetry-subtext">
+                Device-local telemetry only · Never transmitted to external analytics
+              </p>
+            </div>
+
+            <!-- Card 2: Safety Rule of Thumb -->
+            <div class="dashboard-card rule-of-thumb-card">
+              <div class="rule-header">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2v1"/>
+                  <path d="M12 21v1"/>
+                  <path d="M4.22 4.22l.71.71"/>
+                  <path d="M19.07 19.07l.71.71"/>
+                  <path d="M2 12h1"/>
+                  <path d="M21 12h1"/>
+                  <path d="M4.22 19.78l.71-.71"/>
+                  <path d="M19.07 4.93l.71-.71"/>
+                  <circle cx="12" cy="12" r="5"/>
+                </svg>
+                <span class="rule-badge-text">SAFETY RULE OF THUMB</span>
+              </div>
+              <h4 class="rule-title">Out-of-band verification</h4>
+              <p class="rule-desc">
+                Never use contact details provided in the suspicious message itself. Always search for the organization's independently published support line.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SUBFOOTER EXACT FROM SCREENSHOT 1 (Now main footer) -->
+    <footer class="safelens-subfooter" id="contact">
+      <div class="section-container">
+        <div class="subfooter-main-row">
+          <!-- Left: SafeLens AI Brand -->
+          <div class="subfooter-brand">
+            <img src="/shield-lens.svg" alt="SafeLens AI" class="brand-shield-logo" />
+            <span class="subfooter-brand-name">SafeLens AI</span>
+            <span class="subfooter-tagline">· Before you click.</span>
+          </div>
+
+          <!-- Center: Private by design pill -->
+          <div class="subfooter-privacy-pill">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            <span>Private by design: Files and texts are evaluated locally or in transient demo sandbox</span>
+          </div>
+
+          <!-- Right: Action links -->
+          <div class="subfooter-links">
+            <a href="#history" class="subfooter-link">Safety Tips</a>
+            <a href="#history" class="subfooter-link">Local History</a>
+            <button class="subfooter-link-btn" id="footerReplayIntroBtn">Replay Intro</button>
+          </div>
+        </div>
+
+        <div class="subfooter-legal-row">
+          <span class="legal-left">© 2026 SafeLens AI. Designed for everyday digital protection.</span>
+          <span class="legal-right">Never guarantees safety against zero-day threats. Always exercise prudent caution.</span>
+        </div>
+      </div>
+    </footer>
+
+    <!-- INTERACTIVE REAL-BACKEND ASSESSMENT MODAL -->
+    <div class="modal-overlay" id="contactModal">
+      <div class="modal-dialog">
+        <button class="modal-close" id="modalClose" aria-label="Close modal">&times;</button>
+        
+        <!-- Processing State Overlay -->
+        <div class="processing-overlay" id="processingOverlay">
+          <div class="processing-spinner"></div>
+          <h4 class="processing-stage-text" id="processingStageText">Validating submission...</h4>
+          <p class="processing-stage-sub" id="processingStageSub">Step 1 of 4: Content validation &amp; structure checks</p>
+          <button type="button" class="btn-cancel-scan" id="btnCancelScan">Cancel Analysis</button>
+        </div>
+
+        <div class="modal-header">
+          <span class="modal-badge" id="modalBadgeText">Threat Inspection</span>
+          <h3 class="modal-title" id="assessmentModalTitle">Start Security Check</h3>
+          <p class="modal-sub" id="assessmentModalSub">Select intake mode and provide content for real backend inspection.</p>
+        </div>
+
+        <!-- Module Selector Pills -->
+        <div class="modal-module-selector" id="modalModuleSelector">
+          <button type="button" class="module-pill-btn active" data-module="link">Link Check</button>
+          <button type="button" class="module-pill-btn" data-module="message">Message</button>
+          <button type="button" class="module-pill-btn" data-module="screenshot">Screenshot</button>
+          <button type="button" class="module-pill-btn" data-module="qr">QR Code</button>
+          <button type="button" class="module-pill-btn" data-module="document">Document</button>
+          <button type="button" class="module-pill-btn" data-module="media">Media</button>
+          <button type="button" class="module-pill-btn" data-module="offer">Offer</button>
+        </div>
+
+        <form class="modal-form" id="assessmentForm">
+          <!-- Input Group 1: URL Input (Link, QR URL fallback) -->
+          <div class="form-group" id="groupUrlInput">
+            <label for="inputUrlField">Suspicious URL or Domain</label>
+            <input type="text" id="inputUrlField" placeholder="https://suspicious-login.com/auth" />
+          </div>
+
+          <!-- Input Group 2: Text / Message / Offer Input -->
+          <div class="form-group" id="groupTextInput" style="display: none;">
+            <label for="inputTextField">Message / Offer Body Text</label>
+            <textarea id="inputTextField" placeholder="Paste suspicious SMS, chat message, email, or investment pitch here..."></textarea>
+          </div>
+
+          <!-- Input Group 3: File Upload Dropzone (Screenshot, QR, Document, Media) -->
+          <div class="form-group" id="groupFileInput" style="display: none;">
+            <label id="fileInputLabel">File Upload</label>
+            <div class="file-dropzone" id="fileDropzone">
+              <input type="file" id="fileUploadInput" class="file-input-hidden" />
+              <div class="dropzone-prompt" id="dropzonePrompt">
+                <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="17 8 12 3 7 8"></polyline>
+                  <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+                <span id="dropzonePromptText">Drag &amp; drop file here, or click to browse</span>
+                <span style="font-size: 11.5px; color: #64748b;" id="dropzoneHintText">Supports PNG, JPG, WEBP up to 50MB</span>
+              </div>
+            </div>
+            <div class="file-selected-info" id="fileSelectedInfo">
+              <span id="selectedFileName">file.png</span>
+              <button type="button" class="file-remove-btn" id="btnRemoveFile" title="Remove file">&times;</button>
+            </div>
+          </div>
+
+          <div style="margin: 12px 0 16px 0; font-size: 12px; color: #64748b; line-height: 1.4;">
+            <span style="color: #2dd4bf; font-weight: 600;">Transient evaluation:</span> Uploads are analyzed in isolated backend memory and purged automatically according to data retention policy.
+          </div>
+
+          <button type="submit" class="modal-submit-btn" id="btnSubmitAssessment">
+            <span id="submitBtnText">Start Real Assessment</span>
+            <span class="btn-arrow-circle dark-btn-circle">
+              <svg viewBox="0 0 16 16" width="10" height="10">
+                <path d="M6 3.5L10.5 8L6 12.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              </svg>
+            </span>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Toast Notification Element -->
+    <div class="toast-notification" id="toastNotification">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#2dd4bf" stroke-width="2">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+      </svg>
+      <span id="toastMessage">Copied to clipboard</span>
+    </div>
+
+  </div>
+
+  <!-- Scripts -->
+  <script type="module" src="/main.js"></script>
+</body>
+</html>

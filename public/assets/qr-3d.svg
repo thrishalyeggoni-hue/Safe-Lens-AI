@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 320" fill="none">
+  <defs>
+    <!-- Isometric Top Surface -->
+    <linearGradient id="qrPlateTop" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="35%" stop-color="#f8fafc"/>
+      <stop offset="80%" stop-color="#e2e8f0"/>
+      <stop offset="100%" stop-color="#cbd5e1"/>
+    </linearGradient>
+
+    <!-- Isometric Side Extrusion -->
+    <linearGradient id="qrPlateSide" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#334155"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+
+    <!-- Laser Scan Beam -->
+    <linearGradient id="laserBeam" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#22c55e" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#4ade80" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#22c55e" stop-opacity="0"/>
+    </linearGradient>
+
+    <filter id="qrShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="-4" dy="22" stdDeviation="16" flood-color="#000000" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#qrShadow)" transform="translate(15, 15)">
+    <!-- 3D Extrusion Plinth (Bottom) -->
+    <polygon points="175,50 310,120 310,145 175,225 40,145 40,120" fill="url(#qrPlateSide)"/>
+    
+    <!-- 3D Main Ceramic Plinth Face -->
+    <polygon points="175,50 310,120 175,195 40,120" fill="url(#qrPlateTop)" stroke="#ffffff" stroke-width="2"/>
+
+    <!-- Laser Scan Sweep Line across Isometric Face -->
+    <polygon points="65,110 175,170 285,110 175,50" fill="url(#laserBeam)" opacity="0.35"/>
+    <line x1="60" y1="110" x2="290" y2="110" stroke="#22c55e" stroke-width="3" stroke-linecap="round" opacity="0.85"/>
+
+    <!-- Isometric QR Code Pattern Modules & Targets -->
+    <!-- Top-Left Target (Isometric) -->
+    <polygon points="175,70 215,90 195,102 155,80" fill="#0f172a"/>
+    <polygon points="175,76 198,87 190,92 167,81" fill="#ffffff"/>
+    <polygon points="175,80 187,86 182,89 170,83" fill="#0284c7"/>
+
+    <!-- Top-Right Target (Isometric) -->
+    <polygon points="230,95 270,115 250,128 210,105" fill="#0f172a"/>
+    <polygon points="230,101 253,112 245,117 222,106" fill="#ffffff"/>
+    <polygon points="230,105 242,111 237,114 225,108" fill="#0284c7"/>
+
+    <!-- Bottom-Left Target (Isometric) -->
+    <polygon points="100,95 140,115 120,128 80,105" fill="#0f172a"/>
+    <polygon points="100,101 123,112 115,117 92,106" fill="#ffffff"/>
+    <polygon points="100,105 112,111 107,114 95,108" fill="#0284c7"/>
+
+    <!-- Data Pattern Cells (Dots/Blocks) -->
+    <polygon points="175,120 190,128 180,134 165,126" fill="#0f172a"/>
+    <polygon points="145,130 160,138 150,144 135,136" fill="#0f172a"/>
+    <polygon points="195,132 210,140 200,146 185,138" fill="#0f172a"/>
+    <polygon points="160,150 175,158 165,164 150,156" fill="#0284c7"/>
+    <polygon points="175,98 190,106 180,112 165,104" fill="#0f172a"/>
+
+    <!-- Floating Holographic Safety Target Reticle Ring -->
+    <g transform="translate(175, 120)">
+      <ellipse cx="0" cy="0" rx="65" ry="32" stroke="#22c55e" stroke-width="2" stroke-dasharray="10 12" opacity="0.8"/>
+      <!-- Crosshair Tick Marks -->
+      <line x1="-75" y1="0" x2="-60" y2="0" stroke="#22c55e" stroke-width="2.5"/>
+      <line x1="60" y1="0" x2="75" y2="0" stroke="#22c55e" stroke-width="2.5"/>
+      <line x1="0" y1="-38" x2="0" y2="-28" stroke="#22c55e" stroke-width="2.5"/>
+      <line x1="0" y1="28" x2="0" y2="38" stroke="#22c55e" stroke-width="2.5"/>
+    </g>
+  </g>
+</svg>

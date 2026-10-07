@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 320" fill="none">
+  <defs>
+    <!-- 3D Paper Sheet Gradient -->
+    <linearGradient id="docPaper" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="40%" stop-color="#f8fafc"/>
+      <stop offset="85%" stop-color="#e2e8f0"/>
+      <stop offset="100%" stop-color="#cbd5e1"/>
+    </linearGradient>
+
+    <!-- Folded Dog-ear Corner -->
+    <linearGradient id="cornerFold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e2e8f0"/>
+      <stop offset="50%" stop-color="#94a3b8"/>
+      <stop offset="100%" stop-color="#64748b"/>
+    </linearGradient>
+
+    <!-- Blue Audit Stamp Gradient -->
+    <linearGradient id="auditStamp" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="40%" stop-color="#2563eb"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+
+    <filter id="docShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="-6" dy="24" stdDeviation="16" flood-color="#000000" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#docShadow)" transform="rotate(-6, 190, 160)">
+    <!-- Bottom Under-Sheet 3 (Subtle depth) -->
+    <rect x="75" y="60" width="180" height="230" rx="16" fill="#1e293b" opacity="0.8" transform="rotate(-6, 165, 175)"/>
+    
+    <!-- Under-Sheet 2 (Middle) -->
+    <rect x="85" y="45" width="180" height="230" rx="16" fill="#94a3b8" stroke="#cbd5e1" stroke-width="1.5" transform="rotate(-3, 175, 160)"/>
+
+    <!-- Main Front 3D Document Sheet -->
+    <g transform="translate(95, 30)">
+      <!-- Main Paper Body -->
+      <path d="M 0 16 C 0 7 7 0 16 0 L 135 0 L 180 45 L 180 224 C 180 233 173 240 164 240 L 16 240 C 7 240 0 233 0 224 Z" 
+            fill="url(#docPaper)" stroke="#ffffff" stroke-width="2"/>
+
+      <!-- Folded Dog-ear Corner Flap -->
+      <path d="M 135 0 L 135 45 L 180 45 Z" fill="url(#cornerFold)"/>
+      <path d="M 135 45 L 180 45" stroke="#94a3b8" stroke-width="1.5"/>
+
+      <!-- Document Header Strip -->
+      <rect x="24" y="30" width="80" height="12" rx="6" fill="#3b82f6" opacity="0.95"/>
+      <circle cx="120" cy="36" r="4" fill="#22c55e"/>
+
+      <!-- Simulated Text Paragraph Lines -->
+      <rect x="24" y="60" width="132" height="6" rx="3" fill="#64748b" opacity="0.8"/>
+      <rect x="24" y="75" width="120" height="6" rx="3" fill="#94a3b8" opacity="0.7"/>
+      <rect x="24" y="90" width="132" height="6" rx="3" fill="#cbd5e1" opacity="0.7"/>
+      <rect x="24" y="105" width="90" height="6" rx="3" fill="#cbd5e1" opacity="0.6"/>
+
+      <!-- Data Table Box / Invoice Lines -->
+      <rect x="24" y="125" width="132" height="45" rx="6" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="1"/>
+      <line x1="24" y1="140" x2="156" y2="140" stroke="#cbd5e1" stroke-width="1"/>
+      <rect x="34" y="132" width="40" height="4" rx="2" fill="#0f172a"/>
+      <rect x="110" y="132" width="34" height="4" rx="2" fill="#2563eb"/>
+      <rect x="34" y="152" width="60" height="4" rx="2" fill="#64748b"/>
+      <rect x="120" y="152" width="24" height="4" rx="2" fill="#059669"/>
+
+      <!-- 3D Security Analysis Seal / Audit Badge -->
+      <g transform="translate(115, 175)">
+        <circle cx="30" cy="30" r="28" fill="#090d16" transform="translate(2, 6)"/>
+        <circle cx="30" cy="30" r="28" fill="url(#auditStamp)" stroke="#93c5fd" stroke-width="2"/>
+        <circle cx="30" cy="30" r="22" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="3 3"/>
+        <!-- Magnifying Lens / Secure Check Icon in Stamp -->
+        <circle cx="28" cy="28" r="9" stroke="#ffffff" stroke-width="2.5" fill="none"/>
+        <line x1="35" y1="35" x2="42" y2="42" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+      </g>
+    </g>
+  </g>
+</svg>

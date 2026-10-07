@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 320" fill="none">
+  <defs>
+    <!-- Metallic Cylinder Gradient -->
+    <linearGradient id="bodyMetal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f1f3f7"/>
+      <stop offset="25%" stop-color="#d6dae2"/>
+      <stop offset="50%" stop-color="#b8bec9"/>
+      <stop offset="75%" stop-color="#eef1f6"/>
+      <stop offset="100%" stop-color="#939aa5"/>
+    </linearGradient>
+
+    <!-- Chrome Mount Base Gradient -->
+    <linearGradient id="chromeMount" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="35%" stop-color="#9aa0a6"/>
+      <stop offset="60%" stop-color="#3c4043"/>
+      <stop offset="85%" stop-color="#e8eaed"/>
+      <stop offset="100%" stop-color="#5f6368"/>
+    </linearGradient>
+
+    <!-- Copper / Gold Lens Bevel -->
+    <linearGradient id="copperRing" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffd599"/>
+      <stop offset="30%" stop-color="#ea7a24"/>
+      <stop offset="70%" stop-color="#8c3905"/>
+      <stop offset="100%" stop-color="#ffb766"/>
+    </linearGradient>
+
+    <!-- Deep Multi-Coated Lens Iris -->
+    <radialGradient id="lensGlass" cx="45%" cy="45%" r="60%">
+      <stop offset="0%" stop-color="#14092b"/>
+      <stop offset="45%" stop-color="#0a1b4d"/>
+      <stop offset="75%" stop-color="#02479e"/>
+      <stop offset="90%" stop-color="#0d93db"/>
+      <stop offset="100%" stop-color="#1e1035"/>
+    </radialGradient>
+
+    <!-- Specular Highlight Arc -->
+    <linearGradient id="glassReflection" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"/>
+      <stop offset="50%" stop-color="#a5f3fc" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Soft Drop Shadow -->
+    <filter id="cctvShadow" x="-20%" y="-20%" width="150%" height="150%">
+      <feDropShadow dx="-10" dy="25" stdDeviation="18" flood-color="#000000" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#cctvShadow)" transform="rotate(-5, 200, 160)">
+    <!-- Rear Mount Plate -->
+    <ellipse cx="320" cy="95" rx="42" ry="54" fill="url(#chromeMount)" transform="rotate(25, 320, 95)"/>
+    <ellipse cx="316" cy="95" rx="32" ry="42" fill="#5f6368" transform="rotate(25, 316, 95)"/>
+    <circle cx="310" cy="70" r="3.5" fill="#202124"/>
+    <circle cx="330" cy="115" r="3.5" fill="#202124"/>
+
+    <!-- Articulated Pivot Arm -->
+    <path d="M265 130 C285 110 300 95 315 95 C310 115 285 145 260 155 Z" fill="url(#chromeMount)"/>
+    <circle cx="270" cy="135" r="14" fill="url(#chromeMount)"/>
+    <circle cx="270" cy="135" r="7" fill="#3c4043"/>
+
+    <!-- Main Camera Barrel / Chassis -->
+    <!-- Cylindrical body -->
+    <path d="M140 105 L260 150 C265 175 250 205 235 220 L115 175 Z" fill="url(#bodyMetal)"/>
+
+    <!-- Cylindrical 3D top surface contour -->
+    <path d="M140 105 C185 85 240 120 260 150 L235 220 C200 190 150 205 115 175 Z" fill="url(#bodyMetal)"/>
+
+    <!-- Sunshade Hood Rim Overhang -->
+    <path d="M100 135 C115 95 160 85 180 95 C160 120 145 155 125 175 C105 170 95 155 100 135 Z" fill="#ffffff" opacity="0.4"/>
+    <path d="M90 145 C95 100 145 90 170 105 L155 115 C135 105 105 115 100 150 Z" fill="#ffffff"/>
+
+    <!-- Front Lens Bezel Ellipse -->
+    <!-- Outer rim -->
+    <ellipse cx="120" cy="190" rx="60" ry="74" fill="url(#bodyMetal)" transform="rotate(-30, 120, 190)"/>
+    <!-- Copper accent ring -->
+    <ellipse cx="120" cy="190" rx="52" ry="65" fill="url(#copperRing)" transform="rotate(-30, 120, 190)"/>
+    <!-- Stepped groove -->
+    <ellipse cx="120" cy="190" rx="44" ry="56" fill="#1f1f23" transform="rotate(-30, 120, 190)"/>
+
+    <!-- Glass Lens Element -->
+    <ellipse cx="120" cy="190" rx="40" ry="51" fill="url(#lensGlass)" transform="rotate(-30, 120, 190)"/>
+
+    <!-- Internal Aperture Pupil / Core -->
+    <circle cx="118" cy="188" r="18" fill="#04060f"/>
+    <!-- Iris Internal Chromatic Glow -->
+    <ellipse cx="116" cy="186" rx="14" ry="10" fill="#a855f7" opacity="0.75" transform="rotate(-20, 116, 186)"/>
+    <ellipse cx="124" cy="194" rx="12" ry="8" fill="#38bdf8" opacity="0.6" transform="rotate(30, 124, 194)"/>
+
+    <!-- Specular Highlight Curve -->
+    <path d="M95 160 C105 145 130 140 145 150 C135 155 115 160 105 175 Z" fill="url(#glassReflection)" transform="rotate(-30, 120, 190)"/>
+    <circle cx="108" cy="172" r="4.5" fill="#ffffff" opacity="0.95"/>
+    <circle cx="132" cy="204" r="2.5" fill="#ffffff" opacity="0.7"/>
+
+    <!-- Status Indicator LED (Amber/Green security pulse) -->
+    <circle cx="170" cy="132" r="3" fill="#22c55e"/>
+    <circle cx="170" cy="132" r="6" fill="#22c55e" opacity="0.35"/>
+  </g>
+</svg>

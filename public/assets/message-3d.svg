@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 320" fill="none">
+  <defs>
+    <!-- Ceramic Bubble Gradient -->
+    <linearGradient id="msgFace" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="35%" stop-color="#f1f5f9"/>
+      <stop offset="70%" stop-color="#e2e8f0"/>
+      <stop offset="100%" stop-color="#94a3b8"/>
+    </linearGradient>
+
+    <!-- Deep 3D Isometric Rim -->
+    <linearGradient id="msgExtrusion" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#334155"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+
+    <!-- Urgent Amber Shield Gradient -->
+    <linearGradient id="urgencyBadge" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="30%" stop-color="#f59e0b"/>
+      <stop offset="80%" stop-color="#d97706"/>
+      <stop offset="100%" stop-color="#92400e"/>
+    </linearGradient>
+
+    <!-- Blue Hologram Bubble Gradient -->
+    <linearGradient id="holoBubble" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#60a5fa"/>
+      <stop offset="60%" stop-color="#2563eb"/>
+      <stop offset="100%" stop-color="#1e40af"/>
+    </linearGradient>
+
+    <filter id="msgShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="-6" dy="22" stdDeviation="16" flood-color="#000000" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#msgShadow)" transform="rotate(-3, 190, 160)">
+    <!-- Small Background Reply Bubble -->
+    <g transform="translate(160, 40) scale(0.7)">
+      <path d="M 50 40 L 170 40 C 190 40 200 50 200 70 L 200 130 C 200 150 190 160 170 160 L 90 160 L 50 190 L 50 160 C 30 160 20 150 20 130 L 20 70 C 20 50 30 40 50 40 Z" fill="url(#holoBubble)" opacity="0.85"/>
+      <!-- Lines inside small bubble -->
+      <line x1="50" y1="80" x2="160" y2="80" stroke="#ffffff" stroke-width="4" stroke-linecap="round" opacity="0.8"/>
+      <line x1="50" y1="110" x2="130" y2="110" stroke="#ffffff" stroke-width="4" stroke-linecap="round" opacity="0.6"/>
+    </g>
+
+    <!-- Main 3D Chat Bubble Extrusion (Bottom/Side shadow layer) -->
+    <path d="M 60 70 C 60 50 75 40 100 40 L 260 40 C 285 40 300 50 300 70 L 300 170 C 300 190 285 200 260 200 L 140 200 L 80 250 L 80 200 C 65 200 60 190 60 170 Z" 
+          transform="translate(4, 12)" fill="url(#msgExtrusion)"/>
+
+    <!-- Main Chat Bubble Front Face -->
+    <path d="M 60 70 C 60 50 75 40 100 40 L 260 40 C 285 40 300 50 300 70 L 300 170 C 300 190 285 200 260 200 L 140 200 L 80 250 L 80 200 C 65 200 60 190 60 170 Z" 
+          fill="url(#msgFace)" stroke="#f8fafc" stroke-width="2"/>
+
+    <!-- Specular Highlight Curve on Top Edge -->
+    <path d="M 95 44 L 265 44" stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity="0.95"/>
+
+    <!-- Message Content Text Ribbons / Skeuomorphic Bars -->
+    <rect x="100" y="80" width="150" height="10" rx="5" fill="#3b82f6" opacity="0.9"/>
+    <rect x="100" y="105" width="120" height="8" rx="4" fill="#94a3b8" opacity="0.85"/>
+    <rect x="100" y="125" width="140" height="8" rx="4" fill="#cbd5e1" opacity="0.7"/>
+
+    <!-- 3D Warning / Phishing Urgent Alert Pin Badge -->
+    <g transform="translate(235, 140)">
+      <!-- 3D Badge Shadow -->
+      <circle cx="36" cy="36" r="34" fill="#090d16" transform="translate(2, 6)"/>
+      <!-- Badge Body -->
+      <circle cx="36" cy="36" r="34" fill="url(#urgencyBadge)" stroke="#fef3c7" stroke-width="2.5"/>
+      <circle cx="36" cy="36" r="26" fill="#92400e" opacity="0.3"/>
+      <!-- Exclamation Mark -->
+      <path d="M 36 20 L 36 38" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="36" cy="48" r="3" fill="#ffffff"/>
+    </g>
+  </g>
+</svg>

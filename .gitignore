@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+venv/
+env/
+.venv/
+
+# Environment and sensitive keys
+.env
+backend/.env
+
+# Python caches and bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Databases and local runtime data
+safelens.db
+*.db-journal
+backend/storage/*
+!backend/storage/.gitkeep
+
+# Build and distribution
+dist/
+build/
+
+# OS artifacts
+.DS_Store
+Thumbs.db
