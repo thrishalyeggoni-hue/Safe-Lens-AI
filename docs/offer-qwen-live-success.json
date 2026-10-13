@@ -1,0 +1,239 @@
+{
+  "submitted_input": "Send your OTP to activate this job offer.",
+  "http_status": 200,
+  "elapsed_seconds": 21.921129750000546,
+  "result": {
+    "module_type": "offer",
+    "input_summary": "Offer content not retained",
+    "submitted_text": "Send your OTP to activate this job offer.",
+    "input_source": "text",
+    "offset_unit": "unicode_codepoints",
+    "offer_type": "job",
+    "classification": {
+      "offer_type": "job",
+      "method": "Keyword observations, not certified classification",
+      "candidates": [
+        "job"
+      ],
+      "evidence": [
+        {
+          "start": 31,
+          "end": 34,
+          "text": "job",
+          "category": "offer_type_cue"
+        }
+      ]
+    },
+    "extracted_entities": [],
+    "contacts": [],
+    "organisations": [],
+    "payment_amounts": [],
+    "payment_instructions": [],
+    "deterministic_findings": [
+      {
+        "start": 0,
+        "end": 13,
+        "text": "Send your OTP",
+        "category": "credential_request",
+        "source": "deterministic",
+        "context": "direct_or_uncertain",
+        "interpretation": "An observed request or pressure pattern; sender legitimacy is not verified."
+      }
+    ],
+    "url_assessments": [],
+    "ai": {
+      "provider": "Local Ollama / Qwen",
+      "lookup_time": "2026-10-13T19:36:18.127197+00:00",
+      "status": "available",
+      "installed": true,
+      "running": true,
+      "model_available": true,
+      "requested_model": "qwen2.5:3b",
+      "model_used": "qwen2.5:3b",
+      "interpretations": [
+        {
+          "start": 0,
+          "end": 13,
+          "text": "Send your OTP",
+          "category": "credential_request",
+          "source": "ai_interpretation",
+          "context": "direct_or_uncertain",
+          "interpretation": "The message requests the user to send their One-Time Password (OTP), which is a security measure and should not be shared with external parties without verification of the sender's identity and legitimacy.",
+          "recommended_action": "Do not send OTP as requested. Verify the sender's identity and the legitimacy of the job offer before proceeding with any further action.",
+          "uncertainty": "The legitimacy of the sender cannot be verified based solely on the message content."
+        },
+        {
+          "start": 0,
+          "end": 13,
+          "text": "Send your OTP",
+          "category": "credential_request",
+          "source": "ai_interpretation",
+          "context": "direct_or_uncertain",
+          "interpretation": "The message demands the user to send their OTP, which is a security measure and should not be shared with external parties without verification of the sender's identity and legitimacy.",
+          "recommended_action": "Do not send OTP as requested. Verify the sender's identity and the legitimacy of the job offer before proceeding with any further action.",
+          "uncertainty": "The legitimacy of the sender cannot be verified based solely on the message content."
+        }
+      ],
+      "structured_output": {
+        "context": "direct_request",
+        "concerns": [
+          {
+            "category": "credential_request",
+            "evidence": "Send your OTP",
+            "interpretation": "The message requests the user to send their One-Time Password (OTP), which is a security measure and should not be shared with external parties without verification of the sender's identity and legitimacy.",
+            "recommended_action": "Do not send OTP as requested. Verify the sender's identity and the legitimacy of the job offer before proceeding with any further action.",
+            "uncertainty": "The legitimacy of the sender cannot be verified based solely on the message content."
+          },
+          {
+            "category": "credential_request",
+            "evidence": "Send your OTP",
+            "interpretation": "The message demands the user to send their OTP, which is a security measure and should not be shared with external parties without verification of the sender's identity and legitimacy.",
+            "recommended_action": "Do not send OTP as requested. Verify the sender's identity and the legitimacy of the job offer before proceeding with any further action.",
+            "uncertainty": "The legitimacy of the sender cannot be verified based solely on the message content."
+          }
+        ]
+      },
+      "grounding_failures": [],
+      "attempts": 1,
+      "model_digest": "357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b",
+      "context": "direct_request"
+    },
+    "ai_interpretations": [
+      {
+        "start": 0,
+        "end": 13,
+        "text": "Send your OTP",
+        "category": "credential_request",
+        "source": "ai_interpretation",
+        "context": "direct_or_uncertain",
+        "interpretation": "The message requests the user to send their One-Time Password (OTP), which is a security measure and should not be shared with external parties without verification of the sender's identity and legitimacy.",
+        "recommended_action": "Do not send OTP as requested. Verify the sender's identity and the legitimacy of the job offer before proceeding with any further action.",
+        "uncertainty": "The legitimacy of the sender cannot be verified based solely on the message content."
+      },
+      {
+        "start": 0,
+        "end": 13,
+        "text": "Send your OTP",
+        "category": "credential_request",
+        "source": "ai_interpretation",
+        "context": "direct_or_uncertain",
+        "interpretation": "The message demands the user to send their OTP, which is a security measure and should not be shared with external parties without verification of the sender's identity and legitimacy.",
+        "recommended_action": "Do not send OTP as requested. Verify the sender's identity and the legitimacy of the job offer before proceeding with any further action.",
+        "uncertainty": "The legitimacy of the sender cannot be verified based solely on the message content."
+      }
+    ],
+    "findings": [
+      {
+        "source": "deterministic · credential_request",
+        "observation": "Send your OTP",
+        "interpretation": "An observed request or pressure pattern; sender legitimacy is not verified. Context: direct_or_uncertain.",
+        "action": "Verify requests using contact details obtained independently.",
+        "risk_level": "High Risk"
+      },
+      {
+        "source": "ai_interpretation · credential_request",
+        "observation": "Send your OTP",
+        "interpretation": "The message requests the user to send their One-Time Password (OTP), which is a security measure and should not be shared with external parties without verification of the sender's identity and legitimacy. Context: direct_or_uncertain.",
+        "action": "Do not send OTP as requested. Verify the sender's identity and the legitimacy of the job offer before proceeding with any further action.",
+        "risk_level": "Caution"
+      },
+      {
+        "source": "ai_interpretation · credential_request",
+        "observation": "Send your OTP",
+        "interpretation": "The message demands the user to send their OTP, which is a security measure and should not be shared with external parties without verification of the sender's identity and legitimacy. Context: direct_or_uncertain.",
+        "action": "Do not send OTP as requested. Verify the sender's identity and the legitimacy of the job offer before proceeding with any further action.",
+        "risk_level": "Caution"
+      }
+    ],
+    "evidence": [
+      {
+        "source_type": "deterministic",
+        "snippet": "Send your OTP",
+        "text_offset": {
+          "start": 0,
+          "end": 13
+        },
+        "detail": "credential_request · direct_or_uncertain"
+      },
+      {
+        "source_type": "ai_interpretation",
+        "snippet": "Send your OTP",
+        "text_offset": {
+          "start": 0,
+          "end": 13
+        },
+        "detail": "credential_request · direct_or_uncertain"
+      },
+      {
+        "source_type": "ai_interpretation",
+        "snippet": "Send your OTP",
+        "text_offset": {
+          "start": 0,
+          "end": 13
+        },
+        "detail": "credential_request · direct_or_uncertain"
+      }
+    ],
+    "risk_category": "High Risk",
+    "score": null,
+    "explanation": "Offer content risk: High Risk. Observed claims and requests are indicators, not independent proof of fraud or legitimacy. Regulatory status, market prices, employer identity and contact ownership were not independently verified.",
+    "checks_performed": [
+      {
+        "name": "Content adequacy",
+        "status": "passed",
+        "detail": "41 Unicode code points; original text preserved"
+      },
+      {
+        "name": "Entity extraction",
+        "status": "passed",
+        "detail": "0 actual entity span(s)"
+      },
+      {
+        "name": "Context-aware deterministic rules",
+        "status": "flagged",
+        "detail": "1 evidence span(s); negation/quotation considered"
+      },
+      {
+        "name": "Embedded Link Check",
+        "status": "passed",
+        "detail": "0 distinct URL(s) processed"
+      },
+      {
+        "name": "Qwen JSON schema and quote grounding",
+        "status": "passed",
+        "detail": "2 grounded interpretation(s); 0 rejected concern(s)"
+      },
+      {
+        "name": "Offer classification and contextual deterministic indicators",
+        "status": "passed",
+        "detail": "job · 0 exact spans; quoted/negated wording distinguished"
+      }
+    ],
+    "unavailable_checks": [
+      {
+        "name": "Organisation, regulatory, price and contact verification",
+        "status": "unavailable",
+        "detail": "No independent registry, regulator, price, phone or bank ownership source connected"
+      }
+    ],
+    "recommended_actions": [
+      "Verify the offer through independently obtained organisation contact details.",
+      "Do not disclose credentials or pay advance fees solely on an unsolicited promise.",
+      "A suspicious indicator does not prove an organisation is fake."
+    ],
+    "provider_info": {
+      "engine": "SafeLens Offer orchestration over Message/Link/Document",
+      "model_used": "qwen2.5:3b",
+      "raw_content_retained": false
+    },
+    "coverage": {
+      "contextual_ai": "available",
+      "all_urls_checked": 0,
+      "external_claims_verified": false
+    },
+    "id": "asmt_38af0e58d3ad",
+    "created_at": "2026-10-13T19:36:40.004285+00:00",
+    "created_at_iso": "2026-10-13T19:36:40.004285+00:00",
+    "retention_expiry": "2026-10-14T19:36:40.004289"
+  }
+}

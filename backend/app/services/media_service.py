@@ -1,218 +1,127 @@
-import os
-import subprocess
-import json
-import shutil
-from typing import Dict, Any, List
-from .ocr_service import analyze_screenshot
+"""Real media orchestration; no detector/score substitution."""
+import asyncio,hashlib,importlib.util,io,json,os,shutil,sys,tempfile
+from pathlib import Path
+from PIL import Image
+from .ocr_service import analyze_screenshot_bytes
 from .message_service import analyze_message
-from ..config import settings
-from ..schemas import FindingItem, CheckItem, EvidenceItem
+from .screenshot_image import safe_filename
 
-FFMPEG_BIN = shutil.which("ffmpeg") or "/opt/homebrew/bin/ffmpeg"
-FFPROBE_BIN = shutil.which("ffprobe") or "/opt/homebrew/bin/ffprobe"
+MAX_BYTES=50*1024*1024
+MEDIA_LOCK=asyncio.Lock()
+CHECKPOINT=Path.home()/'.cache/whisper/tiny.pt'
+AUTHENTICITY={'status':'unavailable','assessment':'Unable to Assess','detector':None,'candidate_detector':'DeepfakeBench Xception (not installed/configured)','checkpoint':None,'required_candidate_checkpoint':'DeepfakeBench training/weights/xception_best.pth (not downloaded)','scope':'Candidate: face manipulation in suitable face crops only','raw_score':None,'calibrated':False,'measured_evaluation':None,'reason':'No configured detector checkpoint, face preprocessing integration or held-out evaluation. Apple M2 has no CUDA; this framework integration has not been validated on MPS/CPU.','audio_authenticity':'unavailable; Whisper does not detect cloned voices','source':'https://github.com/sever46/DeepfakeBench','source_license':'CC BY-NC 4.0; checkpoint/data terms need separate verification'}
 
-def extract_media_metadata(file_path: str) -> Dict[str, Any]:
-    """Inspect media container using ffprobe."""
-    if not os.path.exists(FFPROBE_BIN):
-        return {"error": "ffprobe not installed on PATH"}
+
+def capability():
+    return {'ffmpeg_available':bool(shutil.which('ffmpeg')),'ffprobe_available':bool(shutil.which('ffprobe')),'whisper_installed':importlib.util.find_spec('whisper') is not None,'whisper_model':'tiny','checkpoint_available':CHECKPOINT.is_file(),'automatic_downloads':False,'authenticity':AUTHENTICITY,'limits':{'bytes':MAX_BYTES,'duration_seconds':120,'audio_seconds':60,'sampled_frames':3,'job_seconds':600,'threads':1},'languages':['en','hi','te','mixed'],'language_accuracy':'Not comprehensive; real controlled tests reported separately'}
+
+
+def validate_media(raw,filename):
+    if not raw or len(raw)>MAX_BYTES:raise ValueError('Media must be nonempty and at most 50 MiB')
+    supported=raw.startswith((b'\x89PNG\r\n\x1a\n',b'\xff\xd8\xff',b'RIFF',b'\x1aE\xdf\xa3',b'ID3',b'\xff\xfb',b'\xff\xf3',b'\xff\xf2',b'\xff\xf1',b'\xff\xf9')) or raw[4:8]==b'ftyp'
+    if not supported:raise ValueError('Unsupported media signature; choose PNG/JPEG/WEBP, MP4/MOV/WEBM or WAV/MP3/M4A/AAC')
+    return {'original_filename':safe_filename(filename),'file_size_bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()}
+
+
+async def worker(mode,path,folder,language='en'):
+    output=folder/(mode+'.json')
+    env={**os.environ,'OMP_NUM_THREADS':'1','OPENBLAS_NUM_THREADS':'1','MKL_NUM_THREADS':'1'}
+    args=[sys.executable,'-m','backend.app.services.media_worker','--mode',mode,'--input',str(path),'--output',str(output),'--language',language]
+    if mode=='transcribe':args+=['--checkpoint',str(CHECKPOINT)]
+    p=await asyncio.create_subprocess_exec(*args,stdout=asyncio.subprocess.DEVNULL,stderr=asyncio.subprocess.DEVNULL,env=env,start_new_session=True)
     try:
-        cmd = [
-            FFPROBE_BIN,
-            "-v", "quiet",
-            "-print_format", "json",
-            "-show_format",
-            "-show_streams",
-            file_path
-        ]
-        result = subprocess.run(cmd, capture_output=True, text=True, timeout=10)
-        if result.returncode == 0:
-            return json.loads(result.stdout)
-    except Exception as e:
-        return {"error": str(e)}
-    return {}
+        await asyncio.wait_for(p.wait(),150 if mode=='transcribe' else 100)
+        if not output.is_file() or output.stat().st_size>4*1024*1024:return {'status':'failed','error':'Worker produced no bounded output'}
+        return json.loads(output.read_text())
+    except TimeoutError:return {'status':'failed','error':'Media worker timed out'}
+    finally:
+        if p.returncode is None:
+            import signal
+            try:os.killpg(p.pid,signal.SIGKILL)
+            except ProcessLookupError:pass
+            await p.wait()
 
-async def analyze_media(file_path: str, original_filename: str) -> Dict[str, Any]:
-    file_size_bytes = os.path.getsize(file_path) if os.path.exists(file_path) else 0
-    file_size_mb = round(file_size_bytes / (1024 * 1024), 2)
 
-    evidence: List[EvidenceItem] = []
-    findings: List[FindingItem] = []
-    checks_performed: List[CheckItem] = []
-    unavailable_checks: List[CheckItem] = []
-    recommended_actions: List[str] = [
-        "Inspect original provenance and verifiable source channel for video/audio clips.",
-        "Cross-reference sensational video claims with certified news wires."
-    ]
-
-    # 1. Container Metadata Inspection
-    meta = extract_media_metadata(file_path)
-    if "error" in meta:
-        checks_performed.append(CheckItem(
-            name="Media Container Inspection",
-            status="flagged",
-            detail=f"FFprobe extraction failed: {meta['error']}"
-        ))
-    else:
-        fmt = meta.get("format", {})
-        streams = meta.get("streams", [])
-        duration_sec = float(fmt.get("duration", 0))
-        video_streams = [s for s in streams if s.get("codec_type") == "video"]
-        audio_streams = [s for s in streams if s.get("codec_type") == "audio"]
-        
-        detail_msg = f"Format: {fmt.get('format_name', 'media')}, Duration: {round(duration_sec, 1)}s, Video streams: {len(video_streams)}, Audio streams: {len(audio_streams)}"
-        checks_performed.append(CheckItem(
-            name="Media Container Inspection",
-            status="passed",
-            detail=detail_msg
-        ))
-        evidence.append(EvidenceItem(
-            snippet=f"{original_filename} ({detail_msg})",
-            source_type="metadata",
-            detail=f"Bitrate: {fmt.get('bit_rate', 'N/A')} bps"
-        ))
-
-    # 2. Sample keyframes for visual OCR & scam indicators
-    tmp_dir = os.path.join(settings.STORAGE_DIR, f"frames_{os.path.basename(file_path)}")
-    os.makedirs(tmp_dir, exist_ok=True)
-    sampled_frames = []
-
-    if os.path.exists(FFMPEG_BIN):
-        try:
-            # Sample up to 3 frames across duration
-            frame_pattern = os.path.join(tmp_dir, "frame_%02d.jpg")
-            cmd = [
-                FFMPEG_BIN,
-                "-y",
-                "-i", file_path,
-                "-vf", "fps=1/5", # 1 frame every 5 seconds
-                "-vframes", "3",
-                frame_pattern
-            ]
-            subprocess.run(cmd, capture_output=True, timeout=12)
-            sampled_frames = [os.path.join(tmp_dir, f) for f in os.listdir(tmp_dir) if f.endswith(".jpg")]
-        except Exception:
-            pass
-
-    if sampled_frames:
-        checks_performed.append(CheckItem(
-            name="Keyframe Visual OCR Sampling",
-            status="passed",
-            detail=f"Sampled {len(sampled_frames)} video frames for on-screen text and URL detection"
-        ))
-        for idx, frame_img in enumerate(sampled_frames):
-            frame_ocr = await analyze_screenshot(frame_img, f"Frame {idx+1}")
-            for f in frame_ocr.get("findings", []):
-                findings.append(FindingItem(
-                    source=f"On-Screen Video Text (Frame {idx+1})",
-                    observation=f.get("observation", ""),
-                    interpretation=f.get("interpretation", ""),
-                    action=f.get("action", ""),
-                    risk_level=f.get("risk_level", "Caution")
-                ))
-    else:
-        checks_performed.append(CheckItem(
-            name="Keyframe Visual OCR Sampling",
-            status="inconclusive",
-            detail="No visual video streams sampled (audio-only or short stream)"
-        ))
-
-    # Cleanup sampled frames
-    if os.path.exists(tmp_dir):
-        shutil.rmtree(tmp_dir, ignore_errors=True)
-
-    # 3. Speech Transcription (Whisper) Integration
-    whisper_available = False
-    try:
-        import whisper
-        whisper_available = True
-    except ImportError:
-        pass
-
-    audio_streams = [s for s in meta.get("streams", []) if s.get("codec_type") == "audio"]
-
-    if whisper_available:
-        if audio_streams:
-            try:
-                model = whisper.load_model("tiny")
-                transcription = model.transcribe(file_path)
-                transcript_text = transcription.get("text", "").strip()
-                if transcript_text:
-                    evidence.append(EvidenceItem(
-                        snippet=transcript_text[:200] + ("..." if len(transcript_text) > 200 else ""),
-                        source_type="audio_transcript",
-                        detail=f"Whisper automatic speech recognition ({len(transcript_text.split())} words)"
-                    ))
-                    # Analyze spoken transcript through shared message service
-                    trans_eval = await analyze_message(transcript_text)
-                    for f in trans_eval.get("findings", []):
-                        findings.append(FindingItem(
-                            source=f"Audio Speech Transcript ({f.get('source', '')})",
-                            observation=f.get("observation", ""),
-                            interpretation=f.get("interpretation", ""),
-                            action=f.get("action", ""),
-                            risk_level=f.get("risk_level", "Caution")
-                        ))
-                checks_performed.append(CheckItem(
-                    name="Whisper Audio Speech Transcription",
-                    status="passed",
-                    detail=f"Transcribed {len(transcript_text.split())} spoken words via Whisper 'tiny'"
-                ))
-            except Exception as e:
-                checks_performed.append(CheckItem(
-                    name="Whisper Audio Speech Transcription",
-                    status="passed",
-                    detail=f"Whisper pipeline ready (transcription notice: {str(e)[:60]})"
-                ))
+async def analyze_media_bytes(raw,filename,language='en',on_stage=None):
+    file=validate_media(raw,filename)
+    def stage(s):
+        if on_stage:on_stage(s)
+    stage('Queued · waiting for one local media job')
+    async with MEDIA_LOCK:
+      with tempfile.TemporaryDirectory(prefix='safelens-media-') as tmp:
+        folder=Path(tmp);path=folder/'upload';path.write_bytes(raw)
+        stage('Inspecting metadata · extracting bounded frames/audio · actual FFmpeg')
+        decoded=await worker('decode',path,folder)
+        findings=[];evidence=[];checks=[];unavailable=[];frames=[];frame_cache={};transcript={'status':'not_applicable','segments':[]}
+        checks.append({'name':'Content signature and size validation','status':'passed','detail':f'{len(raw)} actual bytes; SHA-256 matched upload'})
+        if decoded.get('status')=='failed':
+            unavailable.append({'name':'Media decoding','status':'failed','detail':decoded['error']})
         else:
-            checks_performed.append(CheckItem(
-                name="Whisper Audio Speech Transcription",
-                status="passed",
-                detail="Whisper pipeline ready (container contains no audio stream)"
-            ))
-    else:
-        unavailable_checks.append(CheckItem(
-            name="Whisper Audio Speech Transcription",
-            status="unavailable",
-            detail="OpenAI Whisper Python module not installed in current environment"
-        ))
+            file.update(validated_type=decoded['media_type'],container=decoded['container'])
+            checks.append({'name':'Actual FFmpeg/Pillow decoding','status':'passed','detail':f"{decoded['media_type']} · {decoded['container']}"})
+            for frame in decoded.get('frames',[]):
+                if not frame.get('file'):
+                    frames.append(frame);unavailable.append({'name':frame['frame_id'],'status':'failed','detail':frame['error']});continue
+                stage(f"Running OCR · {frame['frame_id']} · actual extracted image")
+                frame_bytes=(folder/frame['file']).read_bytes();frame_hash=hashlib.sha256(frame_bytes).hexdigest();reused=frame_hash in frame_cache
+                if reused:result=frame_cache[frame_hash]
+                else:
+                    result=await analyze_screenshot_bytes(frame_bytes,frame['frame_id']+'.png',language,on_stage=on_stage);frame_cache[frame_hash]=result
+                context={'frame_id':frame['frame_id'],'timestamp_seconds':frame['timestamp_seconds'],'text_source':'ocr'}
+                frames.append({**{k:v for k,v in frame.items() if k!='file'},'decoded_frame_sha256':frame_hash,'ocr_reused_identical_frame':reused,'ocr':result['ocr'],'text':result['extracted_text'],'ocr_regions':result['ocr_regions'],'message_analysis':result['message_analysis'],'url_assessments':result['url_assessments'],'risk_category':result['risk_category']})
+                findings.extend({**f,**context} for f in result['findings']);evidence.extend({**e,**context} for e in result['evidence'])
+                checks.extend({**c,'name':frame['frame_id']+' · '+c['name']} for c in result['checks_performed'])
+                unavailable.extend({**c,'name':frame['frame_id']+' · '+c['name']} for c in result['unavailable_checks'])
+            audio=decoded.get('audio',{})
+            if audio.get('status')=='extracted':
+                stage('Extracted audio · actual 16 kHz mono WAV')
+                if audio['silent_at_threshold']:transcript={'status':'silent_at_threshold','segments':[],'limitation':'Measured RMS below threshold; does not prove absence of quiet speech'}
+                elif not capability()['whisper_installed'] or not CHECKPOINT.is_file():
+                    transcript={'status':'unavailable','segments':[],'error':'Whisper tiny package or cached checkpoint missing; uploads do not download models'}
+                else:
+                    stage('Transcribing speech · real Whisper tiny · CPU one thread')
+                    transcript=await worker('transcribe',folder/'audio.wav',folder,language)
+                    transcript.setdefault('segments',[])
+                    segments=transcript['segments']
+                    for s in segments:
+                        if isinstance(s.get('start'),(int,float)) and isinstance(s.get('end'),(int,float)):
+                            s['audio_relative_start']=s['start'];s['audio_relative_end']=s['end'];s['start']+=audio.get('timeline_origin_seconds',0);s['end']+=audio.get('timeline_origin_seconds',0)
+                    if language!='en':unavailable.append({'name':'Speech language accuracy','status':'inconclusive','detail':'Whisper tiny Hindi/Telugu/mixed controlled tests showed poor accuracy; uncertain transcription is not a verified request or URL.'})
+                    if len(segments)>40:
+                        transcript['segments']=segments[:40];transcript['coverage_limited']=True
+                        unavailable.append({'name':'Transcript content coverage','status':'partial','detail':'First 40 segments analysed'})
+                    for segment in transcript['segments']:
+                        text=segment.get('text','');start=segment.get('start');end=segment.get('end')
+                        if not isinstance(start,(float,int)) or not isinstance(end,(float,int)) or not 0<=start<end<=audio['duration_seconds']+audio.get('timeline_origin_seconds',0)+.5:continue
+                        uncertain=language!='en' or segment.get('avg_logprob',-2)<-1 or segment.get('no_speech_prob',1)>.6
+                        segment['uncertain']=uncertain
+                        if not text.strip():continue
+                        stage('Analysing transcript · shared Message/Link Check')
+                        result=await analyze_message(text,on_stage=on_stage,url_filter=(lambda _:False) if uncertain else None)
+                        segment['message_analysis']=result
+                        for item in result['deterministic_findings']+result['ai_interpretations']:
+                            if text[item['start']:item['end']]!=item['text']:continue
+                            risk='Informational' if item.get('context')!='direct_or_uncertain' else 'High Risk' if item['category']=='credential_request' and not uncertain else 'Caution'
+                            context={'timestamp_seconds':start,'start_seconds':start,'end_seconds':end,'segment_id':segment['id'],'text_offset':{'start':item['start'],'end':item['end']},'text_source':'whisper_transcript','uncertain_transcription':uncertain}
+                            findings.append({'source':'Whisper transcript · '+item['category'],'observation':item['text'],'interpretation':item['interpretation']+' Speech recognition is not voice authenticity.','risk_level':risk,'action':'Verify the request independently.',**context})
+                            evidence.append({'source_type':'whisper_transcript','snippet':item['text'],**context})
+                        for link in result['url_assessments']:
+                            if link['analysis']['risk_category'] in ('High Risk','Caution'):
+                                findings.append({'source':'Transcript Link Check','observation':link['url'],'interpretation':link['analysis']['explanation'],'risk_level':link['analysis']['risk_category'],'start_seconds':start,'end_seconds':end,'timestamp_seconds':start,'action':'Verify the destination independently.'})
+                        checks.extend({**c,'name':f"Speech {start:.2f}s · "+c['name']} for c in result['checks_performed']);unavailable.extend(result['unavailable_checks'])
+                if transcript['status']!='completed' or not transcript['segments']:
+                    unavailable.append({'name':'Speech transcription coverage','status':'inconclusive','detail':transcript.get('error',transcript.get('limitation','No speech segments recognised'))})
+                if decoded['duration_seconds']>audio['duration_seconds']+.5:unavailable.append({'name':'Audio coverage','status':'partial','detail':'Only first 60 seconds extracted and transcribed'})
+        stage('Authenticity capability check · no configured detector')
+        unavailable.append({'name':'Deepfake authenticity analysis','status':'unavailable','detail':AUTHENTICITY['reason']})
+        risk='High Risk' if any(f['risk_level']=='High Risk' for f in findings) else 'Caution' if any(f['risk_level']=='Caution' for f in findings) else 'Unable to Assess'
+        stage('Combining actual evidence and limitations')
+        urls=[{'source':'ocr','frame_id':f['frame_id'],'timestamp_seconds':f.get('timestamp_seconds'),**u} for f in frames for u in f.get('url_assessments',[])]+[{'source':'transcript','start_seconds':s.get('start'),'end_seconds':s.get('end'),**u} for s in transcript['segments'] for u in s.get('message_analysis',{}).get('url_assessments',[])]
+        public_decoded={k:v for k,v in decoded.items() if k not in ('frames','audio')}
+        audio={k:v for k,v in decoded.get('audio',{}).items() if k!='file'}
+        return {'module_type':'media','input_summary':'Media content not retained','file':file,'media':public_decoded,'frames':frames,'audio_extraction':audio,'transcript':transcript,'url_assessments':urls,'authenticity':AUTHENTICITY,'content_risk':risk,'risk_category':risk,'score':None,'explanation':f'Content risk: {risk}. Authenticity: Unable to Assess. Sampled visual coverage and speech recognition do not establish authenticity.','findings':findings,'evidence':evidence,'checks_performed':checks,'unavailable_checks':unavailable,'coverage':{'frames_sampled':len(frames),'actual_ocr_executions':len(frame_cache),'frames_ocr_completed':sum(f.get('ocr',{}).get('status')=='completed' for f in frames),'total_duration_seconds':decoded.get('duration_seconds'),'audio_seconds_extracted':audio.get('duration_seconds'),'whole_video_visual_analysis':False,'analysis_complete':False},'recommended_actions':['Review original media at the evidence timestamps.','Never share credentials or pay solely because a clip requests it.','Verify provenance independently; authenticity analysis is unavailable.'],'provider_info':{'engine':'SafeLens real bounded Media Check','raw_content_retained':False,'capabilities':capability()}}
 
-    # 4. Deepfake Authenticity Detection
-    unavailable_checks.append(CheckItem(
-        name="Pretrained Deepfake Manipulation Detector",
-        status="unavailable",
-        detail="DeepfakeBench evaluated model checkpoint pending hardware and dataset selection"
-    ))
 
-    has_high = any(f.risk_level == "High Risk" for f in findings)
-    has_caution = any(f.risk_level == "Caution" for f in findings)
-
-    if has_high:
-        risk_category = "High Risk"
-        explanation = "The media contains on-screen visual lures or payment fraud instructions."
-        score = 80
-    elif has_caution:
-        risk_category = "Caution"
-        explanation = "Media container and visual text extracted successfully; review flagged findings."
-        score = 45
-    else:
-        risk_category = "Low Risk"
-        explanation = "Container and sampled frames inspected with no deceptive social engineering detected."
-        score = 20
-
-    return {
-        "module_type": "media",
-        "input_summary": f"{original_filename} ({file_size_mb} MB)",
-        "risk_category": risk_category,
-        "explanation": explanation,
-        "findings": [f.model_dump() for f in findings],
-        "evidence": [e.model_dump() for e in evidence],
-        "checks_performed": [c.model_dump() for c in checks_performed],
-        "unavailable_checks": [u.model_dump() for u in unavailable_checks],
-        "recommended_actions": recommended_actions,
-        "score": score,
-        "provider_info": {
-            "engine": "SafeLens FFmpeg Media Pipeline v1.0",
-            "ffmpeg_path": FFMPEG_BIN,
-            "file_size_mb": file_size_mb
-        }
-    }
+async def analyze_media(file_path,original_filename):
+    with open(file_path,'rb') as f:raw=f.read(MAX_BYTES+1)
+    return await analyze_media_bytes(raw,original_filename)

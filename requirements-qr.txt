@@ -1,0 +1,4 @@
+-r requirements-link.txt
+python-multipart>=0.0.18
+Pillow>=11,<13
+zxing-cpp>=3.1,<4

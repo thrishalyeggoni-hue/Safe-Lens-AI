@@ -1,0 +1,3683 @@
+{
+  "notice": "Actual browser-rendered backend responses; controlled inputs, no invented AI results.",
+  "full_offer": {
+    "module_type": "offer",
+    "input_summary": "Offer content not retained",
+    "submitted_text": "Job offer: Pay INR 3000 registration fee today. Send your OTP to activate the offer. Visit https://example.com. Contact hr@unrelated.example.",
+    "input_source": "text",
+    "offset_unit": "unicode_codepoints",
+    "offer_type": "job",
+    "classification": {
+      "offer_type": "job",
+      "method": "Keyword observations, not certified classification",
+      "candidates": [
+        "job"
+      ],
+      "evidence": [
+        {
+          "start": 0,
+          "end": 3,
+          "text": "Job",
+          "category": "offer_type_cue"
+        }
+      ]
+    },
+    "extracted_entities": [
+      {
+        "start": 15,
+        "end": 23,
+        "text": "INR 3000",
+        "category": "amount"
+      },
+      {
+        "start": 41,
+        "end": 46,
+        "text": "today",
+        "category": "urgency"
+      },
+      {
+        "start": 91,
+        "end": 110,
+        "text": "https://example.com",
+        "category": "url"
+      },
+      {
+        "start": 120,
+        "end": 140,
+        "text": "hr@unrelated.example",
+        "category": "email"
+      }
+    ],
+    "contacts": [
+      {
+        "start": 120,
+        "end": 140,
+        "text": "hr@unrelated.example",
+        "category": "email"
+      }
+    ],
+    "organisations": [],
+    "payment_amounts": [
+      {
+        "start": 15,
+        "end": 23,
+        "text": "INR 3000",
+        "category": "amount"
+      }
+    ],
+    "payment_instructions": [
+      {
+        "start": 24,
+        "end": 40,
+        "text": "registration fee",
+        "category": "advance_payment",
+        "source": "offer_deterministic",
+        "context": "direct_or_uncertain",
+        "interpretation": "Observed fee/deposit wording; verify whether this is an active request and whether payment is justified."
+      },
+      {
+        "start": 11,
+        "end": 40,
+        "text": "Pay INR 3000 registration fee",
+        "category": "advance_payment",
+        "source": "deterministic",
+        "context": "direct_or_uncertain",
+        "interpretation": "An observed request or pressure pattern; sender legitimacy is not verified."
+      }
+    ],
+    "deterministic_findings": [
+      {
+        "start": 11,
+        "end": 40,
+        "text": "Pay INR 3000 registration fee",
+        "category": "advance_payment",
+        "source": "deterministic",
+        "context": "direct_or_uncertain",
+        "interpretation": "An observed request or pressure pattern; sender legitimacy is not verified."
+      },
+      {
+        "start": 41,
+        "end": 46,
+        "text": "today",
+        "category": "urgency",
+        "source": "deterministic",
+        "context": "direct_or_uncertain",
+        "interpretation": "Pressure or an identity claim accompanying an observed request; not an authenticated identity."
+      },
+      {
+        "start": 48,
+        "end": 61,
+        "text": "Send your OTP",
+        "category": "credential_request",
+        "source": "deterministic",
+        "context": "direct_or_uncertain",
+        "interpretation": "An observed request or pressure pattern; sender legitimacy is not verified."
+      },
+      {
+        "start": 24,
+        "end": 40,
+        "text": "registration fee",
+        "category": "advance_payment",
+        "source": "offer_deterministic",
+        "context": "direct_or_uncertain",
+        "interpretation": "Observed fee/deposit wording; verify whether this is an active request and whether payment is justified."
+      }
+    ],
+    "url_assessments": [
+      {
+        "url": "https://example.com",
+        "occurrences": [
+          {
+            "start": 91,
+            "end": 110,
+            "text": "https://example.com",
+            "category": "url"
+          }
+        ],
+        "analysis": {
+          "module_type": "link",
+          "input_summary": "https://example.com/",
+          "normalized_url": "https://example.com/",
+          "hostname": "example.com",
+          "registered_domain": "example.com",
+          "risk_category": "Unable to Assess",
+          "explanation": "Required checks are unavailable or inconclusive. The available evidence is insufficient to classify this URL as Low Risk.",
+          "findings": [],
+          "evidence": [
+            {
+              "source_type": "URL normalization",
+              "snippet": "https://example.com/",
+              "detail": "Actual submitted URL; fragment and embedded credentials omitted."
+            }
+          ],
+          "checks_performed": [
+            {
+              "name": "URL normalization / bundled Public Suffix List",
+              "status": "passed",
+              "detail": "Canonical host: example.com; registered domain: example.com"
+            },
+            {
+              "name": "DNS / public address validation",
+              "status": "passed",
+              "detail": "172.66.147.243, 104.20.23.154, 2606:4700:10::6814:179a, 2606:4700:10::ac42:93f3"
+            },
+            {
+              "name": "RDAP registration",
+              "status": "passed",
+              "detail": "Retrieved from https://rdap.verisign.com/com/v1/domain/example.com"
+            },
+            {
+              "name": "Safe HEAD redirect inspection",
+              "status": "passed",
+              "detail": "0 redirects; final URL: https://example.com/"
+            },
+            {
+              "name": "Deterministic URL heuristics",
+              "status": "passed",
+              "detail": "0 weak indicator(s); no AI interpretation"
+            }
+          ],
+          "unavailable_checks": [
+            {
+              "name": "Google Web Risk Lookup API",
+              "status": "unavailable",
+              "detail": "GOOGLE_WEB_RISK_API_KEY is not configured"
+            }
+          ],
+          "heuristic_findings": [],
+          "recommended_actions": [
+            "Verify the source and exact domain independently.",
+            "Do not share OTPs, passwords, or pay based on an unsolicited link.",
+            "A reputation non-match does not guarantee safety."
+          ],
+          "score": null,
+          "checked_at": "2026-10-13T19:37:33.625021+00:00",
+          "dns": {
+            "provider": "dnspython / system-configured DNS resolver",
+            "lookup_time": "2026-10-13T19:37:33.342211+00:00",
+            "hostname": "example.com",
+            "status": "resolved",
+            "addresses": [
+              "172.66.147.243",
+              "104.20.23.154",
+              "2606:4700:10::6814:179a",
+              "2606:4700:10::ac42:93f3"
+            ],
+            "records": {
+              "A": [
+                "172.66.147.243",
+                "104.20.23.154"
+              ],
+              "AAAA": [
+                "2606:4700:10::6814:179a",
+                "2606:4700:10::ac42:93f3"
+              ]
+            },
+            "errors": []
+          },
+          "rdap": {
+            "provider": "IANA RDAP bootstrap / registry RDAP",
+            "lookup_time": "2026-10-13T19:37:33.354610+00:00",
+            "status": "available",
+            "registered_domain": "example.com",
+            "bootstrap_source": "https://data.iana.org/rdap/dns.json",
+            "source_url": "https://rdap.verisign.com/com/v1/domain/example.com",
+            "registration_date": "1995-08-14T04:00:00Z",
+            "expiry_date": "2027-08-13T04:00:00Z",
+            "registrar": "RESERVED-Internet Assigned Numbers Authority",
+            "nameservers": [
+              "ELLIOTT.NS.CLOUDFLARE.COM",
+              "HERA.NS.CLOUDFLARE.COM"
+            ],
+            "domain_status": [
+              "client delete prohibited",
+              "client transfer prohibited",
+              "client update prohibited"
+            ],
+            "age_days": 11383
+          },
+          "reputation": {
+            "provider": "Google Web Risk Lookup API",
+            "source_url": "https://webrisk.googleapis.com/v1/uris:search",
+            "lookup_time": "2026-10-13T19:37:33.594027+00:00",
+            "status": "unavailable",
+            "threats": [],
+            "error": "GOOGLE_WEB_RISK_API_KEY is not configured",
+            "lookups": [
+              {
+                "provider": "Google Web Risk Lookup API",
+                "source_url": "https://webrisk.googleapis.com/v1/uris:search",
+                "lookup_time": "2026-10-13T19:37:33.594027+00:00",
+                "status": "unavailable",
+                "threats": [],
+                "error": "GOOGLE_WEB_RISK_API_KEY is not configured",
+                "url": "https://example.com/"
+              }
+            ]
+          },
+          "redirects": {
+            "provider": "httpx / pinned public IP / verified TLS / HEAD only",
+            "lookup_time": "2026-10-13T19:37:33.594039+00:00",
+            "status": "completed",
+            "chain": [
+              {
+                "source": "https://example.com/",
+                "status_code": 200,
+                "destination": null,
+                "resolved_addresses": [
+                  "172.66.147.243",
+                  "104.20.23.154",
+                  "2606:4700:10::6814:179a",
+                  "2606:4700:10::ac42:93f3"
+                ],
+                "lookup_time": "2026-10-13T19:37:33.607409+00:00"
+              }
+            ],
+            "final_url": "https://example.com/",
+            "redirect_count": 0,
+            "downloaded_body_bytes": 0
+          },
+          "provider_info": {
+            "engine": "SafeLens deterministic Link Inspector v2",
+            "tldextract_version": "5.4.0",
+            "registered_domain": "example.com",
+            "target_host": "example.com",
+            "link_analysis": {
+              "dns": {
+                "provider": "dnspython / system-configured DNS resolver",
+                "lookup_time": "2026-10-13T19:37:33.342211+00:00",
+                "hostname": "example.com",
+                "status": "resolved",
+                "addresses": [
+                  "172.66.147.243",
+                  "104.20.23.154",
+                  "2606:4700:10::6814:179a",
+                  "2606:4700:10::ac42:93f3"
+                ],
+                "records": {
+                  "A": [
+                    "172.66.147.243",
+                    "104.20.23.154"
+                  ],
+                  "AAAA": [
+                    "2606:4700:10::6814:179a",
+                    "2606:4700:10::ac42:93f3"
+                  ]
+                },
+                "errors": []
+              },
+              "rdap": {
+                "provider": "IANA RDAP bootstrap / registry RDAP",
+                "lookup_time": "2026-10-13T19:37:33.354610+00:00",
+                "status": "available",
+                "registered_domain": "example.com",
+                "bootstrap_source": "https://data.iana.org/rdap/dns.json",
+                "source_url": "https://rdap.verisign.com/com/v1/domain/example.com",
+                "registration_date": "1995-08-14T04:00:00Z",
+                "expiry_date": "2027-08-13T04:00:00Z",
+                "registrar": "RESERVED-Internet Assigned Numbers Authority",
+                "nameservers": [
+                  "ELLIOTT.NS.CLOUDFLARE.COM",
+                  "HERA.NS.CLOUDFLARE.COM"
+                ],
+                "domain_status": [
+                  "client delete prohibited",
+                  "client transfer prohibited",
+                  "client update prohibited"
+                ],
+                "age_days": 11383
+              },
+              "reputation": {
+                "provider": "Google Web Risk Lookup API",
+                "source_url": "https://webrisk.googleapis.com/v1/uris:search",
+                "lookup_time": "2026-10-13T19:37:33.594027+00:00",
+                "status": "unavailable",
+                "threats": [],
+                "error": "GOOGLE_WEB_RISK_API_KEY is not configured",
+                "lookups": [
+                  {
+                    "provider": "Google Web Risk Lookup API",
+                    "source_url": "https://webrisk.googleapis.com/v1/uris:search",
+                    "lookup_time": "2026-10-13T19:37:33.594027+00:00",
+                    "status": "unavailable",
+                    "threats": [],
+                    "error": "GOOGLE_WEB_RISK_API_KEY is not configured",
+                    "url": "https://example.com/"
+                  }
+                ]
+              },
+              "redirects": {
+                "provider": "httpx / pinned public IP / verified TLS / HEAD only",
+                "lookup_time": "2026-10-13T19:37:33.594039+00:00",
+                "status": "completed",
+                "chain": [
+                  {
+                    "source": "https://example.com/",
+                    "status_code": 200,
+                    "destination": null,
+                    "resolved_addresses": [
+                      "172.66.147.243",
+                      "104.20.23.154",
+                      "2606:4700:10::6814:179a",
+                      "2606:4700:10::ac42:93f3"
+                    ],
+                    "lookup_time": "2026-10-13T19:37:33.607409+00:00"
+                  }
+                ],
+                "final_url": "https://example.com/",
+                "redirect_count": 0,
+                "downloaded_body_bytes": 0
+              },
+              "normalized_url": "https://example.com/",
+              "hostname": "example.com",
+              "registered_domain": "example.com",
+              "heuristic_findings": [],
+              "checked_at": "2026-10-13T19:37:33.625032+00:00"
+            }
+          }
+        }
+      }
+    ],
+    "ai": {
+      "provider": "Local Ollama / Qwen",
+      "lookup_time": "2026-10-13T19:37:33.625093+00:00",
+      "status": "unavailable",
+      "installed": true,
+      "running": true,
+      "model_available": true,
+      "requested_model": "qwen2.5:3b",
+      "model_used": null,
+      "interpretations": [],
+      "structured_output": null,
+      "grounding_failures": [],
+      "attempts": 2,
+      "model_digest": "357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b",
+      "error": "ReadTimeout"
+    },
+    "ai_interpretations": [],
+    "findings": [
+      {
+        "source": "deterministic · advance_payment",
+        "observation": "Pay INR 3000 registration fee",
+        "interpretation": "An observed request or pressure pattern; sender legitimacy is not verified. Context: direct_or_uncertain.",
+        "action": "Verify requests using contact details obtained independently.",
+        "risk_level": "Caution"
+      },
+      {
+        "source": "deterministic · urgency",
+        "observation": "today",
+        "interpretation": "Pressure or an identity claim accompanying an observed request; not an authenticated identity. Context: direct_or_uncertain.",
+        "action": "Verify requests using contact details obtained independently.",
+        "risk_level": "Caution"
+      },
+      {
+        "source": "deterministic · credential_request",
+        "observation": "Send your OTP",
+        "interpretation": "An observed request or pressure pattern; sender legitimacy is not verified. Context: direct_or_uncertain.",
+        "action": "Verify requests using contact details obtained independently.",
+        "risk_level": "High Risk"
+      },
+      {
+        "source": "Offer deterministic · advance_payment",
+        "observation": "registration fee",
+        "interpretation": "Observed fee/deposit wording; verify whether this is an active request and whether payment is justified. Context: direct_or_uncertain",
+        "action": "Verify the issuer and claims independently before payment or sharing credentials.",
+        "risk_level": "Caution",
+        "text_offset": {
+          "start": 24,
+          "end": 40
+        }
+      }
+    ],
+    "evidence": [
+      {
+        "source_type": "deterministic",
+        "snippet": "Pay INR 3000 registration fee",
+        "text_offset": {
+          "start": 11,
+          "end": 40
+        },
+        "detail": "advance_payment · direct_or_uncertain"
+      },
+      {
+        "source_type": "deterministic",
+        "snippet": "today",
+        "text_offset": {
+          "start": 41,
+          "end": 46
+        },
+        "detail": "urgency · direct_or_uncertain"
+      },
+      {
+        "source_type": "deterministic",
+        "snippet": "Send your OTP",
+        "text_offset": {
+          "start": 48,
+          "end": 61
+        },
+        "detail": "credential_request · direct_or_uncertain"
+      },
+      {
+        "source_type": "offer_deterministic",
+        "snippet": "registration fee",
+        "text_offset": {
+          "start": 24,
+          "end": 40
+        },
+        "detail": "advance_payment · direct_or_uncertain"
+      }
+    ],
+    "risk_category": "High Risk",
+    "score": null,
+    "explanation": "Offer content risk: High Risk. Observed claims and requests are indicators, not independent proof of fraud or legitimacy. Regulatory status, market prices, employer identity and contact ownership were not independently verified.",
+    "checks_performed": [
+      {
+        "name": "Content adequacy",
+        "status": "passed",
+        "detail": "141 Unicode code points; original text preserved"
+      },
+      {
+        "name": "Entity extraction",
+        "status": "passed",
+        "detail": "4 actual entity span(s)"
+      },
+      {
+        "name": "Context-aware deterministic rules",
+        "status": "flagged",
+        "detail": "3 evidence span(s); negation/quotation considered"
+      },
+      {
+        "name": "Embedded Link Check",
+        "status": "passed",
+        "detail": "1 distinct URL(s) processed"
+      },
+      {
+        "name": "Embedded URL 1",
+        "status": "inconclusive",
+        "detail": "Unable to Assess"
+      },
+      {
+        "name": "Offer classification and contextual deterministic indicators",
+        "status": "flagged",
+        "detail": "job · 1 exact spans; quoted/negated wording distinguished"
+      }
+    ],
+    "unavailable_checks": [
+      {
+        "name": "Grounded Qwen contextual interpretation",
+        "status": "unavailable",
+        "detail": "ReadTimeout"
+      },
+      {
+        "name": "Embedded URL 1 · Google Web Risk Lookup API",
+        "status": "unavailable",
+        "detail": "GOOGLE_WEB_RISK_API_KEY is not configured"
+      },
+      {
+        "name": "Organisation, regulatory, price and contact verification",
+        "status": "unavailable",
+        "detail": "No independent registry, regulator, price, phone or bank ownership source connected"
+      }
+    ],
+    "recommended_actions": [
+      "Verify the offer through independently obtained organisation contact details.",
+      "Do not disclose credentials or pay advance fees solely on an unsolicited promise.",
+      "A suspicious indicator does not prove an organisation is fake."
+    ],
+    "provider_info": {
+      "engine": "SafeLens Offer orchestration over Message/Link/Document",
+      "model_used": null,
+      "raw_content_retained": false
+    },
+    "coverage": {
+      "contextual_ai": "unavailable",
+      "all_urls_checked": 1,
+      "external_claims_verified": false
+    },
+    "id": "asmt_856f7e3c1bcf",
+    "created_at": "2026-10-13T19:39:32.018903+00:00",
+    "created_at_iso": "2026-10-13T19:39:32.018903+00:00",
+    "retention_expiry": "2026-10-14T19:39:32.018924"
+  },
+  "changed_offer_with_real_qwen": {
+    "module_type": "offer",
+    "input_summary": "Offer content not retained",
+    "submitted_text": "Send your OTP to activate this job offer.",
+    "input_source": "text",
+    "offset_unit": "unicode_codepoints",
+    "offer_type": "job",
+    "classification": {
+      "offer_type": "job",
+      "method": "Keyword observations, not certified classification",
+      "candidates": [
+        "job"
+      ],
+      "evidence": [
+        {
+          "start": 31,
+          "end": 34,
+          "text": "job",
+          "category": "offer_type_cue"
+        }
+      ]
+    },
+    "extracted_entities": [],
+    "contacts": [],
+    "organisations": [],
+    "payment_amounts": [],
+    "payment_instructions": [],
+    "deterministic_findings": [
+      {
+        "start": 0,
+        "end": 13,
+        "text": "Send your OTP",
+        "category": "credential_request",
+        "source": "deterministic",
+        "context": "direct_or_uncertain",
+        "interpretation": "An observed request or pressure pattern; sender legitimacy is not verified."
+      }
+    ],
+    "url_assessments": [],
+    "ai": {
+      "provider": "Local Ollama / Qwen",
+      "lookup_time": "2026-10-13T19:40:52.236636+00:00",
+      "status": "available",
+      "installed": true,
+      "running": true,
+      "model_available": true,
+      "requested_model": "qwen2.5:3b",
+      "model_used": "qwen2.5:3b",
+      "interpretations": [
+        {
+          "start": 0,
+          "end": 13,
+          "text": "Send your OTP",
+          "category": "credential_request",
+          "source": "ai_interpretation",
+          "context": "direct_or_uncertain",
+          "interpretation": "The message requests the user to send their One-Time Password (OTP), which is a security measure and should not be shared with external parties without verification of the sender's identity and legitimacy.",
+          "recommended_action": "Do not send OTP as requested. Verify the sender's identity and the legitimacy of the job offer before proceeding with any further action.",
+          "uncertainty": "The legitimacy of the sender cannot be verified based solely on the message content."
+        },
+        {
+          "start": 0,
+          "end": 13,
+          "text": "Send your OTP",
+          "category": "credential_request",
+          "source": "ai_interpretation",
+          "context": "direct_or_uncertain",
+          "interpretation": "The message demands the user to send their OTP, which is a security measure and should not be shared with external parties without verification of the sender's identity and legitimacy.",
+          "recommended_action": "Do not send OTP as requested. Verify the sender's identity and the legitimacy of the job offer before proceeding with any further action.",
+          "uncertainty": "The legitimacy of the sender cannot be verified based solely on the message content."
+        }
+      ],
+      "structured_output": {
+        "context": "direct_request",
+        "concerns": [
+          {
+            "category": "credential_request",
+            "evidence": "Send your OTP",
+            "interpretation": "The message requests the user to send their One-Time Password (OTP), which is a security measure and should not be shared with external parties without verification of the sender's identity and legitimacy.",
+            "recommended_action": "Do not send OTP as requested. Verify the sender's identity and the legitimacy of the job offer before proceeding with any further action.",
+            "uncertainty": "The legitimacy of the sender cannot be verified based solely on the message content."
+          },
+          {
+            "category": "credential_request",
+            "evidence": "Send your OTP",
+            "interpretation": "The message demands the user to send their OTP, which is a security measure and should not be shared with external parties without verification of the sender's identity and legitimacy.",
+            "recommended_action": "Do not send OTP as requested. Verify the sender's identity and the legitimacy of the job offer before proceeding with any further action.",
+            "uncertainty": "The legitimacy of the sender cannot be verified based solely on the message content."
+          }
+        ]
+      },
+      "grounding_failures": [],
+      "attempts": 1,
+      "model_digest": "357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b",
+      "context": "direct_request"
+    },
+    "ai_interpretations": [
+      {
+        "start": 0,
+        "end": 13,
+        "text": "Send your OTP",
+        "category": "credential_request",
+        "source": "ai_interpretation",
+        "context": "direct_or_uncertain",
+        "interpretation": "The message requests the user to send their One-Time Password (OTP), which is a security measure and should not be shared with external parties without verification of the sender's identity and legitimacy.",
+        "recommended_action": "Do not send OTP as requested. Verify the sender's identity and the legitimacy of the job offer before proceeding with any further action.",
+        "uncertainty": "The legitimacy of the sender cannot be verified based solely on the message content."
+      },
+      {
+        "start": 0,
+        "end": 13,
+        "text": "Send your OTP",
+        "category": "credential_request",
+        "source": "ai_interpretation",
+        "context": "direct_or_uncertain",
+        "interpretation": "The message demands the user to send their OTP, which is a security measure and should not be shared with external parties without verification of the sender's identity and legitimacy.",
+        "recommended_action": "Do not send OTP as requested. Verify the sender's identity and the legitimacy of the job offer before proceeding with any further action.",
+        "uncertainty": "The legitimacy of the sender cannot be verified based solely on the message content."
+      }
+    ],
+    "findings": [
+      {
+        "source": "deterministic · credential_request",
+        "observation": "Send your OTP",
+        "interpretation": "An observed request or pressure pattern; sender legitimacy is not verified. Context: direct_or_uncertain.",
+        "action": "Verify requests using contact details obtained independently.",
+        "risk_level": "High Risk"
+      },
+      {
+        "source": "ai_interpretation · credential_request",
+        "observation": "Send your OTP",
+        "interpretation": "The message requests the user to send their One-Time Password (OTP), which is a security measure and should not be shared with external parties without verification of the sender's identity and legitimacy. Context: direct_or_uncertain.",
+        "action": "Do not send OTP as requested. Verify the sender's identity and the legitimacy of the job offer before proceeding with any further action.",
+        "risk_level": "Caution"
+      },
+      {
+        "source": "ai_interpretation · credential_request",
+        "observation": "Send your OTP",
+        "interpretation": "The message demands the user to send their OTP, which is a security measure and should not be shared with external parties without verification of the sender's identity and legitimacy. Context: direct_or_uncertain.",
+        "action": "Do not send OTP as requested. Verify the sender's identity and the legitimacy of the job offer before proceeding with any further action.",
+        "risk_level": "Caution"
+      }
+    ],
+    "evidence": [
+      {
+        "source_type": "deterministic",
+        "snippet": "Send your OTP",
+        "text_offset": {
+          "start": 0,
+          "end": 13
+        },
+        "detail": "credential_request · direct_or_uncertain"
+      },
+      {
+        "source_type": "ai_interpretation",
+        "snippet": "Send your OTP",
+        "text_offset": {
+          "start": 0,
+          "end": 13
+        },
+        "detail": "credential_request · direct_or_uncertain"
+      },
+      {
+        "source_type": "ai_interpretation",
+        "snippet": "Send your OTP",
+        "text_offset": {
+          "start": 0,
+          "end": 13
+        },
+        "detail": "credential_request · direct_or_uncertain"
+      }
+    ],
+    "risk_category": "High Risk",
+    "score": null,
+    "explanation": "Offer content risk: High Risk. Observed claims and requests are indicators, not independent proof of fraud or legitimacy. Regulatory status, market prices, employer identity and contact ownership were not independently verified.",
+    "checks_performed": [
+      {
+        "name": "Content adequacy",
+        "status": "passed",
+        "detail": "41 Unicode code points; original text preserved"
+      },
+      {
+        "name": "Entity extraction",
+        "status": "passed",
+        "detail": "0 actual entity span(s)"
+      },
+      {
+        "name": "Context-aware deterministic rules",
+        "status": "flagged",
+        "detail": "1 evidence span(s); negation/quotation considered"
+      },
+      {
+        "name": "Embedded Link Check",
+        "status": "passed",
+        "detail": "0 distinct URL(s) processed"
+      },
+      {
+        "name": "Qwen JSON schema and quote grounding",
+        "status": "passed",
+        "detail": "2 grounded interpretation(s); 0 rejected concern(s)"
+      },
+      {
+        "name": "Offer classification and contextual deterministic indicators",
+        "status": "passed",
+        "detail": "job · 0 exact spans; quoted/negated wording distinguished"
+      }
+    ],
+    "unavailable_checks": [
+      {
+        "name": "Organisation, regulatory, price and contact verification",
+        "status": "unavailable",
+        "detail": "No independent registry, regulator, price, phone or bank ownership source connected"
+      }
+    ],
+    "recommended_actions": [
+      "Verify the offer through independently obtained organisation contact details.",
+      "Do not disclose credentials or pay advance fees solely on an unsolicited promise.",
+      "A suspicious indicator does not prove an organisation is fake."
+    ],
+    "provider_info": {
+      "engine": "SafeLens Offer orchestration over Message/Link/Document",
+      "model_used": "qwen2.5:3b",
+      "raw_content_retained": false
+    },
+    "coverage": {
+      "contextual_ai": "available",
+      "all_urls_checked": 0,
+      "external_claims_verified": false
+    },
+    "id": "asmt_6fc5e88e12f0",
+    "created_at": "2026-10-13T19:41:15.321576+00:00",
+    "created_at_iso": "2026-10-13T19:41:15.321576+00:00",
+    "retention_expiry": "2026-10-14T19:41:15.321580"
+  },
+  "verified_controls": [
+    "actual pasted text",
+    "Back retains exact prior text",
+    "changed offer creates new assessment ID",
+    "real grounded Qwen displayed",
+    "Evidence",
+    "Checks including timed-out contextual model and missing reputation",
+    "cancel active offer request",
+    "Reset offer text clears input and result",
+    "file select/remove/reselect",
+    "actual offer PDF rendering, hash match and page-linked evidence"
+  ],
+  "pending_controls": [],
+  "document_offer": {
+    "module_type": "offer",
+    "input_summary": "Offer document content not retained",
+    "input_source": "document",
+    "offer_type": "job",
+    "file": {
+      "original_filename": "job_offer.pdf",
+      "validated_type": "PDF",
+      "validated_mime": "application/pdf",
+      "file_size_bytes": 1820,
+      "sha256": "3a6d05f60707142ebe4ea5c783b991423f7e687c3a114c49203eaf250470e9ba",
+      "authenticity": "Filename, metadata and signatures do not verify issuer identity or document authenticity"
+    },
+    "document_analysis": {
+      "module_type": "document",
+      "original_filename": "job_offer.pdf",
+      "input_summary": "Document content not retained",
+      "file": {
+        "original_filename": "job_offer.pdf",
+        "validated_type": "PDF",
+        "validated_mime": "application/pdf",
+        "file_size_bytes": 1820,
+        "sha256": "3a6d05f60707142ebe4ea5c783b991423f7e687c3a114c49203eaf250470e9ba",
+        "authenticity": "Filename, metadata and signatures do not verify issuer identity or document authenticity"
+      },
+      "document": {
+        "format": "PDF",
+        "parse_status": "completed",
+        "encrypted": false,
+        "metadata": {
+          "/Author": "Agent-authored test fixture",
+          "/CreationDate": "D:20261013223500+05'00'",
+          "/Creator": "anonymous",
+          "/Keywords": "",
+          "/ModDate": "D:20261013223500+05'00'",
+          "/Producer": "ReportLab PDF Library - (opensource)",
+          "/Subject": "unspecified",
+          "/Title": "Controlled SafeLens document test",
+          "/Trapped": "/False"
+        },
+        "structure_observations": [],
+        "total_pages": 1,
+        "pages_skipped": [],
+        "parse_failures": [],
+        "parser": {
+          "pypdf_strict": true,
+          "native_text": "pdfplumber with pypdf fallback",
+          "renderer": "PDFium, forms not initialized, no JavaScript execution",
+          "parser_timeout_seconds": 30,
+          "render_max_pixels": 4000000
+        },
+        "resource_limits": {
+          "cpu_seconds": 25,
+          "address_space_bytes": 1610612736,
+          "address_space_applied": false
+        }
+      },
+      "pages": [
+        {
+          "page": 1,
+          "reference": "Page 1",
+          "source": "pdf_text",
+          "text": "SafeLens controlled document test\nThis is bank support. Job offer.\nPay INR 2500 registration fee today for your job.\nSend me your OTP to verify your account.\nVisit https://example.com",
+          "status": "completed",
+          "ocr_needed": false,
+          "text_truncated": false,
+          "words": [
+            {
+              "text": "SafeLens",
+              "x0": 40,
+              "top": 37.726,
+              "x1": 120.028,
+              "bottom": 55.726
+            },
+            {
+              "text": "controlled",
+              "x0": 125.03200000000001,
+              "top": 37.726,
+              "x1": 212.04399999999998,
+              "bottom": 55.726
+            },
+            {
+              "text": "document",
+              "x0": 217.04799999999997,
+              "top": 37.726,
+              "x1": 303.052,
+              "bottom": 55.726
+            },
+            {
+              "text": "test",
+              "x0": 308.05600000000004,
+              "top": 37.726,
+              "x1": 340.06000000000006,
+              "bottom": 55.726
+            },
+            {
+              "text": "This",
+              "x0": 40,
+              "top": 80.89800000000002,
+              "x1": 66.446,
+              "bottom": 94.89800000000002
+            },
+            {
+              "text": "is",
+              "x0": 70.338,
+              "top": 80.89800000000002,
+              "x1": 80.446,
+              "bottom": 94.89800000000002
+            },
+            {
+              "text": "bank",
+              "x0": 84.338,
+              "top": 80.89800000000002,
+              "x1": 114.69,
+              "bottom": 94.89800000000002
+            },
+            {
+              "text": "support.",
+              "x0": 118.582,
+              "top": 80.89800000000002,
+              "x1": 169.16400000000002,
+              "bottom": 94.89800000000002
+            },
+            {
+              "text": "Job",
+              "x0": 173.056,
+              "top": 80.89800000000002,
+              "x1": 195.624,
+              "bottom": 94.89800000000002
+            },
+            {
+              "text": "offer.",
+              "x0": 199.516,
+              "top": 80.89800000000002,
+              "x1": 231.42199999999997,
+              "bottom": 94.89800000000002
+            },
+            {
+              "text": "Pay",
+              "x0": 40,
+              "top": 106.89800000000002,
+              "x1": 64.122,
+              "bottom": 120.89800000000002
+            },
+            {
+              "text": "INR",
+              "x0": 68.014,
+              "top": 106.89800000000002,
+              "x1": 92.122,
+              "bottom": 120.89800000000002
+            },
+            {
+              "text": "2500",
+              "x0": 96.01400000000001,
+              "top": 106.89800000000002,
+              "x1": 127.15000000000002,
+              "bottom": 120.89800000000002
+            },
+            {
+              "text": "registration",
+              "x0": 131.04200000000003,
+              "top": 106.89800000000002,
+              "x1": 200.286,
+              "bottom": 120.89800000000002
+            },
+            {
+              "text": "fee",
+              "x0": 204.178,
+              "top": 106.89800000000002,
+              "x1": 223.63799999999998,
+              "bottom": 120.89800000000002
+            },
+            {
+              "text": "today",
+              "x0": 227.52999999999997,
+              "top": 106.89800000000002,
+              "x1": 261.77399999999994,
+              "bottom": 120.89800000000002
+            },
+            {
+              "text": "for",
+              "x0": 265.66599999999994,
+              "top": 106.89800000000002,
+              "x1": 282.0039999999999,
+              "bottom": 120.89800000000002
+            },
+            {
+              "text": "your",
+              "x0": 285.89599999999996,
+              "top": 106.89800000000002,
+              "x1": 313.1259999999999,
+              "bottom": 120.89800000000002
+            },
+            {
+              "text": "job.",
+              "x0": 317.0179999999999,
+              "top": 106.89800000000002,
+              "x1": 339.5859999999999,
+              "bottom": 120.89800000000002
+            },
+            {
+              "text": "Send",
+              "x0": 40,
+              "top": 132.89800000000002,
+              "x1": 72.69000000000001,
+              "bottom": 146.89800000000002
+            },
+            {
+              "text": "me",
+              "x0": 76.582,
+              "top": 132.89800000000002,
+              "x1": 96.028,
+              "bottom": 146.89800000000002
+            },
+            {
+              "text": "your",
+              "x0": 99.92,
+              "top": 132.89800000000002,
+              "x1": 127.15000000000002,
+              "bottom": 146.89800000000002
+            },
+            {
+              "text": "OTP",
+              "x0": 131.04200000000003,
+              "top": 132.89800000000002,
+              "x1": 159.826,
+              "bottom": 146.89800000000002
+            },
+            {
+              "text": "to",
+              "x0": 163.71800000000002,
+              "top": 132.89800000000002,
+              "x1": 175.394,
+              "bottom": 146.89800000000002
+            },
+            {
+              "text": "verify",
+              "x0": 179.286,
+              "top": 132.89800000000002,
+              "x1": 212.732,
+              "bottom": 146.89800000000002
+            },
+            {
+              "text": "your",
+              "x0": 216.624,
+              "top": 132.89800000000002,
+              "x1": 243.85399999999998,
+              "bottom": 146.89800000000002
+            },
+            {
+              "text": "account.",
+              "x0": 247.74599999999998,
+              "top": 132.89800000000002,
+              "x1": 300.66599999999994,
+              "bottom": 146.89800000000002
+            },
+            {
+              "text": "Visit",
+              "x0": 40,
+              "top": 158.89800000000002,
+              "x1": 66.446,
+              "bottom": 172.89800000000002
+            },
+            {
+              "text": "https://example.com",
+              "x0": 70.338,
+              "top": 158.89800000000002,
+              "x1": 195.61,
+              "bottom": 172.89800000000002
+            }
+          ],
+          "tables": [],
+          "width_points": 612,
+          "height_points": 792,
+          "render_width": 1224,
+          "render_height": 1584,
+          "render_scale": 2,
+          "coordinate_space": "rendered page pixels after PDFium page rotation; PDF annotations use original PDF point coordinates",
+          "ocr": null,
+          "message_analysis": {
+            "module_type": "message",
+            "input_summary": "Message content not saved",
+            "submitted_text": "SafeLens controlled document test\nThis is bank support. Job offer.\nPay INR 2500 registration fee today for your job.\nSend me your OTP to verify your account.\nVisit https://example.com",
+            "offset_unit": "unicode_codepoints",
+            "risk_category": "High Risk",
+            "explanation": "The submitted text directly requests disclosure of a security credential. Do not share it; the sender has not been authenticated.",
+            "extracted_entities": [
+              {
+                "start": 34,
+                "end": 46,
+                "text": "This is bank",
+                "category": "identity_claim"
+              },
+              {
+                "start": 71,
+                "end": 79,
+                "text": "INR 2500",
+                "category": "amount"
+              },
+              {
+                "start": 97,
+                "end": 102,
+                "text": "today",
+                "category": "urgency"
+              },
+              {
+                "start": 164,
+                "end": 183,
+                "text": "https://example.com",
+                "category": "url"
+              }
+            ],
+            "deterministic_findings": [
+              {
+                "start": 34,
+                "end": 46,
+                "text": "This is bank",
+                "category": "identity_claim",
+                "source": "deterministic",
+                "context": "direct_or_uncertain",
+                "interpretation": "Pressure or an identity claim accompanying an observed request; not an authenticated identity."
+              },
+              {
+                "start": 67,
+                "end": 96,
+                "text": "Pay INR 2500 registration fee",
+                "category": "advance_payment",
+                "source": "deterministic",
+                "context": "direct_or_uncertain",
+                "interpretation": "An observed request or pressure pattern; sender legitimacy is not verified."
+              },
+              {
+                "start": 97,
+                "end": 102,
+                "text": "today",
+                "category": "urgency",
+                "source": "deterministic",
+                "context": "direct_or_uncertain",
+                "interpretation": "Pressure or an identity claim accompanying an observed request; not an authenticated identity."
+              },
+              {
+                "start": 117,
+                "end": 133,
+                "text": "Send me your OTP",
+                "category": "credential_request",
+                "source": "deterministic",
+                "context": "direct_or_uncertain",
+                "interpretation": "An observed request or pressure pattern; sender legitimacy is not verified."
+              }
+            ],
+            "ai_interpretations": [],
+            "ai": {
+              "provider": "Local Ollama / Qwen",
+              "lookup_time": "2026-10-13T19:46:25.715014+00:00",
+              "status": "unavailable",
+              "installed": true,
+              "running": false,
+              "model_available": false,
+              "requested_model": "qwen3:4b",
+              "model_used": null,
+              "interpretations": [],
+              "structured_output": null,
+              "grounding_failures": [],
+              "attempts": 0,
+              "error": "Message AI is disabled by backend configuration"
+            },
+            "url_assessments": [
+              {
+                "url": "https://example.com",
+                "occurrences": [
+                  {
+                    "start": 164,
+                    "end": 183,
+                    "text": "https://example.com",
+                    "category": "url"
+                  }
+                ],
+                "analysis": {
+                  "module_type": "link",
+                  "input_summary": "https://example.com/",
+                  "normalized_url": "https://example.com/",
+                  "hostname": "example.com",
+                  "registered_domain": "example.com",
+                  "risk_category": "Unable to Assess",
+                  "explanation": "Required checks are unavailable or inconclusive. The available evidence is insufficient to classify this URL as Low Risk.",
+                  "findings": [],
+                  "evidence": [
+                    {
+                      "source_type": "URL normalization",
+                      "snippet": "https://example.com/",
+                      "detail": "Actual submitted URL; fragment and embedded credentials omitted."
+                    }
+                  ],
+                  "checks_performed": [
+                    {
+                      "name": "URL normalization / bundled Public Suffix List",
+                      "status": "passed",
+                      "detail": "Canonical host: example.com; registered domain: example.com"
+                    },
+                    {
+                      "name": "DNS / public address validation",
+                      "status": "passed",
+                      "detail": "104.20.23.154, 172.66.147.243, 2606:4700:10::6814:179a, 2606:4700:10::ac42:93f3"
+                    },
+                    {
+                      "name": "RDAP registration",
+                      "status": "passed",
+                      "detail": "Retrieved from https://rdap.verisign.com/com/v1/domain/example.com"
+                    },
+                    {
+                      "name": "Safe HEAD redirect inspection",
+                      "status": "passed",
+                      "detail": "0 redirects; final URL: https://example.com/"
+                    },
+                    {
+                      "name": "Deterministic URL heuristics",
+                      "status": "passed",
+                      "detail": "0 weak indicator(s); no AI interpretation"
+                    }
+                  ],
+                  "unavailable_checks": [
+                    {
+                      "name": "Google Web Risk Lookup API",
+                      "status": "unavailable",
+                      "detail": "GOOGLE_WEB_RISK_API_KEY is not configured"
+                    }
+                  ],
+                  "heuristic_findings": [],
+                  "recommended_actions": [
+                    "Verify the source and exact domain independently.",
+                    "Do not share OTPs, passwords, or pay based on an unsolicited link.",
+                    "A reputation non-match does not guarantee safety."
+                  ],
+                  "score": null,
+                  "checked_at": "2026-10-13T19:46:25.714182+00:00",
+                  "dns": {
+                    "provider": "dnspython / system-configured DNS resolver",
+                    "lookup_time": "2026-10-13T19:46:24.503048+00:00",
+                    "hostname": "example.com",
+                    "status": "resolved",
+                    "addresses": [
+                      "104.20.23.154",
+                      "172.66.147.243",
+                      "2606:4700:10::6814:179a",
+                      "2606:4700:10::ac42:93f3"
+                    ],
+                    "records": {
+                      "A": [
+                        "104.20.23.154",
+                        "172.66.147.243"
+                      ],
+                      "AAAA": [
+                        "2606:4700:10::6814:179a",
+                        "2606:4700:10::ac42:93f3"
+                      ]
+                    },
+                    "errors": []
+                  },
+                  "rdap": {
+                    "provider": "IANA RDAP bootstrap / registry RDAP",
+                    "lookup_time": "2026-10-13T19:46:24.517157+00:00",
+                    "status": "available",
+                    "registered_domain": "example.com",
+                    "bootstrap_source": "https://data.iana.org/rdap/dns.json",
+                    "source_url": "https://rdap.verisign.com/com/v1/domain/example.com",
+                    "registration_date": "1995-08-14T04:00:00Z",
+                    "expiry_date": "2027-08-13T04:00:00Z",
+                    "registrar": "RESERVED-Internet Assigned Numbers Authority",
+                    "nameservers": [
+                      "ELLIOTT.NS.CLOUDFLARE.COM",
+                      "HERA.NS.CLOUDFLARE.COM"
+                    ],
+                    "domain_status": [
+                      "client delete prohibited",
+                      "client transfer prohibited",
+                      "client update prohibited"
+                    ],
+                    "age_days": 11383
+                  },
+                  "reputation": {
+                    "provider": "Google Web Risk Lookup API",
+                    "source_url": "https://webrisk.googleapis.com/v1/uris:search",
+                    "lookup_time": "2026-10-13T19:46:25.683370+00:00",
+                    "status": "unavailable",
+                    "threats": [],
+                    "error": "GOOGLE_WEB_RISK_API_KEY is not configured",
+                    "lookups": [
+                      {
+                        "provider": "Google Web Risk Lookup API",
+                        "source_url": "https://webrisk.googleapis.com/v1/uris:search",
+                        "lookup_time": "2026-10-13T19:46:25.683370+00:00",
+                        "status": "unavailable",
+                        "threats": [],
+                        "error": "GOOGLE_WEB_RISK_API_KEY is not configured",
+                        "url": "https://example.com/"
+                      }
+                    ]
+                  },
+                  "redirects": {
+                    "provider": "httpx / pinned public IP / verified TLS / HEAD only",
+                    "lookup_time": "2026-10-13T19:46:25.683384+00:00",
+                    "status": "completed",
+                    "chain": [
+                      {
+                        "source": "https://example.com/",
+                        "status_code": 200,
+                        "destination": null,
+                        "resolved_addresses": [
+                          "104.20.23.154",
+                          "172.66.147.243",
+                          "2606:4700:10::6814:179a",
+                          "2606:4700:10::ac42:93f3"
+                        ],
+                        "lookup_time": "2026-10-13T19:46:25.697930+00:00"
+                      }
+                    ],
+                    "final_url": "https://example.com/",
+                    "redirect_count": 0,
+                    "downloaded_body_bytes": 0
+                  },
+                  "provider_info": {
+                    "engine": "SafeLens deterministic Link Inspector v2",
+                    "tldextract_version": "5.4.0",
+                    "registered_domain": "example.com",
+                    "target_host": "example.com",
+                    "link_analysis": {
+                      "dns": {
+                        "provider": "dnspython / system-configured DNS resolver",
+                        "lookup_time": "2026-10-13T19:46:24.503048+00:00",
+                        "hostname": "example.com",
+                        "status": "resolved",
+                        "addresses": [
+                          "104.20.23.154",
+                          "172.66.147.243",
+                          "2606:4700:10::6814:179a",
+                          "2606:4700:10::ac42:93f3"
+                        ],
+                        "records": {
+                          "A": [
+                            "104.20.23.154",
+                            "172.66.147.243"
+                          ],
+                          "AAAA": [
+                            "2606:4700:10::6814:179a",
+                            "2606:4700:10::ac42:93f3"
+                          ]
+                        },
+                        "errors": []
+                      },
+                      "rdap": {
+                        "provider": "IANA RDAP bootstrap / registry RDAP",
+                        "lookup_time": "2026-10-13T19:46:24.517157+00:00",
+                        "status": "available",
+                        "registered_domain": "example.com",
+                        "bootstrap_source": "https://data.iana.org/rdap/dns.json",
+                        "source_url": "https://rdap.verisign.com/com/v1/domain/example.com",
+                        "registration_date": "1995-08-14T04:00:00Z",
+                        "expiry_date": "2027-08-13T04:00:00Z",
+                        "registrar": "RESERVED-Internet Assigned Numbers Authority",
+                        "nameservers": [
+                          "ELLIOTT.NS.CLOUDFLARE.COM",
+                          "HERA.NS.CLOUDFLARE.COM"
+                        ],
+                        "domain_status": [
+                          "client delete prohibited",
+                          "client transfer prohibited",
+                          "client update prohibited"
+                        ],
+                        "age_days": 11383
+                      },
+                      "reputation": {
+                        "provider": "Google Web Risk Lookup API",
+                        "source_url": "https://webrisk.googleapis.com/v1/uris:search",
+                        "lookup_time": "2026-10-13T19:46:25.683370+00:00",
+                        "status": "unavailable",
+                        "threats": [],
+                        "error": "GOOGLE_WEB_RISK_API_KEY is not configured",
+                        "lookups": [
+                          {
+                            "provider": "Google Web Risk Lookup API",
+                            "source_url": "https://webrisk.googleapis.com/v1/uris:search",
+                            "lookup_time": "2026-10-13T19:46:25.683370+00:00",
+                            "status": "unavailable",
+                            "threats": [],
+                            "error": "GOOGLE_WEB_RISK_API_KEY is not configured",
+                            "url": "https://example.com/"
+                          }
+                        ]
+                      },
+                      "redirects": {
+                        "provider": "httpx / pinned public IP / verified TLS / HEAD only",
+                        "lookup_time": "2026-10-13T19:46:25.683384+00:00",
+                        "status": "completed",
+                        "chain": [
+                          {
+                            "source": "https://example.com/",
+                            "status_code": 200,
+                            "destination": null,
+                            "resolved_addresses": [
+                              "104.20.23.154",
+                              "172.66.147.243",
+                              "2606:4700:10::6814:179a",
+                              "2606:4700:10::ac42:93f3"
+                            ],
+                            "lookup_time": "2026-10-13T19:46:25.697930+00:00"
+                          }
+                        ],
+                        "final_url": "https://example.com/",
+                        "redirect_count": 0,
+                        "downloaded_body_bytes": 0
+                      },
+                      "normalized_url": "https://example.com/",
+                      "hostname": "example.com",
+                      "registered_domain": "example.com",
+                      "heuristic_findings": [],
+                      "checked_at": "2026-10-13T19:46:25.714195+00:00"
+                    }
+                  }
+                }
+              }
+            ],
+            "language": {
+              "method": "Unicode script screening, not statistical language detection",
+              "scripts": [
+                "en"
+              ],
+              "status": "limited_rule_support",
+              "rule_languages": [
+                "en",
+                "hi",
+                "te"
+              ],
+              "contextual_language_support": "not verified until a real model succeeds",
+              "limitation": "English rules plus targeted Hindi/Telugu requests are tested. Script alone cannot authenticate language or establish comprehensive support."
+            },
+            "findings": [
+              {
+                "source": "deterministic · identity_claim",
+                "observation": "This is bank",
+                "interpretation": "Pressure or an identity claim accompanying an observed request; not an authenticated identity. Context: direct_or_uncertain.",
+                "action": "Verify requests using contact details obtained independently.",
+                "risk_level": "Caution"
+              },
+              {
+                "source": "deterministic · advance_payment",
+                "observation": "Pay INR 2500 registration fee",
+                "interpretation": "An observed request or pressure pattern; sender legitimacy is not verified. Context: direct_or_uncertain.",
+                "action": "Verify requests using contact details obtained independently.",
+                "risk_level": "Caution"
+              },
+              {
+                "source": "deterministic · urgency",
+                "observation": "today",
+                "interpretation": "Pressure or an identity claim accompanying an observed request; not an authenticated identity. Context: direct_or_uncertain.",
+                "action": "Verify requests using contact details obtained independently.",
+                "risk_level": "Caution"
+              },
+              {
+                "source": "deterministic · credential_request",
+                "observation": "Send me your OTP",
+                "interpretation": "An observed request or pressure pattern; sender legitimacy is not verified. Context: direct_or_uncertain.",
+                "action": "Verify requests using contact details obtained independently.",
+                "risk_level": "High Risk"
+              }
+            ],
+            "evidence": [
+              {
+                "source_type": "deterministic",
+                "snippet": "This is bank",
+                "text_offset": {
+                  "start": 34,
+                  "end": 46
+                },
+                "detail": "identity_claim · direct_or_uncertain"
+              },
+              {
+                "source_type": "deterministic",
+                "snippet": "Pay INR 2500 registration fee",
+                "text_offset": {
+                  "start": 67,
+                  "end": 96
+                },
+                "detail": "advance_payment · direct_or_uncertain"
+              },
+              {
+                "source_type": "deterministic",
+                "snippet": "today",
+                "text_offset": {
+                  "start": 97,
+                  "end": 102
+                },
+                "detail": "urgency · direct_or_uncertain"
+              },
+              {
+                "source_type": "deterministic",
+                "snippet": "Send me your OTP",
+                "text_offset": {
+                  "start": 117,
+                  "end": 133
+                },
+                "detail": "credential_request · direct_or_uncertain"
+              }
+            ],
+            "checks_performed": [
+              {
+                "name": "Content adequacy",
+                "status": "passed",
+                "detail": "183 Unicode code points; original text preserved"
+              },
+              {
+                "name": "Entity extraction",
+                "status": "passed",
+                "detail": "4 actual entity span(s)"
+              },
+              {
+                "name": "Context-aware deterministic rules",
+                "status": "flagged",
+                "detail": "4 evidence span(s); negation/quotation considered"
+              },
+              {
+                "name": "Embedded Link Check",
+                "status": "passed",
+                "detail": "1 distinct URL(s) processed"
+              },
+              {
+                "name": "Embedded URL 1",
+                "status": "inconclusive",
+                "detail": "Unable to Assess"
+              }
+            ],
+            "unavailable_checks": [
+              {
+                "name": "Grounded Qwen contextual interpretation",
+                "status": "unavailable",
+                "detail": "Message AI is disabled by backend configuration"
+              },
+              {
+                "name": "Embedded URL 1 · Google Web Risk Lookup API",
+                "status": "unavailable",
+                "detail": "GOOGLE_WEB_RISK_API_KEY is not configured"
+              }
+            ],
+            "recommended_actions": [
+              "Never share OTPs, PINs, passwords, or security codes with another person.",
+              "Verify requests using contact details obtained independently.",
+              "Do not pay fees or install remote-access software solely because a message asks you to.",
+              "Text analysis cannot authenticate the sender or guarantee safety."
+            ],
+            "score": null,
+            "checked_at": "2026-10-13T19:46:25.715275+00:00",
+            "content_saved": false,
+            "provider_info": {
+              "engine": "SafeLens Message Inspector v2",
+              "qwen_integrated": false,
+              "model_used": null,
+              "raw_message_retained": false
+            }
+          },
+          "uncertain_url_candidates": [],
+          "preview_png": "Preview bytes omitted",
+          "content_risk": "High Risk"
+        }
+      ],
+      "malware": {
+        "status": "clean",
+        "engine": "ClamAV",
+        "version": "ClamAV 1.5.4/28152/Tue Oct 13 11:56:14 2026",
+        "signature_match": null,
+        "detail": "No configured known malware signature was detected. This is not a safety guarantee.",
+        "transport": "Private temporary Unix socket, INSTREAM; original upload bytes",
+        "idle_shutdown_seconds": 30
+      },
+      "content_risk": "High Risk",
+      "url_assessments": [
+        {
+          "page": 1,
+          "reference": "Page 1",
+          "source": "visible_url_text",
+          "url": "https://example.com",
+          "offset": {
+            "start": 164,
+            "end": 183
+          },
+          "readable": true,
+          "analysis": {
+            "module_type": "link",
+            "input_summary": "https://example.com/",
+            "normalized_url": "https://example.com/",
+            "hostname": "example.com",
+            "registered_domain": "example.com",
+            "risk_category": "Unable to Assess",
+            "explanation": "Required checks are unavailable or inconclusive. The available evidence is insufficient to classify this URL as Low Risk.",
+            "findings": [],
+            "evidence": [
+              {
+                "source_type": "URL normalization",
+                "snippet": "https://example.com/",
+                "detail": "Actual submitted URL; fragment and embedded credentials omitted."
+              }
+            ],
+            "checks_performed": [
+              {
+                "name": "URL normalization / bundled Public Suffix List",
+                "status": "passed",
+                "detail": "Canonical host: example.com; registered domain: example.com"
+              },
+              {
+                "name": "DNS / public address validation",
+                "status": "passed",
+                "detail": "104.20.23.154, 172.66.147.243, 2606:4700:10::6814:179a, 2606:4700:10::ac42:93f3"
+              },
+              {
+                "name": "RDAP registration",
+                "status": "passed",
+                "detail": "Retrieved from https://rdap.verisign.com/com/v1/domain/example.com"
+              },
+              {
+                "name": "Safe HEAD redirect inspection",
+                "status": "passed",
+                "detail": "0 redirects; final URL: https://example.com/"
+              },
+              {
+                "name": "Deterministic URL heuristics",
+                "status": "passed",
+                "detail": "0 weak indicator(s); no AI interpretation"
+              }
+            ],
+            "unavailable_checks": [
+              {
+                "name": "Google Web Risk Lookup API",
+                "status": "unavailable",
+                "detail": "GOOGLE_WEB_RISK_API_KEY is not configured"
+              }
+            ],
+            "heuristic_findings": [],
+            "recommended_actions": [
+              "Verify the source and exact domain independently.",
+              "Do not share OTPs, passwords, or pay based on an unsolicited link.",
+              "A reputation non-match does not guarantee safety."
+            ],
+            "score": null,
+            "checked_at": "2026-10-13T19:46:25.714182+00:00",
+            "dns": {
+              "provider": "dnspython / system-configured DNS resolver",
+              "lookup_time": "2026-10-13T19:46:24.503048+00:00",
+              "hostname": "example.com",
+              "status": "resolved",
+              "addresses": [
+                "104.20.23.154",
+                "172.66.147.243",
+                "2606:4700:10::6814:179a",
+                "2606:4700:10::ac42:93f3"
+              ],
+              "records": {
+                "A": [
+                  "104.20.23.154",
+                  "172.66.147.243"
+                ],
+                "AAAA": [
+                  "2606:4700:10::6814:179a",
+                  "2606:4700:10::ac42:93f3"
+                ]
+              },
+              "errors": []
+            },
+            "rdap": {
+              "provider": "IANA RDAP bootstrap / registry RDAP",
+              "lookup_time": "2026-10-13T19:46:24.517157+00:00",
+              "status": "available",
+              "registered_domain": "example.com",
+              "bootstrap_source": "https://data.iana.org/rdap/dns.json",
+              "source_url": "https://rdap.verisign.com/com/v1/domain/example.com",
+              "registration_date": "1995-08-14T04:00:00Z",
+              "expiry_date": "2027-08-13T04:00:00Z",
+              "registrar": "RESERVED-Internet Assigned Numbers Authority",
+              "nameservers": [
+                "ELLIOTT.NS.CLOUDFLARE.COM",
+                "HERA.NS.CLOUDFLARE.COM"
+              ],
+              "domain_status": [
+                "client delete prohibited",
+                "client transfer prohibited",
+                "client update prohibited"
+              ],
+              "age_days": 11383
+            },
+            "reputation": {
+              "provider": "Google Web Risk Lookup API",
+              "source_url": "https://webrisk.googleapis.com/v1/uris:search",
+              "lookup_time": "2026-10-13T19:46:25.683370+00:00",
+              "status": "unavailable",
+              "threats": [],
+              "error": "GOOGLE_WEB_RISK_API_KEY is not configured",
+              "lookups": [
+                {
+                  "provider": "Google Web Risk Lookup API",
+                  "source_url": "https://webrisk.googleapis.com/v1/uris:search",
+                  "lookup_time": "2026-10-13T19:46:25.683370+00:00",
+                  "status": "unavailable",
+                  "threats": [],
+                  "error": "GOOGLE_WEB_RISK_API_KEY is not configured",
+                  "url": "https://example.com/"
+                }
+              ]
+            },
+            "redirects": {
+              "provider": "httpx / pinned public IP / verified TLS / HEAD only",
+              "lookup_time": "2026-10-13T19:46:25.683384+00:00",
+              "status": "completed",
+              "chain": [
+                {
+                  "source": "https://example.com/",
+                  "status_code": 200,
+                  "destination": null,
+                  "resolved_addresses": [
+                    "104.20.23.154",
+                    "172.66.147.243",
+                    "2606:4700:10::6814:179a",
+                    "2606:4700:10::ac42:93f3"
+                  ],
+                  "lookup_time": "2026-10-13T19:46:25.697930+00:00"
+                }
+              ],
+              "final_url": "https://example.com/",
+              "redirect_count": 0,
+              "downloaded_body_bytes": 0
+            },
+            "provider_info": {
+              "engine": "SafeLens deterministic Link Inspector v2",
+              "tldextract_version": "5.4.0",
+              "registered_domain": "example.com",
+              "target_host": "example.com",
+              "link_analysis": {
+                "dns": {
+                  "provider": "dnspython / system-configured DNS resolver",
+                  "lookup_time": "2026-10-13T19:46:24.503048+00:00",
+                  "hostname": "example.com",
+                  "status": "resolved",
+                  "addresses": [
+                    "104.20.23.154",
+                    "172.66.147.243",
+                    "2606:4700:10::6814:179a",
+                    "2606:4700:10::ac42:93f3"
+                  ],
+                  "records": {
+                    "A": [
+                      "104.20.23.154",
+                      "172.66.147.243"
+                    ],
+                    "AAAA": [
+                      "2606:4700:10::6814:179a",
+                      "2606:4700:10::ac42:93f3"
+                    ]
+                  },
+                  "errors": []
+                },
+                "rdap": {
+                  "provider": "IANA RDAP bootstrap / registry RDAP",
+                  "lookup_time": "2026-10-13T19:46:24.517157+00:00",
+                  "status": "available",
+                  "registered_domain": "example.com",
+                  "bootstrap_source": "https://data.iana.org/rdap/dns.json",
+                  "source_url": "https://rdap.verisign.com/com/v1/domain/example.com",
+                  "registration_date": "1995-08-14T04:00:00Z",
+                  "expiry_date": "2027-08-13T04:00:00Z",
+                  "registrar": "RESERVED-Internet Assigned Numbers Authority",
+                  "nameservers": [
+                    "ELLIOTT.NS.CLOUDFLARE.COM",
+                    "HERA.NS.CLOUDFLARE.COM"
+                  ],
+                  "domain_status": [
+                    "client delete prohibited",
+                    "client transfer prohibited",
+                    "client update prohibited"
+                  ],
+                  "age_days": 11383
+                },
+                "reputation": {
+                  "provider": "Google Web Risk Lookup API",
+                  "source_url": "https://webrisk.googleapis.com/v1/uris:search",
+                  "lookup_time": "2026-10-13T19:46:25.683370+00:00",
+                  "status": "unavailable",
+                  "threats": [],
+                  "error": "GOOGLE_WEB_RISK_API_KEY is not configured",
+                  "lookups": [
+                    {
+                      "provider": "Google Web Risk Lookup API",
+                      "source_url": "https://webrisk.googleapis.com/v1/uris:search",
+                      "lookup_time": "2026-10-13T19:46:25.683370+00:00",
+                      "status": "unavailable",
+                      "threats": [],
+                      "error": "GOOGLE_WEB_RISK_API_KEY is not configured",
+                      "url": "https://example.com/"
+                    }
+                  ]
+                },
+                "redirects": {
+                  "provider": "httpx / pinned public IP / verified TLS / HEAD only",
+                  "lookup_time": "2026-10-13T19:46:25.683384+00:00",
+                  "status": "completed",
+                  "chain": [
+                    {
+                      "source": "https://example.com/",
+                      "status_code": 200,
+                      "destination": null,
+                      "resolved_addresses": [
+                        "104.20.23.154",
+                        "172.66.147.243",
+                        "2606:4700:10::6814:179a",
+                        "2606:4700:10::ac42:93f3"
+                      ],
+                      "lookup_time": "2026-10-13T19:46:25.697930+00:00"
+                    }
+                  ],
+                  "final_url": "https://example.com/",
+                  "redirect_count": 0,
+                  "downloaded_body_bytes": 0
+                },
+                "normalized_url": "https://example.com/",
+                "hostname": "example.com",
+                "registered_domain": "example.com",
+                "heuristic_findings": [],
+                "checked_at": "2026-10-13T19:46:25.714195+00:00"
+              }
+            }
+          }
+        }
+      ],
+      "grounded_findings": [
+        {
+          "start": 34,
+          "end": 46,
+          "text": "This is bank",
+          "category": "identity_claim",
+          "source": "deterministic",
+          "context": "direct_or_uncertain",
+          "interpretation": "Pressure or an identity claim accompanying an observed request; not an authenticated identity.",
+          "page_number": 1,
+          "reference": "Page 1",
+          "text_source": "pdf_text"
+        },
+        {
+          "start": 67,
+          "end": 96,
+          "text": "Pay INR 2500 registration fee",
+          "category": "advance_payment",
+          "source": "deterministic",
+          "context": "direct_or_uncertain",
+          "interpretation": "An observed request or pressure pattern; sender legitimacy is not verified.",
+          "page_number": 1,
+          "reference": "Page 1",
+          "text_source": "pdf_text"
+        },
+        {
+          "start": 97,
+          "end": 102,
+          "text": "today",
+          "category": "urgency",
+          "source": "deterministic",
+          "context": "direct_or_uncertain",
+          "interpretation": "Pressure or an identity claim accompanying an observed request; not an authenticated identity.",
+          "page_number": 1,
+          "reference": "Page 1",
+          "text_source": "pdf_text"
+        },
+        {
+          "start": 117,
+          "end": 133,
+          "text": "Send me your OTP",
+          "category": "credential_request",
+          "source": "deterministic",
+          "context": "direct_or_uncertain",
+          "interpretation": "An observed request or pressure pattern; sender legitimacy is not verified.",
+          "page_number": 1,
+          "reference": "Page 1",
+          "text_source": "pdf_text"
+        }
+      ],
+      "coverage": {
+        "total_pages": 1,
+        "pages_parsed": 1,
+        "logical_blocks_parsed": null,
+        "pages_ocr_processed": 0,
+        "pages_failed": [],
+        "pages_skipped": [],
+        "content_blocks_analysed": 1,
+        "parse_coverage_complete": true,
+        "analysis_complete": false,
+        "pagination_limitation": null,
+        "unprocessed_parts": [],
+        "limits": {
+          "upload_bytes": 20971520,
+          "pdf_pages": 30,
+          "ocr_pages": 3,
+          "render_pixels": 4000000,
+          "rendered_pages_including_preview": 3,
+          "parse_seconds": 30,
+          "analysis_seconds": 300,
+          "urls": 16,
+          "content_blocks": 30
+        }
+      },
+      "risk_category": "High Risk",
+      "explanation": "Processed 1 actual page(s)/logical block(s). Malware: clean. Content risk: High Risk. Metadata, signatures, issuer identity, bank ownership and invoice authenticity are not independently verified.",
+      "score": null,
+      "findings": [
+        {
+          "source": "Document deterministic · identity_claim",
+          "observation": "This is bank",
+          "interpretation": "Pressure or an identity claim accompanying an observed request; not an authenticated identity.",
+          "action": "Verify the request independently.",
+          "risk_level": "Caution",
+          "page_number": 1,
+          "reference": "Page 1",
+          "text_offset": {
+            "start": 34,
+            "end": 46
+          },
+          "bounding_boxes": null
+        },
+        {
+          "source": "Document deterministic · advance_payment",
+          "observation": "Pay INR 2500 registration fee",
+          "interpretation": "An observed request or pressure pattern; sender legitimacy is not verified.",
+          "action": "Verify the request independently.",
+          "risk_level": "Caution",
+          "page_number": 1,
+          "reference": "Page 1",
+          "text_offset": {
+            "start": 67,
+            "end": 96
+          },
+          "bounding_boxes": null
+        },
+        {
+          "source": "Document deterministic · urgency",
+          "observation": "today",
+          "interpretation": "Pressure or an identity claim accompanying an observed request; not an authenticated identity.",
+          "action": "Verify the request independently.",
+          "risk_level": "Caution",
+          "page_number": 1,
+          "reference": "Page 1",
+          "text_offset": {
+            "start": 97,
+            "end": 102
+          },
+          "bounding_boxes": null
+        },
+        {
+          "source": "Document deterministic · credential_request",
+          "observation": "Send me your OTP",
+          "interpretation": "An observed request or pressure pattern; sender legitimacy is not verified.",
+          "action": "Verify the request independently.",
+          "risk_level": "High Risk",
+          "page_number": 1,
+          "reference": "Page 1",
+          "text_offset": {
+            "start": 117,
+            "end": 133
+          },
+          "bounding_boxes": null
+        }
+      ],
+      "evidence": [
+        {
+          "source_type": "pdf_text",
+          "snippet": "This is bank",
+          "page_number": 1,
+          "reference": "Page 1",
+          "text_offset": {
+            "start": 34,
+            "end": 46
+          },
+          "bounding_boxes": null,
+          "detail": "Exact grounded page evidence · identity_claim"
+        },
+        {
+          "source_type": "pdf_text",
+          "snippet": "Pay INR 2500 registration fee",
+          "page_number": 1,
+          "reference": "Page 1",
+          "text_offset": {
+            "start": 67,
+            "end": 96
+          },
+          "bounding_boxes": null,
+          "detail": "Exact grounded page evidence · advance_payment"
+        },
+        {
+          "source_type": "pdf_text",
+          "snippet": "today",
+          "page_number": 1,
+          "reference": "Page 1",
+          "text_offset": {
+            "start": 97,
+            "end": 102
+          },
+          "bounding_boxes": null,
+          "detail": "Exact grounded page evidence · urgency"
+        },
+        {
+          "source_type": "pdf_text",
+          "snippet": "Send me your OTP",
+          "page_number": 1,
+          "reference": "Page 1",
+          "text_offset": {
+            "start": 117,
+            "end": 133
+          },
+          "bounding_boxes": null,
+          "detail": "Exact grounded page evidence · credential_request"
+        }
+      ],
+      "checks_performed": [
+        {
+          "name": "Content-based file validation",
+          "status": "passed",
+          "detail": "PDF"
+        },
+        {
+          "name": "ClamAV malware scan",
+          "status": "passed",
+          "detail": "No configured known malware signature was detected. This is not a safety guarantee."
+        },
+        {
+          "name": "Isolated document parser",
+          "status": "passed",
+          "detail": "completed"
+        },
+        {
+          "name": "Page/content coverage",
+          "status": "passed",
+          "detail": "1 actual pages/blocks; 0 OCR runs; 0 unreadable; 0 skipped"
+        },
+        {
+          "name": "URL normalization / bundled Public Suffix List",
+          "status": "passed",
+          "detail": "Canonical host: example.com; registered domain: example.com"
+        },
+        {
+          "name": "DNS / public address validation",
+          "status": "passed",
+          "detail": "104.20.23.154, 172.66.147.243, 2606:4700:10::6814:179a, 2606:4700:10::ac42:93f3"
+        },
+        {
+          "name": "RDAP registration",
+          "status": "passed",
+          "detail": "Retrieved from https://rdap.verisign.com/com/v1/domain/example.com"
+        },
+        {
+          "name": "Safe HEAD redirect inspection",
+          "status": "passed",
+          "detail": "0 redirects; final URL: https://example.com/"
+        },
+        {
+          "name": "Deterministic URL heuristics",
+          "status": "passed",
+          "detail": "0 weak indicator(s); no AI interpretation"
+        },
+        {
+          "name": "Page 1 · Content adequacy",
+          "status": "passed",
+          "detail": "183 Unicode code points; original text preserved"
+        },
+        {
+          "name": "Page 1 · Entity extraction",
+          "status": "passed",
+          "detail": "4 actual entity span(s)"
+        },
+        {
+          "name": "Page 1 · Context-aware deterministic rules",
+          "status": "flagged",
+          "detail": "4 evidence span(s); negation/quotation considered"
+        },
+        {
+          "name": "Page 1 · Embedded Link Check",
+          "status": "passed",
+          "detail": "1 distinct URL(s) processed"
+        },
+        {
+          "name": "Page 1 · Embedded URL 1",
+          "status": "inconclusive",
+          "detail": "Unable to Assess"
+        }
+      ],
+      "unavailable_checks": [
+        {
+          "name": "Google Web Risk Lookup API",
+          "status": "unavailable",
+          "detail": "GOOGLE_WEB_RISK_API_KEY is not configured"
+        },
+        {
+          "name": "Page 1 · Grounded Qwen contextual interpretation",
+          "status": "unavailable",
+          "detail": "Message AI is disabled by backend configuration"
+        },
+        {
+          "name": "Page 1 · Embedded URL 1 · Google Web Risk Lookup API",
+          "status": "unavailable",
+          "detail": "GOOGLE_WEB_RISK_API_KEY is not configured"
+        }
+      ],
+      "recommended_actions": [
+        "Verify issuer and payment instructions using independently obtained contact details.",
+        "Do not execute document scripts, macros or attachments.",
+        "A clean malware scan does not establish safety or authenticity.",
+        "Review exact page evidence and missing coverage before acting."
+      ],
+      "provider_info": {
+        "engine": "SafeLens real Document Check",
+        "raw_content_retained": false,
+        "parsers": {
+          "formats": [
+            "PDF",
+            "DOCX"
+          ],
+          "pypdf": "6.20.1",
+          "pdfplumber": "0.11.10",
+          "pypdfium2": "5.14.0",
+          "python_docx": "1.2.0",
+          "clamav_installed": true,
+          "ocr": {
+            "engine": "PaddleOCR",
+            "package_version": "3.7.0",
+            "runtime_version": "3.3.1",
+            "detector": "PP-OCRv5_mobile_det",
+            "detector_available": true,
+            "languages": {
+              "en": {
+                "model": "en_PP-OCRv5_mobile_rec",
+                "available": true,
+                "accuracy_verified": false
+              },
+              "hi": {
+                "model": "devanagari_PP-OCRv5_mobile_rec",
+                "available": true,
+                "accuracy_verified": false
+              },
+              "te": {
+                "model": "te_PP-OCRv5_mobile_rec",
+                "available": true,
+                "accuracy_verified": false
+              }
+            },
+            "device": "CPU",
+            "threads": 1,
+            "automatic_downloads": false,
+            "setup_command": ".venv/bin/python scripts/setup_screenshot_ocr.py",
+            "language_limitation": "Choose the screenshot language. Mixed uses English, Hindi and Telugu recognizers; confidence is not comparable accuracy across languages. No comprehensive multilingual guarantee."
+          },
+          "limits": {
+            "upload_bytes": 20971520,
+            "pdf_pages": 30,
+            "ocr_pages": 3,
+            "render_pixels": 4000000,
+            "rendered_pages_including_preview": 3,
+            "parse_seconds": 30,
+            "analysis_seconds": 300,
+            "urls": 16,
+            "content_blocks": 30
+          }
+        }
+      }
+    },
+    "page_analyses": [
+      {
+        "reference": "Page 1",
+        "page_number": 1,
+        "analysis": {
+          "module_type": "offer",
+          "input_summary": "Offer content not retained",
+          "submitted_text": "SafeLens controlled document test\nThis is bank support. Job offer.\nPay INR 2500 registration fee today for your job.\nSend me your OTP to verify your account.\nVisit https://example.com",
+          "input_source": "text",
+          "offset_unit": "unicode_codepoints",
+          "offer_type": "job",
+          "classification": {
+            "offer_type": "job",
+            "method": "Keyword observations, not certified classification",
+            "candidates": [
+              "job"
+            ],
+            "evidence": [
+              {
+                "start": 56,
+                "end": 59,
+                "text": "Job",
+                "category": "offer_type_cue"
+              },
+              {
+                "start": 112,
+                "end": 115,
+                "text": "job",
+                "category": "offer_type_cue"
+              }
+            ]
+          },
+          "extracted_entities": [
+            {
+              "start": 34,
+              "end": 46,
+              "text": "This is bank",
+              "category": "identity_claim"
+            },
+            {
+              "start": 71,
+              "end": 79,
+              "text": "INR 2500",
+              "category": "amount"
+            },
+            {
+              "start": 97,
+              "end": 102,
+              "text": "today",
+              "category": "urgency"
+            },
+            {
+              "start": 164,
+              "end": 183,
+              "text": "https://example.com",
+              "category": "url"
+            }
+          ],
+          "contacts": [],
+          "organisations": [],
+          "payment_amounts": [
+            {
+              "start": 71,
+              "end": 79,
+              "text": "INR 2500",
+              "category": "amount"
+            }
+          ],
+          "payment_instructions": [
+            {
+              "start": 80,
+              "end": 96,
+              "text": "registration fee",
+              "category": "advance_payment",
+              "source": "offer_deterministic",
+              "context": "direct_or_uncertain",
+              "interpretation": "Observed fee/deposit wording; verify whether this is an active request and whether payment is justified."
+            },
+            {
+              "start": 67,
+              "end": 96,
+              "text": "Pay INR 2500 registration fee",
+              "category": "advance_payment",
+              "source": "deterministic",
+              "context": "direct_or_uncertain",
+              "interpretation": "An observed request or pressure pattern; sender legitimacy is not verified."
+            }
+          ],
+          "deterministic_findings": [
+            {
+              "start": 34,
+              "end": 46,
+              "text": "This is bank",
+              "category": "identity_claim",
+              "source": "deterministic",
+              "context": "direct_or_uncertain",
+              "interpretation": "Pressure or an identity claim accompanying an observed request; not an authenticated identity."
+            },
+            {
+              "start": 67,
+              "end": 96,
+              "text": "Pay INR 2500 registration fee",
+              "category": "advance_payment",
+              "source": "deterministic",
+              "context": "direct_or_uncertain",
+              "interpretation": "An observed request or pressure pattern; sender legitimacy is not verified."
+            },
+            {
+              "start": 97,
+              "end": 102,
+              "text": "today",
+              "category": "urgency",
+              "source": "deterministic",
+              "context": "direct_or_uncertain",
+              "interpretation": "Pressure or an identity claim accompanying an observed request; not an authenticated identity."
+            },
+            {
+              "start": 117,
+              "end": 133,
+              "text": "Send me your OTP",
+              "category": "credential_request",
+              "source": "deterministic",
+              "context": "direct_or_uncertain",
+              "interpretation": "An observed request or pressure pattern; sender legitimacy is not verified."
+            },
+            {
+              "start": 80,
+              "end": 96,
+              "text": "registration fee",
+              "category": "advance_payment",
+              "source": "offer_deterministic",
+              "context": "direct_or_uncertain",
+              "interpretation": "Observed fee/deposit wording; verify whether this is an active request and whether payment is justified."
+            }
+          ],
+          "url_assessments": [
+            {
+              "url": "https://example.com",
+              "occurrences": [
+                {
+                  "start": 164,
+                  "end": 183,
+                  "text": "https://example.com",
+                  "category": "url"
+                }
+              ],
+              "analysis": {
+                "module_type": "link",
+                "input_summary": "https://example.com/",
+                "normalized_url": "https://example.com/",
+                "hostname": "example.com",
+                "registered_domain": "example.com",
+                "risk_category": "Unable to Assess",
+                "explanation": "Required checks are unavailable or inconclusive. The available evidence is insufficient to classify this URL as Low Risk.",
+                "findings": [],
+                "evidence": [
+                  {
+                    "source_type": "URL normalization",
+                    "snippet": "https://example.com/",
+                    "detail": "Actual submitted URL; fragment and embedded credentials omitted."
+                  }
+                ],
+                "checks_performed": [
+                  {
+                    "name": "URL normalization / bundled Public Suffix List",
+                    "status": "passed",
+                    "detail": "Canonical host: example.com; registered domain: example.com"
+                  },
+                  {
+                    "name": "DNS / public address validation",
+                    "status": "passed",
+                    "detail": "104.20.23.154, 172.66.147.243, 2606:4700:10::6814:179a, 2606:4700:10::ac42:93f3"
+                  },
+                  {
+                    "name": "RDAP registration",
+                    "status": "passed",
+                    "detail": "Retrieved from https://rdap.verisign.com/com/v1/domain/example.com"
+                  },
+                  {
+                    "name": "Safe HEAD redirect inspection",
+                    "status": "passed",
+                    "detail": "0 redirects; final URL: https://example.com/"
+                  },
+                  {
+                    "name": "Deterministic URL heuristics",
+                    "status": "passed",
+                    "detail": "0 weak indicator(s); no AI interpretation"
+                  }
+                ],
+                "unavailable_checks": [
+                  {
+                    "name": "Google Web Risk Lookup API",
+                    "status": "unavailable",
+                    "detail": "GOOGLE_WEB_RISK_API_KEY is not configured"
+                  }
+                ],
+                "heuristic_findings": [],
+                "recommended_actions": [
+                  "Verify the source and exact domain independently.",
+                  "Do not share OTPs, passwords, or pay based on an unsolicited link.",
+                  "A reputation non-match does not guarantee safety."
+                ],
+                "score": null,
+                "checked_at": "2026-10-13T19:46:25.714182+00:00",
+                "dns": {
+                  "provider": "dnspython / system-configured DNS resolver",
+                  "lookup_time": "2026-10-13T19:46:24.503048+00:00",
+                  "hostname": "example.com",
+                  "status": "resolved",
+                  "addresses": [
+                    "104.20.23.154",
+                    "172.66.147.243",
+                    "2606:4700:10::6814:179a",
+                    "2606:4700:10::ac42:93f3"
+                  ],
+                  "records": {
+                    "A": [
+                      "104.20.23.154",
+                      "172.66.147.243"
+                    ],
+                    "AAAA": [
+                      "2606:4700:10::6814:179a",
+                      "2606:4700:10::ac42:93f3"
+                    ]
+                  },
+                  "errors": []
+                },
+                "rdap": {
+                  "provider": "IANA RDAP bootstrap / registry RDAP",
+                  "lookup_time": "2026-10-13T19:46:24.517157+00:00",
+                  "status": "available",
+                  "registered_domain": "example.com",
+                  "bootstrap_source": "https://data.iana.org/rdap/dns.json",
+                  "source_url": "https://rdap.verisign.com/com/v1/domain/example.com",
+                  "registration_date": "1995-08-14T04:00:00Z",
+                  "expiry_date": "2027-08-13T04:00:00Z",
+                  "registrar": "RESERVED-Internet Assigned Numbers Authority",
+                  "nameservers": [
+                    "ELLIOTT.NS.CLOUDFLARE.COM",
+                    "HERA.NS.CLOUDFLARE.COM"
+                  ],
+                  "domain_status": [
+                    "client delete prohibited",
+                    "client transfer prohibited",
+                    "client update prohibited"
+                  ],
+                  "age_days": 11383
+                },
+                "reputation": {
+                  "provider": "Google Web Risk Lookup API",
+                  "source_url": "https://webrisk.googleapis.com/v1/uris:search",
+                  "lookup_time": "2026-10-13T19:46:25.683370+00:00",
+                  "status": "unavailable",
+                  "threats": [],
+                  "error": "GOOGLE_WEB_RISK_API_KEY is not configured",
+                  "lookups": [
+                    {
+                      "provider": "Google Web Risk Lookup API",
+                      "source_url": "https://webrisk.googleapis.com/v1/uris:search",
+                      "lookup_time": "2026-10-13T19:46:25.683370+00:00",
+                      "status": "unavailable",
+                      "threats": [],
+                      "error": "GOOGLE_WEB_RISK_API_KEY is not configured",
+                      "url": "https://example.com/"
+                    }
+                  ]
+                },
+                "redirects": {
+                  "provider": "httpx / pinned public IP / verified TLS / HEAD only",
+                  "lookup_time": "2026-10-13T19:46:25.683384+00:00",
+                  "status": "completed",
+                  "chain": [
+                    {
+                      "source": "https://example.com/",
+                      "status_code": 200,
+                      "destination": null,
+                      "resolved_addresses": [
+                        "104.20.23.154",
+                        "172.66.147.243",
+                        "2606:4700:10::6814:179a",
+                        "2606:4700:10::ac42:93f3"
+                      ],
+                      "lookup_time": "2026-10-13T19:46:25.697930+00:00"
+                    }
+                  ],
+                  "final_url": "https://example.com/",
+                  "redirect_count": 0,
+                  "downloaded_body_bytes": 0
+                },
+                "provider_info": {
+                  "engine": "SafeLens deterministic Link Inspector v2",
+                  "tldextract_version": "5.4.0",
+                  "registered_domain": "example.com",
+                  "target_host": "example.com",
+                  "link_analysis": {
+                    "dns": {
+                      "provider": "dnspython / system-configured DNS resolver",
+                      "lookup_time": "2026-10-13T19:46:24.503048+00:00",
+                      "hostname": "example.com",
+                      "status": "resolved",
+                      "addresses": [
+                        "104.20.23.154",
+                        "172.66.147.243",
+                        "2606:4700:10::6814:179a",
+                        "2606:4700:10::ac42:93f3"
+                      ],
+                      "records": {
+                        "A": [
+                          "104.20.23.154",
+                          "172.66.147.243"
+                        ],
+                        "AAAA": [
+                          "2606:4700:10::6814:179a",
+                          "2606:4700:10::ac42:93f3"
+                        ]
+                      },
+                      "errors": []
+                    },
+                    "rdap": {
+                      "provider": "IANA RDAP bootstrap / registry RDAP",
+                      "lookup_time": "2026-10-13T19:46:24.517157+00:00",
+                      "status": "available",
+                      "registered_domain": "example.com",
+                      "bootstrap_source": "https://data.iana.org/rdap/dns.json",
+                      "source_url": "https://rdap.verisign.com/com/v1/domain/example.com",
+                      "registration_date": "1995-08-14T04:00:00Z",
+                      "expiry_date": "2027-08-13T04:00:00Z",
+                      "registrar": "RESERVED-Internet Assigned Numbers Authority",
+                      "nameservers": [
+                        "ELLIOTT.NS.CLOUDFLARE.COM",
+                        "HERA.NS.CLOUDFLARE.COM"
+                      ],
+                      "domain_status": [
+                        "client delete prohibited",
+                        "client transfer prohibited",
+                        "client update prohibited"
+                      ],
+                      "age_days": 11383
+                    },
+                    "reputation": {
+                      "provider": "Google Web Risk Lookup API",
+                      "source_url": "https://webrisk.googleapis.com/v1/uris:search",
+                      "lookup_time": "2026-10-13T19:46:25.683370+00:00",
+                      "status": "unavailable",
+                      "threats": [],
+                      "error": "GOOGLE_WEB_RISK_API_KEY is not configured",
+                      "lookups": [
+                        {
+                          "provider": "Google Web Risk Lookup API",
+                          "source_url": "https://webrisk.googleapis.com/v1/uris:search",
+                          "lookup_time": "2026-10-13T19:46:25.683370+00:00",
+                          "status": "unavailable",
+                          "threats": [],
+                          "error": "GOOGLE_WEB_RISK_API_KEY is not configured",
+                          "url": "https://example.com/"
+                        }
+                      ]
+                    },
+                    "redirects": {
+                      "provider": "httpx / pinned public IP / verified TLS / HEAD only",
+                      "lookup_time": "2026-10-13T19:46:25.683384+00:00",
+                      "status": "completed",
+                      "chain": [
+                        {
+                          "source": "https://example.com/",
+                          "status_code": 200,
+                          "destination": null,
+                          "resolved_addresses": [
+                            "104.20.23.154",
+                            "172.66.147.243",
+                            "2606:4700:10::6814:179a",
+                            "2606:4700:10::ac42:93f3"
+                          ],
+                          "lookup_time": "2026-10-13T19:46:25.697930+00:00"
+                        }
+                      ],
+                      "final_url": "https://example.com/",
+                      "redirect_count": 0,
+                      "downloaded_body_bytes": 0
+                    },
+                    "normalized_url": "https://example.com/",
+                    "hostname": "example.com",
+                    "registered_domain": "example.com",
+                    "heuristic_findings": [],
+                    "checked_at": "2026-10-13T19:46:25.714195+00:00"
+                  }
+                }
+              }
+            }
+          ],
+          "ai": {
+            "provider": "Local Ollama / Qwen",
+            "lookup_time": "2026-10-13T19:46:25.715014+00:00",
+            "status": "unavailable",
+            "installed": true,
+            "running": false,
+            "model_available": false,
+            "requested_model": "qwen3:4b",
+            "model_used": null,
+            "interpretations": [],
+            "structured_output": null,
+            "grounding_failures": [],
+            "attempts": 0,
+            "error": "Message AI is disabled by backend configuration"
+          },
+          "ai_interpretations": [],
+          "findings": [
+            {
+              "source": "deterministic · identity_claim",
+              "observation": "This is bank",
+              "interpretation": "Pressure or an identity claim accompanying an observed request; not an authenticated identity. Context: direct_or_uncertain.",
+              "action": "Verify requests using contact details obtained independently.",
+              "risk_level": "Caution"
+            },
+            {
+              "source": "deterministic · advance_payment",
+              "observation": "Pay INR 2500 registration fee",
+              "interpretation": "An observed request or pressure pattern; sender legitimacy is not verified. Context: direct_or_uncertain.",
+              "action": "Verify requests using contact details obtained independently.",
+              "risk_level": "Caution"
+            },
+            {
+              "source": "deterministic · urgency",
+              "observation": "today",
+              "interpretation": "Pressure or an identity claim accompanying an observed request; not an authenticated identity. Context: direct_or_uncertain.",
+              "action": "Verify requests using contact details obtained independently.",
+              "risk_level": "Caution"
+            },
+            {
+              "source": "deterministic · credential_request",
+              "observation": "Send me your OTP",
+              "interpretation": "An observed request or pressure pattern; sender legitimacy is not verified. Context: direct_or_uncertain.",
+              "action": "Verify requests using contact details obtained independently.",
+              "risk_level": "High Risk"
+            },
+            {
+              "source": "Offer deterministic · advance_payment",
+              "observation": "registration fee",
+              "interpretation": "Observed fee/deposit wording; verify whether this is an active request and whether payment is justified. Context: direct_or_uncertain",
+              "action": "Verify the issuer and claims independently before payment or sharing credentials.",
+              "risk_level": "Caution",
+              "text_offset": {
+                "start": 80,
+                "end": 96
+              }
+            }
+          ],
+          "evidence": [
+            {
+              "source_type": "deterministic",
+              "snippet": "This is bank",
+              "text_offset": {
+                "start": 34,
+                "end": 46
+              },
+              "detail": "identity_claim · direct_or_uncertain"
+            },
+            {
+              "source_type": "deterministic",
+              "snippet": "Pay INR 2500 registration fee",
+              "text_offset": {
+                "start": 67,
+                "end": 96
+              },
+              "detail": "advance_payment · direct_or_uncertain"
+            },
+            {
+              "source_type": "deterministic",
+              "snippet": "today",
+              "text_offset": {
+                "start": 97,
+                "end": 102
+              },
+              "detail": "urgency · direct_or_uncertain"
+            },
+            {
+              "source_type": "deterministic",
+              "snippet": "Send me your OTP",
+              "text_offset": {
+                "start": 117,
+                "end": 133
+              },
+              "detail": "credential_request · direct_or_uncertain"
+            },
+            {
+              "source_type": "offer_deterministic",
+              "snippet": "registration fee",
+              "text_offset": {
+                "start": 80,
+                "end": 96
+              },
+              "detail": "advance_payment · direct_or_uncertain"
+            }
+          ],
+          "risk_category": "High Risk",
+          "score": null,
+          "explanation": "Offer content risk: High Risk. Observed claims and requests are indicators, not independent proof of fraud or legitimacy. Regulatory status, market prices, employer identity and contact ownership were not independently verified.",
+          "checks_performed": [
+            {
+              "name": "Content adequacy",
+              "status": "passed",
+              "detail": "183 Unicode code points; original text preserved"
+            },
+            {
+              "name": "Entity extraction",
+              "status": "passed",
+              "detail": "4 actual entity span(s)"
+            },
+            {
+              "name": "Context-aware deterministic rules",
+              "status": "flagged",
+              "detail": "4 evidence span(s); negation/quotation considered"
+            },
+            {
+              "name": "Embedded Link Check",
+              "status": "passed",
+              "detail": "1 distinct URL(s) processed"
+            },
+            {
+              "name": "Embedded URL 1",
+              "status": "inconclusive",
+              "detail": "Unable to Assess"
+            },
+            {
+              "name": "Offer classification and contextual deterministic indicators",
+              "status": "flagged",
+              "detail": "job · 1 exact spans; quoted/negated wording distinguished"
+            }
+          ],
+          "unavailable_checks": [
+            {
+              "name": "Grounded Qwen contextual interpretation",
+              "status": "unavailable",
+              "detail": "Message AI is disabled by backend configuration"
+            },
+            {
+              "name": "Embedded URL 1 · Google Web Risk Lookup API",
+              "status": "unavailable",
+              "detail": "GOOGLE_WEB_RISK_API_KEY is not configured"
+            },
+            {
+              "name": "Organisation, regulatory, price and contact verification",
+              "status": "unavailable",
+              "detail": "No independent registry, regulator, price, phone or bank ownership source connected"
+            }
+          ],
+          "recommended_actions": [
+            "Verify the offer through independently obtained organisation contact details.",
+            "Do not disclose credentials or pay advance fees solely on an unsolicited promise.",
+            "A suspicious indicator does not prove an organisation is fake."
+          ],
+          "provider_info": {
+            "engine": "SafeLens Offer orchestration over Message/Link/Document",
+            "model_used": null,
+            "raw_content_retained": false
+          },
+          "coverage": {
+            "contextual_ai": "unavailable",
+            "all_urls_checked": 1,
+            "external_claims_verified": false
+          }
+        }
+      }
+    ],
+    "extracted_entities": [
+      {
+        "start": 34,
+        "end": 46,
+        "text": "This is bank",
+        "category": "identity_claim",
+        "page_number": 1,
+        "reference": "Page 1",
+        "text_source": "pdf_text"
+      },
+      {
+        "start": 71,
+        "end": 79,
+        "text": "INR 2500",
+        "category": "amount",
+        "page_number": 1,
+        "reference": "Page 1",
+        "text_source": "pdf_text"
+      },
+      {
+        "start": 97,
+        "end": 102,
+        "text": "today",
+        "category": "urgency",
+        "page_number": 1,
+        "reference": "Page 1",
+        "text_source": "pdf_text"
+      },
+      {
+        "start": 164,
+        "end": 183,
+        "text": "https://example.com",
+        "category": "url",
+        "page_number": 1,
+        "reference": "Page 1",
+        "text_source": "pdf_text"
+      }
+    ],
+    "url_assessments": [
+      {
+        "page": 1,
+        "reference": "Page 1",
+        "source": "visible_url_text",
+        "url": "https://example.com",
+        "offset": {
+          "start": 164,
+          "end": 183
+        },
+        "readable": true,
+        "analysis": {
+          "module_type": "link",
+          "input_summary": "https://example.com/",
+          "normalized_url": "https://example.com/",
+          "hostname": "example.com",
+          "registered_domain": "example.com",
+          "risk_category": "Unable to Assess",
+          "explanation": "Required checks are unavailable or inconclusive. The available evidence is insufficient to classify this URL as Low Risk.",
+          "findings": [],
+          "evidence": [
+            {
+              "source_type": "URL normalization",
+              "snippet": "https://example.com/",
+              "detail": "Actual submitted URL; fragment and embedded credentials omitted."
+            }
+          ],
+          "checks_performed": [
+            {
+              "name": "URL normalization / bundled Public Suffix List",
+              "status": "passed",
+              "detail": "Canonical host: example.com; registered domain: example.com"
+            },
+            {
+              "name": "DNS / public address validation",
+              "status": "passed",
+              "detail": "104.20.23.154, 172.66.147.243, 2606:4700:10::6814:179a, 2606:4700:10::ac42:93f3"
+            },
+            {
+              "name": "RDAP registration",
+              "status": "passed",
+              "detail": "Retrieved from https://rdap.verisign.com/com/v1/domain/example.com"
+            },
+            {
+              "name": "Safe HEAD redirect inspection",
+              "status": "passed",
+              "detail": "0 redirects; final URL: https://example.com/"
+            },
+            {
+              "name": "Deterministic URL heuristics",
+              "status": "passed",
+              "detail": "0 weak indicator(s); no AI interpretation"
+            }
+          ],
+          "unavailable_checks": [
+            {
+              "name": "Google Web Risk Lookup API",
+              "status": "unavailable",
+              "detail": "GOOGLE_WEB_RISK_API_KEY is not configured"
+            }
+          ],
+          "heuristic_findings": [],
+          "recommended_actions": [
+            "Verify the source and exact domain independently.",
+            "Do not share OTPs, passwords, or pay based on an unsolicited link.",
+            "A reputation non-match does not guarantee safety."
+          ],
+          "score": null,
+          "checked_at": "2026-10-13T19:46:25.714182+00:00",
+          "dns": {
+            "provider": "dnspython / system-configured DNS resolver",
+            "lookup_time": "2026-10-13T19:46:24.503048+00:00",
+            "hostname": "example.com",
+            "status": "resolved",
+            "addresses": [
+              "104.20.23.154",
+              "172.66.147.243",
+              "2606:4700:10::6814:179a",
+              "2606:4700:10::ac42:93f3"
+            ],
+            "records": {
+              "A": [
+                "104.20.23.154",
+                "172.66.147.243"
+              ],
+              "AAAA": [
+                "2606:4700:10::6814:179a",
+                "2606:4700:10::ac42:93f3"
+              ]
+            },
+            "errors": []
+          },
+          "rdap": {
+            "provider": "IANA RDAP bootstrap / registry RDAP",
+            "lookup_time": "2026-10-13T19:46:24.517157+00:00",
+            "status": "available",
+            "registered_domain": "example.com",
+            "bootstrap_source": "https://data.iana.org/rdap/dns.json",
+            "source_url": "https://rdap.verisign.com/com/v1/domain/example.com",
+            "registration_date": "1995-08-14T04:00:00Z",
+            "expiry_date": "2027-08-13T04:00:00Z",
+            "registrar": "RESERVED-Internet Assigned Numbers Authority",
+            "nameservers": [
+              "ELLIOTT.NS.CLOUDFLARE.COM",
+              "HERA.NS.CLOUDFLARE.COM"
+            ],
+            "domain_status": [
+              "client delete prohibited",
+              "client transfer prohibited",
+              "client update prohibited"
+            ],
+            "age_days": 11383
+          },
+          "reputation": {
+            "provider": "Google Web Risk Lookup API",
+            "source_url": "https://webrisk.googleapis.com/v1/uris:search",
+            "lookup_time": "2026-10-13T19:46:25.683370+00:00",
+            "status": "unavailable",
+            "threats": [],
+            "error": "GOOGLE_WEB_RISK_API_KEY is not configured",
+            "lookups": [
+              {
+                "provider": "Google Web Risk Lookup API",
+                "source_url": "https://webrisk.googleapis.com/v1/uris:search",
+                "lookup_time": "2026-10-13T19:46:25.683370+00:00",
+                "status": "unavailable",
+                "threats": [],
+                "error": "GOOGLE_WEB_RISK_API_KEY is not configured",
+                "url": "https://example.com/"
+              }
+            ]
+          },
+          "redirects": {
+            "provider": "httpx / pinned public IP / verified TLS / HEAD only",
+            "lookup_time": "2026-10-13T19:46:25.683384+00:00",
+            "status": "completed",
+            "chain": [
+              {
+                "source": "https://example.com/",
+                "status_code": 200,
+                "destination": null,
+                "resolved_addresses": [
+                  "104.20.23.154",
+                  "172.66.147.243",
+                  "2606:4700:10::6814:179a",
+                  "2606:4700:10::ac42:93f3"
+                ],
+                "lookup_time": "2026-10-13T19:46:25.697930+00:00"
+              }
+            ],
+            "final_url": "https://example.com/",
+            "redirect_count": 0,
+            "downloaded_body_bytes": 0
+          },
+          "provider_info": {
+            "engine": "SafeLens deterministic Link Inspector v2",
+            "tldextract_version": "5.4.0",
+            "registered_domain": "example.com",
+            "target_host": "example.com",
+            "link_analysis": {
+              "dns": {
+                "provider": "dnspython / system-configured DNS resolver",
+                "lookup_time": "2026-10-13T19:46:24.503048+00:00",
+                "hostname": "example.com",
+                "status": "resolved",
+                "addresses": [
+                  "104.20.23.154",
+                  "172.66.147.243",
+                  "2606:4700:10::6814:179a",
+                  "2606:4700:10::ac42:93f3"
+                ],
+                "records": {
+                  "A": [
+                    "104.20.23.154",
+                    "172.66.147.243"
+                  ],
+                  "AAAA": [
+                    "2606:4700:10::6814:179a",
+                    "2606:4700:10::ac42:93f3"
+                  ]
+                },
+                "errors": []
+              },
+              "rdap": {
+                "provider": "IANA RDAP bootstrap / registry RDAP",
+                "lookup_time": "2026-10-13T19:46:24.517157+00:00",
+                "status": "available",
+                "registered_domain": "example.com",
+                "bootstrap_source": "https://data.iana.org/rdap/dns.json",
+                "source_url": "https://rdap.verisign.com/com/v1/domain/example.com",
+                "registration_date": "1995-08-14T04:00:00Z",
+                "expiry_date": "2027-08-13T04:00:00Z",
+                "registrar": "RESERVED-Internet Assigned Numbers Authority",
+                "nameservers": [
+                  "ELLIOTT.NS.CLOUDFLARE.COM",
+                  "HERA.NS.CLOUDFLARE.COM"
+                ],
+                "domain_status": [
+                  "client delete prohibited",
+                  "client transfer prohibited",
+                  "client update prohibited"
+                ],
+                "age_days": 11383
+              },
+              "reputation": {
+                "provider": "Google Web Risk Lookup API",
+                "source_url": "https://webrisk.googleapis.com/v1/uris:search",
+                "lookup_time": "2026-10-13T19:46:25.683370+00:00",
+                "status": "unavailable",
+                "threats": [],
+                "error": "GOOGLE_WEB_RISK_API_KEY is not configured",
+                "lookups": [
+                  {
+                    "provider": "Google Web Risk Lookup API",
+                    "source_url": "https://webrisk.googleapis.com/v1/uris:search",
+                    "lookup_time": "2026-10-13T19:46:25.683370+00:00",
+                    "status": "unavailable",
+                    "threats": [],
+                    "error": "GOOGLE_WEB_RISK_API_KEY is not configured",
+                    "url": "https://example.com/"
+                  }
+                ]
+              },
+              "redirects": {
+                "provider": "httpx / pinned public IP / verified TLS / HEAD only",
+                "lookup_time": "2026-10-13T19:46:25.683384+00:00",
+                "status": "completed",
+                "chain": [
+                  {
+                    "source": "https://example.com/",
+                    "status_code": 200,
+                    "destination": null,
+                    "resolved_addresses": [
+                      "104.20.23.154",
+                      "172.66.147.243",
+                      "2606:4700:10::6814:179a",
+                      "2606:4700:10::ac42:93f3"
+                    ],
+                    "lookup_time": "2026-10-13T19:46:25.697930+00:00"
+                  }
+                ],
+                "final_url": "https://example.com/",
+                "redirect_count": 0,
+                "downloaded_body_bytes": 0
+              },
+              "normalized_url": "https://example.com/",
+              "hostname": "example.com",
+              "registered_domain": "example.com",
+              "heuristic_findings": [],
+              "checked_at": "2026-10-13T19:46:25.714195+00:00"
+            }
+          }
+        }
+      },
+      {
+        "url": "https://example.com",
+        "occurrences": [
+          {
+            "start": 164,
+            "end": 183,
+            "text": "https://example.com",
+            "category": "url"
+          }
+        ],
+        "analysis": {
+          "module_type": "link",
+          "input_summary": "https://example.com/",
+          "normalized_url": "https://example.com/",
+          "hostname": "example.com",
+          "registered_domain": "example.com",
+          "risk_category": "Unable to Assess",
+          "explanation": "Required checks are unavailable or inconclusive. The available evidence is insufficient to classify this URL as Low Risk.",
+          "findings": [],
+          "evidence": [
+            {
+              "source_type": "URL normalization",
+              "snippet": "https://example.com/",
+              "detail": "Actual submitted URL; fragment and embedded credentials omitted."
+            }
+          ],
+          "checks_performed": [
+            {
+              "name": "URL normalization / bundled Public Suffix List",
+              "status": "passed",
+              "detail": "Canonical host: example.com; registered domain: example.com"
+            },
+            {
+              "name": "DNS / public address validation",
+              "status": "passed",
+              "detail": "104.20.23.154, 172.66.147.243, 2606:4700:10::6814:179a, 2606:4700:10::ac42:93f3"
+            },
+            {
+              "name": "RDAP registration",
+              "status": "passed",
+              "detail": "Retrieved from https://rdap.verisign.com/com/v1/domain/example.com"
+            },
+            {
+              "name": "Safe HEAD redirect inspection",
+              "status": "passed",
+              "detail": "0 redirects; final URL: https://example.com/"
+            },
+            {
+              "name": "Deterministic URL heuristics",
+              "status": "passed",
+              "detail": "0 weak indicator(s); no AI interpretation"
+            }
+          ],
+          "unavailable_checks": [
+            {
+              "name": "Google Web Risk Lookup API",
+              "status": "unavailable",
+              "detail": "GOOGLE_WEB_RISK_API_KEY is not configured"
+            }
+          ],
+          "heuristic_findings": [],
+          "recommended_actions": [
+            "Verify the source and exact domain independently.",
+            "Do not share OTPs, passwords, or pay based on an unsolicited link.",
+            "A reputation non-match does not guarantee safety."
+          ],
+          "score": null,
+          "checked_at": "2026-10-13T19:46:25.714182+00:00",
+          "dns": {
+            "provider": "dnspython / system-configured DNS resolver",
+            "lookup_time": "2026-10-13T19:46:24.503048+00:00",
+            "hostname": "example.com",
+            "status": "resolved",
+            "addresses": [
+              "104.20.23.154",
+              "172.66.147.243",
+              "2606:4700:10::6814:179a",
+              "2606:4700:10::ac42:93f3"
+            ],
+            "records": {
+              "A": [
+                "104.20.23.154",
+                "172.66.147.243"
+              ],
+              "AAAA": [
+                "2606:4700:10::6814:179a",
+                "2606:4700:10::ac42:93f3"
+              ]
+            },
+            "errors": []
+          },
+          "rdap": {
+            "provider": "IANA RDAP bootstrap / registry RDAP",
+            "lookup_time": "2026-10-13T19:46:24.517157+00:00",
+            "status": "available",
+            "registered_domain": "example.com",
+            "bootstrap_source": "https://data.iana.org/rdap/dns.json",
+            "source_url": "https://rdap.verisign.com/com/v1/domain/example.com",
+            "registration_date": "1995-08-14T04:00:00Z",
+            "expiry_date": "2027-08-13T04:00:00Z",
+            "registrar": "RESERVED-Internet Assigned Numbers Authority",
+            "nameservers": [
+              "ELLIOTT.NS.CLOUDFLARE.COM",
+              "HERA.NS.CLOUDFLARE.COM"
+            ],
+            "domain_status": [
+              "client delete prohibited",
+              "client transfer prohibited",
+              "client update prohibited"
+            ],
+            "age_days": 11383
+          },
+          "reputation": {
+            "provider": "Google Web Risk Lookup API",
+            "source_url": "https://webrisk.googleapis.com/v1/uris:search",
+            "lookup_time": "2026-10-13T19:46:25.683370+00:00",
+            "status": "unavailable",
+            "threats": [],
+            "error": "GOOGLE_WEB_RISK_API_KEY is not configured",
+            "lookups": [
+              {
+                "provider": "Google Web Risk Lookup API",
+                "source_url": "https://webrisk.googleapis.com/v1/uris:search",
+                "lookup_time": "2026-10-13T19:46:25.683370+00:00",
+                "status": "unavailable",
+                "threats": [],
+                "error": "GOOGLE_WEB_RISK_API_KEY is not configured",
+                "url": "https://example.com/"
+              }
+            ]
+          },
+          "redirects": {
+            "provider": "httpx / pinned public IP / verified TLS / HEAD only",
+            "lookup_time": "2026-10-13T19:46:25.683384+00:00",
+            "status": "completed",
+            "chain": [
+              {
+                "source": "https://example.com/",
+                "status_code": 200,
+                "destination": null,
+                "resolved_addresses": [
+                  "104.20.23.154",
+                  "172.66.147.243",
+                  "2606:4700:10::6814:179a",
+                  "2606:4700:10::ac42:93f3"
+                ],
+                "lookup_time": "2026-10-13T19:46:25.697930+00:00"
+              }
+            ],
+            "final_url": "https://example.com/",
+            "redirect_count": 0,
+            "downloaded_body_bytes": 0
+          },
+          "provider_info": {
+            "engine": "SafeLens deterministic Link Inspector v2",
+            "tldextract_version": "5.4.0",
+            "registered_domain": "example.com",
+            "target_host": "example.com",
+            "link_analysis": {
+              "dns": {
+                "provider": "dnspython / system-configured DNS resolver",
+                "lookup_time": "2026-10-13T19:46:24.503048+00:00",
+                "hostname": "example.com",
+                "status": "resolved",
+                "addresses": [
+                  "104.20.23.154",
+                  "172.66.147.243",
+                  "2606:4700:10::6814:179a",
+                  "2606:4700:10::ac42:93f3"
+                ],
+                "records": {
+                  "A": [
+                    "104.20.23.154",
+                    "172.66.147.243"
+                  ],
+                  "AAAA": [
+                    "2606:4700:10::6814:179a",
+                    "2606:4700:10::ac42:93f3"
+                  ]
+                },
+                "errors": []
+              },
+              "rdap": {
+                "provider": "IANA RDAP bootstrap / registry RDAP",
+                "lookup_time": "2026-10-13T19:46:24.517157+00:00",
+                "status": "available",
+                "registered_domain": "example.com",
+                "bootstrap_source": "https://data.iana.org/rdap/dns.json",
+                "source_url": "https://rdap.verisign.com/com/v1/domain/example.com",
+                "registration_date": "1995-08-14T04:00:00Z",
+                "expiry_date": "2027-08-13T04:00:00Z",
+                "registrar": "RESERVED-Internet Assigned Numbers Authority",
+                "nameservers": [
+                  "ELLIOTT.NS.CLOUDFLARE.COM",
+                  "HERA.NS.CLOUDFLARE.COM"
+                ],
+                "domain_status": [
+                  "client delete prohibited",
+                  "client transfer prohibited",
+                  "client update prohibited"
+                ],
+                "age_days": 11383
+              },
+              "reputation": {
+                "provider": "Google Web Risk Lookup API",
+                "source_url": "https://webrisk.googleapis.com/v1/uris:search",
+                "lookup_time": "2026-10-13T19:46:25.683370+00:00",
+                "status": "unavailable",
+                "threats": [],
+                "error": "GOOGLE_WEB_RISK_API_KEY is not configured",
+                "lookups": [
+                  {
+                    "provider": "Google Web Risk Lookup API",
+                    "source_url": "https://webrisk.googleapis.com/v1/uris:search",
+                    "lookup_time": "2026-10-13T19:46:25.683370+00:00",
+                    "status": "unavailable",
+                    "threats": [],
+                    "error": "GOOGLE_WEB_RISK_API_KEY is not configured",
+                    "url": "https://example.com/"
+                  }
+                ]
+              },
+              "redirects": {
+                "provider": "httpx / pinned public IP / verified TLS / HEAD only",
+                "lookup_time": "2026-10-13T19:46:25.683384+00:00",
+                "status": "completed",
+                "chain": [
+                  {
+                    "source": "https://example.com/",
+                    "status_code": 200,
+                    "destination": null,
+                    "resolved_addresses": [
+                      "104.20.23.154",
+                      "172.66.147.243",
+                      "2606:4700:10::6814:179a",
+                      "2606:4700:10::ac42:93f3"
+                    ],
+                    "lookup_time": "2026-10-13T19:46:25.697930+00:00"
+                  }
+                ],
+                "final_url": "https://example.com/",
+                "redirect_count": 0,
+                "downloaded_body_bytes": 0
+              },
+              "normalized_url": "https://example.com/",
+              "hostname": "example.com",
+              "registered_domain": "example.com",
+              "heuristic_findings": [],
+              "checked_at": "2026-10-13T19:46:25.714195+00:00"
+            }
+          }
+        },
+        "page_number": 1,
+        "reference": "Page 1",
+        "text_source": "pdf_text"
+      }
+    ],
+    "findings": [
+      {
+        "source": "Document deterministic · identity_claim",
+        "observation": "This is bank",
+        "interpretation": "Pressure or an identity claim accompanying an observed request; not an authenticated identity.",
+        "action": "Verify the request independently.",
+        "risk_level": "Caution",
+        "page_number": 1,
+        "reference": "Page 1",
+        "text_offset": {
+          "start": 34,
+          "end": 46
+        },
+        "bounding_boxes": null
+      },
+      {
+        "source": "Document deterministic · advance_payment",
+        "observation": "Pay INR 2500 registration fee",
+        "interpretation": "An observed request or pressure pattern; sender legitimacy is not verified.",
+        "action": "Verify the request independently.",
+        "risk_level": "Caution",
+        "page_number": 1,
+        "reference": "Page 1",
+        "text_offset": {
+          "start": 67,
+          "end": 96
+        },
+        "bounding_boxes": null
+      },
+      {
+        "source": "Document deterministic · urgency",
+        "observation": "today",
+        "interpretation": "Pressure or an identity claim accompanying an observed request; not an authenticated identity.",
+        "action": "Verify the request independently.",
+        "risk_level": "Caution",
+        "page_number": 1,
+        "reference": "Page 1",
+        "text_offset": {
+          "start": 97,
+          "end": 102
+        },
+        "bounding_boxes": null
+      },
+      {
+        "source": "Document deterministic · credential_request",
+        "observation": "Send me your OTP",
+        "interpretation": "An observed request or pressure pattern; sender legitimacy is not verified.",
+        "action": "Verify the request independently.",
+        "risk_level": "High Risk",
+        "page_number": 1,
+        "reference": "Page 1",
+        "text_offset": {
+          "start": 117,
+          "end": 133
+        },
+        "bounding_boxes": null
+      },
+      {
+        "source": "deterministic · identity_claim",
+        "observation": "This is bank",
+        "interpretation": "Pressure or an identity claim accompanying an observed request; not an authenticated identity. Context: direct_or_uncertain.",
+        "action": "Verify requests using contact details obtained independently.",
+        "risk_level": "Caution",
+        "page_number": 1,
+        "reference": "Page 1",
+        "text_source": "pdf_text"
+      },
+      {
+        "source": "deterministic · advance_payment",
+        "observation": "Pay INR 2500 registration fee",
+        "interpretation": "An observed request or pressure pattern; sender legitimacy is not verified. Context: direct_or_uncertain.",
+        "action": "Verify requests using contact details obtained independently.",
+        "risk_level": "Caution",
+        "page_number": 1,
+        "reference": "Page 1",
+        "text_source": "pdf_text"
+      },
+      {
+        "source": "deterministic · urgency",
+        "observation": "today",
+        "interpretation": "Pressure or an identity claim accompanying an observed request; not an authenticated identity. Context: direct_or_uncertain.",
+        "action": "Verify requests using contact details obtained independently.",
+        "risk_level": "Caution",
+        "page_number": 1,
+        "reference": "Page 1",
+        "text_source": "pdf_text"
+      },
+      {
+        "source": "deterministic · credential_request",
+        "observation": "Send me your OTP",
+        "interpretation": "An observed request or pressure pattern; sender legitimacy is not verified. Context: direct_or_uncertain.",
+        "action": "Verify requests using contact details obtained independently.",
+        "risk_level": "High Risk",
+        "page_number": 1,
+        "reference": "Page 1",
+        "text_source": "pdf_text"
+      },
+      {
+        "source": "Offer deterministic · advance_payment",
+        "observation": "registration fee",
+        "interpretation": "Observed fee/deposit wording; verify whether this is an active request and whether payment is justified. Context: direct_or_uncertain",
+        "action": "Verify the issuer and claims independently before payment or sharing credentials.",
+        "risk_level": "Caution",
+        "text_offset": {
+          "start": 80,
+          "end": 96
+        },
+        "page_number": 1,
+        "reference": "Page 1",
+        "text_source": "pdf_text"
+      }
+    ],
+    "evidence": [
+      {
+        "source_type": "pdf_text",
+        "snippet": "This is bank",
+        "page_number": 1,
+        "reference": "Page 1",
+        "text_offset": {
+          "start": 34,
+          "end": 46
+        },
+        "bounding_boxes": null,
+        "detail": "Exact grounded page evidence · identity_claim"
+      },
+      {
+        "source_type": "pdf_text",
+        "snippet": "Pay INR 2500 registration fee",
+        "page_number": 1,
+        "reference": "Page 1",
+        "text_offset": {
+          "start": 67,
+          "end": 96
+        },
+        "bounding_boxes": null,
+        "detail": "Exact grounded page evidence · advance_payment"
+      },
+      {
+        "source_type": "pdf_text",
+        "snippet": "today",
+        "page_number": 1,
+        "reference": "Page 1",
+        "text_offset": {
+          "start": 97,
+          "end": 102
+        },
+        "bounding_boxes": null,
+        "detail": "Exact grounded page evidence · urgency"
+      },
+      {
+        "source_type": "pdf_text",
+        "snippet": "Send me your OTP",
+        "page_number": 1,
+        "reference": "Page 1",
+        "text_offset": {
+          "start": 117,
+          "end": 133
+        },
+        "bounding_boxes": null,
+        "detail": "Exact grounded page evidence · credential_request"
+      },
+      {
+        "source_type": "deterministic",
+        "snippet": "This is bank",
+        "text_offset": {
+          "start": 34,
+          "end": 46
+        },
+        "detail": "identity_claim · direct_or_uncertain",
+        "page_number": 1,
+        "reference": "Page 1",
+        "text_source": "pdf_text"
+      },
+      {
+        "source_type": "deterministic",
+        "snippet": "Pay INR 2500 registration fee",
+        "text_offset": {
+          "start": 67,
+          "end": 96
+        },
+        "detail": "advance_payment · direct_or_uncertain",
+        "page_number": 1,
+        "reference": "Page 1",
+        "text_source": "pdf_text"
+      },
+      {
+        "source_type": "deterministic",
+        "snippet": "today",
+        "text_offset": {
+          "start": 97,
+          "end": 102
+        },
+        "detail": "urgency · direct_or_uncertain",
+        "page_number": 1,
+        "reference": "Page 1",
+        "text_source": "pdf_text"
+      },
+      {
+        "source_type": "deterministic",
+        "snippet": "Send me your OTP",
+        "text_offset": {
+          "start": 117,
+          "end": 133
+        },
+        "detail": "credential_request · direct_or_uncertain",
+        "page_number": 1,
+        "reference": "Page 1",
+        "text_source": "pdf_text"
+      },
+      {
+        "source_type": "offer_deterministic",
+        "snippet": "registration fee",
+        "text_offset": {
+          "start": 80,
+          "end": 96
+        },
+        "detail": "advance_payment · direct_or_uncertain",
+        "page_number": 1,
+        "reference": "Page 1",
+        "text_source": "pdf_text"
+      }
+    ],
+    "risk_category": "High Risk",
+    "score": null,
+    "explanation": "Offer document: High Risk. Actual document evidence and coverage retained; issuer, regulatory status and market prices are unverified.",
+    "checks_performed": [
+      {
+        "name": "Content-based file validation",
+        "status": "passed",
+        "detail": "PDF"
+      },
+      {
+        "name": "ClamAV malware scan",
+        "status": "passed",
+        "detail": "No configured known malware signature was detected. This is not a safety guarantee."
+      },
+      {
+        "name": "Isolated document parser",
+        "status": "passed",
+        "detail": "completed"
+      },
+      {
+        "name": "Page/content coverage",
+        "status": "passed",
+        "detail": "1 actual pages/blocks; 0 OCR runs; 0 unreadable; 0 skipped"
+      },
+      {
+        "name": "URL normalization / bundled Public Suffix List",
+        "status": "passed",
+        "detail": "Canonical host: example.com; registered domain: example.com"
+      },
+      {
+        "name": "DNS / public address validation",
+        "status": "passed",
+        "detail": "104.20.23.154, 172.66.147.243, 2606:4700:10::6814:179a, 2606:4700:10::ac42:93f3"
+      },
+      {
+        "name": "RDAP registration",
+        "status": "passed",
+        "detail": "Retrieved from https://rdap.verisign.com/com/v1/domain/example.com"
+      },
+      {
+        "name": "Safe HEAD redirect inspection",
+        "status": "passed",
+        "detail": "0 redirects; final URL: https://example.com/"
+      },
+      {
+        "name": "Deterministic URL heuristics",
+        "status": "passed",
+        "detail": "0 weak indicator(s); no AI interpretation"
+      },
+      {
+        "name": "Page 1 · Content adequacy",
+        "status": "passed",
+        "detail": "183 Unicode code points; original text preserved"
+      },
+      {
+        "name": "Page 1 · Entity extraction",
+        "status": "passed",
+        "detail": "4 actual entity span(s)"
+      },
+      {
+        "name": "Page 1 · Context-aware deterministic rules",
+        "status": "flagged",
+        "detail": "4 evidence span(s); negation/quotation considered"
+      },
+      {
+        "name": "Page 1 · Embedded Link Check",
+        "status": "passed",
+        "detail": "1 distinct URL(s) processed"
+      },
+      {
+        "name": "Page 1 · Embedded URL 1",
+        "status": "inconclusive",
+        "detail": "Unable to Assess"
+      },
+      {
+        "name": "Content adequacy",
+        "status": "passed",
+        "detail": "183 Unicode code points; original text preserved"
+      },
+      {
+        "name": "Entity extraction",
+        "status": "passed",
+        "detail": "4 actual entity span(s)"
+      },
+      {
+        "name": "Context-aware deterministic rules",
+        "status": "flagged",
+        "detail": "4 evidence span(s); negation/quotation considered"
+      },
+      {
+        "name": "Embedded Link Check",
+        "status": "passed",
+        "detail": "1 distinct URL(s) processed"
+      },
+      {
+        "name": "Embedded URL 1",
+        "status": "inconclusive",
+        "detail": "Unable to Assess"
+      },
+      {
+        "name": "Offer classification and contextual deterministic indicators",
+        "status": "flagged",
+        "detail": "job · 1 exact spans; quoted/negated wording distinguished"
+      }
+    ],
+    "unavailable_checks": [
+      {
+        "name": "Google Web Risk Lookup API",
+        "status": "unavailable",
+        "detail": "GOOGLE_WEB_RISK_API_KEY is not configured"
+      },
+      {
+        "name": "Page 1 · Grounded Qwen contextual interpretation",
+        "status": "unavailable",
+        "detail": "Message AI is disabled by backend configuration"
+      },
+      {
+        "name": "Page 1 · Embedded URL 1 · Google Web Risk Lookup API",
+        "status": "unavailable",
+        "detail": "GOOGLE_WEB_RISK_API_KEY is not configured"
+      },
+      {
+        "name": "Grounded Qwen contextual interpretation",
+        "status": "unavailable",
+        "detail": "Message AI is disabled by backend configuration"
+      },
+      {
+        "name": "Embedded URL 1 · Google Web Risk Lookup API",
+        "status": "unavailable",
+        "detail": "GOOGLE_WEB_RISK_API_KEY is not configured"
+      },
+      {
+        "name": "Organisation, regulatory, price and contact verification",
+        "status": "unavailable",
+        "detail": "No independent registry, regulator, price, phone or bank ownership source connected"
+      }
+    ],
+    "coverage": {
+      "total_pages": 1,
+      "pages_parsed": 1,
+      "logical_blocks_parsed": null,
+      "pages_ocr_processed": 0,
+      "pages_failed": [],
+      "pages_skipped": [],
+      "content_blocks_analysed": 1,
+      "parse_coverage_complete": true,
+      "analysis_complete": false,
+      "pagination_limitation": null,
+      "unprocessed_parts": [],
+      "limits": {
+        "upload_bytes": 20971520,
+        "pdf_pages": 30,
+        "ocr_pages": 3,
+        "render_pixels": 4000000,
+        "rendered_pages_including_preview": 3,
+        "parse_seconds": 30,
+        "analysis_seconds": 300,
+        "urls": 16,
+        "content_blocks": 30
+      }
+    },
+    "recommended_actions": [
+      "Verify issuer and payment instructions using independently obtained contact details.",
+      "Do not execute document scripts, macros or attachments.",
+      "A clean malware scan does not establish safety or authenticity.",
+      "Review exact page evidence and missing coverage before acting."
+    ],
+    "provider_info": {
+      "engine": "SafeLens Offer + existing Document/Message/Link",
+      "raw_content_retained": false
+    },
+    "id": "asmt_eda545936427",
+    "created_at": "2026-10-13T19:46:25.733757+00:00",
+    "created_at_iso": "2026-10-13T19:46:25.733757+00:00",
+    "retention_expiry": "2026-10-14T19:46:25.733763"
+  },
+  "completed_retry_metadata": {
+    "id": "asmt_5c6511b1ede7",
+    "risk_category": "High Risk",
+    "detail": "Retry initiated with retained job_offer.pdf and completed; browser subsequently navigated to Link, so detailed retry response was not captured."
+  },
+  "not_separately_exercised": [
+    "native drag/drop",
+    "Check Another after final blank-text control fix"
+  ],
+  "shutdown_verification": {
+    "checked_at": "2026-10-13T19:57:38.960543+00:00",
+    "ports_without_listeners": [
+      8000,
+      8001,
+      11434
+    ],
+    "ollama_background_service": "stopped via brew services stop ollama",
+    "processing_workers_remaining": false
+  }
+}

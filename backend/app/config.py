@@ -23,12 +23,23 @@ class Settings(BaseSettings):
     
     # External Threat Intelligence
     SAFE_BROWSING_API_KEY: str = os.getenv("SAFE_BROWSING_API_KEY", "")
+    GOOGLE_WEB_RISK_API_KEY: str = ""
     SAFE_BROWSING_NONCOMMERCIAL: bool = os.getenv("SAFE_BROWSING_NONCOMMERCIAL", "true").lower() == "true"
     
     # Local & Remote AI Settings
     OLLAMA_BASE_URL: str = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
     OLLAMA_MODEL: str = os.getenv("OLLAMA_MODEL", "qwen2.5:3b")
     FALLBACK_LOCAL_RULES: bool = True
+    MESSAGE_OLLAMA_MODEL: str = 'qwen3:4b'
+    MESSAGE_AI_ENABLED: bool = True
+    MESSAGE_MAX_CHARACTERS: int = 12000
+    MESSAGE_MAX_LINKS: int = 8
+    SCREENSHOT_MAX_BYTES: int = 10 * 1024 * 1024
+    SCREENSHOT_MAX_SIDE: int = 6000
+    SCREENSHOT_MAX_PIXELS: int = 12_000_000
+    SCREENSHOT_OCR_TIMEOUT: int = 60
+    SCREENSHOT_MIN_CONFIDENCE: float = 0.80
+    SCREENSHOT_OCR_MODEL_ROOT: str = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'ocr_models')
     
     # Limits & Storage
     MAX_UPLOAD_SIZE_BYTES: int = 50 * 1024 * 1024 # 50 MB

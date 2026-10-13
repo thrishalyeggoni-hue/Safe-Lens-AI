@@ -16,31 +16,28 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* --------------------------------------------------------------------------
-   1. CUSTOM MAGNETIC CURSOR (DEAD CENTER ALIGNMENT)
+   1. CUSTOM CURSOR (SYNCHRONIZED DOT AND RING)
    -------------------------------------------------------------------------- */
 function initCustomCursor() {
   const cursor = document.getElementById('customCursor');
   const follower = document.getElementById('cursorFollower');
   if (!cursor || !follower) return;
 
-  let mouseX = window.innerWidth / 2;
-  let mouseY = window.innerHeight / 2;
-  let followerX = mouseX;
-  let followerY = mouseY;
   let isVisible = false;
 
-  window.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
+  window.addEventListener('pointermove', (e) => {
+    if (e.pointerType === 'touch') return;
+
+    // Both layers use the same coordinates in the same event, without easing.
+    const position = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`;
+    cursor.style.transform = position;
+    follower.style.transform = position;
 
     if (!isVisible) {
       isVisible = true;
       cursor.style.opacity = '1';
       follower.style.opacity = '1';
     }
-
-    // Dot represents INSTANTANEOUS mouse coordinate, centered with translate(-50%, -50%)
-    cursor.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
 
     // Detect if cursor is over a light / white container
     const target = e.target;
@@ -55,26 +52,17 @@ function initCustomCursor() {
         document.body.classList.remove('cursor-on-light');
       }
     }
-  });
+  }, { passive: true });
 
-  window.addEventListener('mouseleave', () => {
+  function hideCursor() {
     cursor.style.opacity = '0';
     follower.style.opacity = '0';
     isVisible = false;
-  });
-
-  function renderCursor() {
-    // Follower smoothly eases toward mouse position with spring physics
-    followerX += (mouseX - followerX) * 0.18;
-    followerY += (mouseY - followerY) * 0.18;
-
-    // Follower also centered with translate(-50%, -50%), guaranteeing the dot is DEAD CENTER
-    follower.style.transform = `translate3d(${followerX}px, ${followerY}px, 0) translate(-50%, -50%)`;
-    requestAnimationFrame(renderCursor);
   }
-  requestAnimationFrame(renderCursor);
+  document.documentElement.addEventListener('pointerleave', hideCursor);
+  window.addEventListener('blur', hideCursor);
 
-  // Magnetic & Hover expansion over interactive elements
+  // Hover expansion over interactive elements
   const interactives = document.querySelectorAll(
     'a, button, input, .partner-card, .stepped-tab-card, .toggle-opt, .threat-item, .threat-service-card, .process-card, .assessment-item'
   );
@@ -235,8 +223,8 @@ function initHeroCanvasSequence() {
         const elapsed = now - startTime;
         const progress = Math.min(1, elapsed / duration);
         // Eased progress
-        const ease = progress < 0.5 
-          ? 2 * progress * progress 
+        const ease = progress < 0.5
+          ? 2 * progress * progress
           : 1 - Math.pow(-2 * progress + 2, 2) / 2;
 
         if (progress < 1) {
@@ -409,10 +397,126 @@ let activeModule = 'link';
 let activeSelectedFile = null;
 let activeAbortController = null;
 let currentAssessment = null;
+let mediaFile = null, mediaResultId = null, mediaResultUrl = null;
+let offerFile = null, offerText = '', offerResultId = null;
+let documentFile = null;
+let documentResultId = null;
+let documentLanguage = 'en';
+let qrFile = null;
+let qrResultUrl = null;
+let qrResultId = null;
+let screenshotIntakeUrl = null;
+let screenshotResultUrl = null;
+let currentScreenshotFile = null;
+let screenshotResultId = null;
+
+const moduleExperiences = {
+  link: { sheet: 'link-message', panel: 1, description: 'Look before you click. Inspect real DNS records, domain registration, configured reputation intelligence, and public redirect destinations.', signals: ['Domain · DNS & RDAP', 'Redirects · public destinations', 'Reputation · Google Web Risk'], action: 'Check link' },
+  message: { sheet: 'link-message', panel: 2, description: 'Read between the lines. Analyse the exact message, review requests in context, and inspect any embedded links.', signals: ['Context · requests & warnings', 'Evidence · exact text spans', 'Links · real URL checks'], action: 'Analyse message' },
+  screenshot: { sheet: 'link-message', panel: 0, description: 'See the hidden clues. Extract actual text and evidence boxes, inspect embedded links, and review requests in context.', signals: ['Local OCR · actual text & boxes', 'Links · real URL checks', 'Context · grounded message analysis'], action: 'Analyse screenshot' },
+  qr: { sheet: 'link-message', panel: 1, description: 'Know where it leads. Decode actual QR images and review destinations and self-declared payment details.', signals: ['ZXing-C++ · actual QR payloads', 'URLs · existing Link Check', 'Payment · unverified parsed fields'], action: 'Analyse QR image' },
+  document: { sheet: 'media-offer-review', panel: 2, description: 'Check the fine print. Parse actual pages, review malware scanning, and inspect links and exact evidence.', signals: ['PDF / DOCX · actual text and structure', 'Scanned pages · local PaddleOCR', 'ClamAV · separate malware scan'], action: 'Analyse document' },
+  media: { sheet: 'media-offer-review', panel: 0, description: 'Look beyond the surface. Prepare your file, extract available signals, then review its source and context.', signals: ['Image signals · visual analysis', 'Video signals · frame analysis', 'Source check · origin & context'], action: 'Analyse media', sample: 'Illustrative video.mp4 · 12.4 MB', excerpt: 'No reliable source information is available for this sample.', warnings: ['Source not verified', 'Context unavailable', 'Authenticity inconclusive'], score: null },
+  offer: { sheet: 'media-offer-review', panel: 1, description: 'Pause before the promise. Review guaranteed returns, advance fees, and pressure to pay.', signals: ['Offer claims · unverified promises', 'Advance fee · contextual requests', 'Pressure · exact evidence'], action: 'Analyse offer', sample: 'Guaranteed returns. Pay today. Limited time offer with high profits for everyone. Click the link to get started.', excerpt: 'Guaranteed returns. Pay today.', warnings: ['Guaranteed returns', 'Advance fee', 'Scam pattern'], score: 86 },
+};
+
+function updateModuleExperience() {
+  const config = moduleExperiences[activeModule];
+  const hero = document.getElementById('moduleExperience');
+  hero.innerHTML = `<div class="module-reference-image" role="img" aria-label="${escapeHtml(activeModule)} check illustration" style="background-image:url('/assets/module-references/${config.sheet}.png');background-position:${config.panel * 50}% 20%"></div>
+    ${activeModule === 'media' ? '<ol class="module-review-steps"><li>1 · Prepare</li><li>2 · Extract</li><li>3 · Review</li></ol>' : ''}
+    <p class="module-explanation">${escapeHtml(config.description)}</p>`;
+  document.getElementById('moduleSignals').innerHTML = config.signals.map(signal => `<div class="module-signal"><span class="module-signal-dot"></span>${escapeHtml(signal)}</div>`).join('');
+  document.getElementById('submitBtnText').textContent = config.action;
+  document.getElementById('btnModuleDemo').textContent = `Review ${activeModule} sample →`;
+  document.querySelector('.module-demo-actions').hidden = ['link', 'message', 'screenshot', 'qr', 'document', 'media', 'offer'].includes(activeModule);
+  document.getElementById('screenshotIntake').hidden = !['screenshot','qr','document','media','offer'].includes(activeModule);
+  document.getElementById('screenshotLanguage').hidden = activeModule === 'qr';
+  document.querySelector('label[for="screenshotLanguage"]').hidden = activeModule === 'qr';
+  document.querySelector('#screenshotIntake .screenshot-note').hidden = activeModule === 'qr';
+  document.getElementById('btnResetScreenshot').textContent = activeModule === 'qr' ? 'Reset QR image' : activeModule === 'document' ? 'Reset document' : activeModule === 'media' ? 'Reset media' : activeModule === 'offer' ? 'Reset offer' : 'Reset screenshot';
+  document.querySelector('label[for="screenshotLanguage"]').textContent = activeModule === 'document' ? 'Scanned page language' : ['media','offer'].includes(activeModule) ? 'OCR / speech language' : 'Screenshot language';
+  document.getElementById('screenshotInputPreview').hidden = ['document','media','offer'].includes(activeModule);
+  document.getElementById('mediaIntakePreview')?.remove();
+  document.getElementById('btnResetMessage').textContent=activeModule==='offer'?'Reset offer text':'Reset message';
+  document.getElementById('messageInputActions').hidden = !['message','offer'].includes(activeModule);
+  document.querySelector('label[for="inputTextField"]').textContent = activeModule === 'message' ? 'Message to review' : 'Message / Offer Body Text';
+  document.getElementById('intakePrivacyNote').textContent = activeModule === 'link'
+    ? 'The backend contacts DNS, registry RDAP, and the destination. When configured, Google Web Risk receives the normalized URL. History is stored locally.'
+    : activeModule === 'message' ? 'Your text is processed by the backend and configured local model. Embedded URLs use Link Check. Only assessment metadata is saved; detailed results disappear on refresh.'
+    : activeModule === 'screenshot' ? 'Local PaddleOCR processes your image temporarily. Readable URLs use Link Check; extracted text uses Message Check. Only metadata is saved. No cloud OCR is used.'
+    : activeModule === 'qr' ? 'ZXing-C++ decodes your temporary image. URL payloads use Link Check. Credentials, payment identifiers and contact details are not stored. Nothing is opened or executed automatically.'
+    : activeModule === 'document' ? 'Documents are parsed temporarily in isolated workers. Scanned pages use local OCR; URLs use Link Check. Only assessment metadata is saved. Scripts and attachments are not executed.'
+    : 'Temporary local extraction and grounded content analysis. Authenticity and external claims are separate and may be unavailable. Only assessment metadata is saved.';
+  document.getElementById('inputTextField').maxLength = ['message','offer'].includes(activeModule) ? 12000 : 500;
+  updateMessageCount();
+}
+
+function updateMessageCount() {
+  const field = document.getElementById('inputTextField');
+  document.getElementById('messageCharacterCount').textContent = `${Array.from(field.value).length}/${field.maxLength}`;
+}
+
+function clearScreenshotInput(clearResult = false) {
+  activeSelectedFile = null;
+  document.getElementById('mediaIntakePreview')?.remove();
+  if (activeModule==='offer' && clearResult) { document.getElementById('inputTextField').value=''; offerText=''; updateMessageCount(); }
+  document.getElementById('fileUploadInput').value = '';
+  document.getElementById('fileSelectedInfo').style.display = 'none';
+  document.getElementById('dropzonePrompt').style.display = 'flex';
+  const preview = document.getElementById('screenshotInputPreview');
+  preview.hidden = true;
+  preview.removeAttribute('src');
+  if (screenshotIntakeUrl) URL.revokeObjectURL(screenshotIntakeUrl);
+  screenshotIntakeUrl = null;
+  if (clearResult && ['screenshot','qr','document','media','offer'].includes(currentAssessment?.module_type)) {
+    mediaFile=null; mediaResultId=null; offerFile=null; offerResultId=null; offerText='';
+    if(mediaResultUrl) URL.revokeObjectURL(mediaResultUrl); mediaResultUrl=null;
+    documentFile = null; documentResultId = null;
+    qrFile = null; qrResultId = null;
+    if (qrResultUrl) URL.revokeObjectURL(qrResultUrl);
+    qrResultUrl = null;
+    currentAssessment = null;
+    currentScreenshotFile = null;
+    if (screenshotResultUrl) URL.revokeObjectURL(screenshotResultUrl);
+    screenshotResultUrl = null;
+    document.getElementById('evidenceActiveState').style.display = 'none';
+    document.getElementById('assessmentOverview')?.replaceChildren();
+    document.getElementById('findingsContainer').replaceChildren();
+    document.getElementById('evidenceEmptyState').style.display = 'block';
+  }
+}
+
+function showScreenshotPreview(file) {
+  if (screenshotIntakeUrl) URL.revokeObjectURL(screenshotIntakeUrl);
+  screenshotIntakeUrl = URL.createObjectURL(file);
+  const preview = document.getElementById('screenshotInputPreview');
+  preview.src = screenshotIntakeUrl;
+  preview.hidden = false;
+}
+
+function reviewModuleSample() {
+  if (['link', 'message', 'screenshot', 'qr', 'document', 'media', 'offer'].includes(activeModule)) return;
+  const config = moduleExperiences[activeModule];
+  const risk = config.score === null ? 'Unable to Assess' : 'High Risk';
+  const actions = ['Do not share OTPs, passwords, or account details.', 'Avoid payment until you verify the request.', 'Verify the source through an official contact you find independently.', 'Learn common warning signs: urgency, guaranteed returns, and advance fees.'];
+  const data = {
+    id: `demo-${activeModule}`, demo: true, module_type: activeModule, created_at: new Date().toISOString(),
+    input_summary: config.sample, risk_category: risk, demo_score: config.score,
+    findings: config.warnings.map(warning => ({ source: 'Illustrative example', risk_level: config.score === null ? 'Caution' : risk, observation: warning, interpretation: 'Example warning sign for this module; this is not a finding about your submitted content.', action: actions[2] })),
+    evidence: [{ source_type: 'Demo sample', snippet: config.excerpt, detail: 'Highlighted sample content — illustrative only.' }],
+    checks_performed: [], unavailable_checks: config.signals.map(signal => ({ name: signal.split(' · ')[0], detail: 'Not run · demo mode' })), recommended_actions: actions,
+  };
+  document.getElementById('contactModal').classList.remove('open');
+  renderAssessment(data);
+  // The sample is already rendered; avoid a queued route change reopening it.
+  window.history.replaceState(null, '', `#/results/${data.id}`);
+  document.getElementById('architecture').scrollIntoView({ behavior: 'smooth' });
+}
 
 function setModalModule(moduleType) {
-  activeModule = moduleType || 'link';
-  
+  activeModule = Object.hasOwn(moduleExperiences, moduleType) ? moduleType : 'link';
+
   // Update selector pills
   const pills = document.querySelectorAll('.module-pill-btn');
   pills.forEach((p) => {
@@ -448,20 +552,20 @@ function setModalModule(moduleType) {
   switch (activeModule) {
     case 'link':
       if (modalTitle) modalTitle.textContent = 'Link Check — Look Before You Click';
-      if (modalSub) modalSub.textContent = 'Inspect redirect hops, lookalike homoglyphs, DNS records, and threat reputation.';
+      if (modalSub) modalSub.textContent = 'Real URL analysis with DNS, RDAP, protected redirects, and configured reputation checking. No AI or demo verdicts.';
       if (groupUrl) groupUrl.style.display = 'flex';
       if (groupText) groupText.style.display = 'none';
       if (groupFile) groupFile.style.display = 'none';
-      if (urlInput) urlInput.placeholder = 'https://suspicious-pay-login.com/auth';
+      if (urlInput) urlInput.placeholder = 'Enter the HTTP or HTTPS URL you want to check';
       break;
 
     case 'message':
       if (modalTitle) modalTitle.textContent = 'Message Check — Read Between the Lines';
-      if (modalSub) modalSub.textContent = 'Analyze urgent SMS, chat, or WhatsApp lures for OTP harvesting and advance fee traps.';
+      if (modalSub) modalSub.textContent = 'Actual message analysis with grounded evidence, real Link Check, and local Qwen interpretation when available.';
       if (groupUrl) groupUrl.style.display = 'none';
       if (groupText) groupText.style.display = 'flex';
       if (groupFile) groupFile.style.display = 'none';
-      if (textInput) textInput.placeholder = 'Paste urgent message text, e.g. "Your bank account has been suspended! Verify immediately at..."';
+      if (textInput) textInput.placeholder = 'Paste the full SMS, chat, email, or message you want to review';
       break;
 
     case 'screenshot':
@@ -471,20 +575,19 @@ function setModalModule(moduleType) {
       if (groupText) groupText.style.display = 'none';
       if (groupFile) groupFile.style.display = 'flex';
       if (fileLabel) fileLabel.textContent = 'Screenshot / Image Upload (PNG, JPG, WEBP)';
-      if (fileInput) fileInput.accept = 'image/*';
-      if (dropHint) dropHint.textContent = 'Supports PNG, JPG, WEBP up to 50MB';
+      if (fileInput) fileInput.accept = '.png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp';
+      if (dropHint) dropHint.textContent = 'PNG, JPEG or WEBP · up to 10 MiB and 12 million pixels';
       break;
 
     case 'qr':
       if (modalTitle) modalTitle.textContent = 'QR Check — Know Where It Leads';
       if (modalSub) modalSub.textContent = 'Decode barcode matrices, inspect target URLs, and parse UPI payment identifiers.';
-      if (groupUrl) groupUrl.style.display = 'flex';
+      if (groupUrl) groupUrl.style.display = 'none';
       if (groupText) groupText.style.display = 'none';
       if (groupFile) groupFile.style.display = 'flex';
-      if (urlInput) urlInput.placeholder = 'Or enter decoded QR text / URL directly...';
-      if (fileLabel) fileLabel.textContent = 'QR Code Image (PNG, JPG)';
-      if (fileInput) fileInput.accept = 'image/*';
-      if (dropHint) dropHint.textContent = 'Upload image containing one or more QR codes';
+      if (fileLabel) fileLabel.textContent = 'QR Code Image (PNG, JPEG, WEBP)';
+      if (fileInput) fileInput.accept = '.png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp';
+      if (dropHint) dropHint.textContent = 'PNG, JPEG or WEBP · up to 10 MiB · one or multiple QR codes';
       break;
 
     case 'document':
@@ -493,20 +596,20 @@ function setModalModule(moduleType) {
       if (groupUrl) groupUrl.style.display = 'none';
       if (groupText) groupText.style.display = 'none';
       if (groupFile) groupFile.style.display = 'flex';
-      if (fileLabel) fileLabel.textContent = 'PDF Document';
-      if (fileInput) fileInput.accept = '.pdf,application/pdf';
-      if (dropHint) dropHint.textContent = 'Supports PDF documents up to 50MB (max 30 pages)';
+      if (fileLabel) fileLabel.textContent = 'PDF / DOCX Document';
+      if (fileInput) fileInput.accept = '.pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+      if (dropHint) dropHint.textContent = 'PDF / DOCX · up to 20 MiB · first 30 PDF pages · bounded scanned-page OCR';
       break;
 
     case 'media':
       if (modalTitle) modalTitle.textContent = 'Media Check — Look Beyond the Surface';
-      if (modalSub) modalSub.textContent = 'Container metadata inspection, keyframe sampling, OCR, and speech transcription readiness.';
+      if (modalSub) modalSub.textContent = 'Real metadata, bounded frame/audio extraction, local OCR and Whisper transcription. Authenticity detection is unavailable.';
       if (groupUrl) groupUrl.style.display = 'none';
       if (groupText) groupText.style.display = 'none';
       if (groupFile) groupFile.style.display = 'flex';
-      if (fileLabel) fileLabel.textContent = 'Video or Audio File';
+      if (fileLabel) fileLabel.textContent = 'Image, Video or Audio';
       if (fileInput) fileInput.accept = 'video/*,audio/*,image/*';
-      if (dropHint) dropHint.textContent = 'Supports MP4, WebM, MOV, MP3 up to 50MB';
+      if (dropHint) dropHint.textContent = 'PNG/JPEG/WEBP, MP4/MOV/WEBM, WAV/MP3/M4A/AAC · 50 MiB · 120 seconds maximum';
       break;
 
     case 'offer':
@@ -515,12 +618,13 @@ function setModalModule(moduleType) {
       if (groupUrl) groupUrl.style.display = 'none';
       if (groupText) groupText.style.display = 'flex';
       if (groupFile) groupFile.style.display = 'flex';
-      if (textInput) textInput.placeholder = 'Paste offer description, e.g. "Work from home part time, earn ₹50,000/day rating hotels. Deposit ₹500 to activate..."';
-      if (fileLabel) fileLabel.textContent = 'Optional Offer PDF Attachment';
-      if (fileInput) fileInput.accept = '.pdf,application/pdf';
-      if (dropHint) dropHint.textContent = 'Optional PDF offer brochure or contract';
+      if (textInput) textInput.placeholder = 'Paste the actual job, shopping, investment or service offer, or upload one document separately';
+      if (fileLabel) fileLabel.textContent = 'Optional Offer PDF / DOCX';
+      if (fileInput) fileInput.accept = '.pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+      if (dropHint) dropHint.textContent = 'Optional PDF / DOCX · 20 MiB · bounded real document extraction';
       break;
   }
+  updateModuleExperience();
 }
 
 function initCardsInteractions() {
@@ -530,6 +634,8 @@ function initCardsInteractions() {
   serviceCards.forEach((card) => {
     card.addEventListener('click', () => {
       const serviceType = card.getAttribute('data-service') || 'link';
+      setModalModule(serviceType);
+      modal.classList.add('open');
       window.location.hash = `#/check/${serviceType}`;
     });
 
@@ -545,7 +651,54 @@ function initCardsInteractions() {
 /* --------------------------------------------------------------------------
    7. MODAL & INTAKE INTERACTIONS
    -------------------------------------------------------------------------- */
+async function readLinkCheckStream(response, onStage) {
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = '';
+  let result = null;
+  const consume = line => {
+    if (!line.trim()) return;
+    const event = JSON.parse(line);
+    if (event.type === 'stage') onStage(event.stage);
+    if (event.type === 'error') throw new Error(event.detail);
+    if (event.type === 'result') result = event.data;
+  };
+  try {
+    while (true) {
+      const { value, done } = await reader.read();
+      buffer += decoder.decode(value, { stream: !done });
+      let end;
+      while ((end = buffer.indexOf('\n')) >= 0) {
+        consume(buffer.slice(0, end));
+        buffer = buffer.slice(end + 1);
+      }
+      if (done) break;
+    }
+    consume(buffer);
+  } finally {
+    await reader.cancel();
+  }
+  if (!result) throw new Error('Backend connection ended before a result was returned.');
+  return result;
+}
+
 function initModalInteractions() {
+  document.getElementById('btnResetScreenshot').addEventListener('click', () => clearScreenshotInput(true));
+  document.getElementById('btnResetMessage').addEventListener('click', () => {
+    if(activeModule==='offer') { offerText='';offerFile=null;offerResultId=null; }
+    document.getElementById('inputTextField').value = '';
+    if (['message','offer'].includes(currentAssessment?.module_type)) {
+      currentAssessment = null;
+      document.getElementById('evidenceActiveState').style.display = 'none';
+      document.getElementById('evidenceActiveState').querySelector('#assessmentOverview')?.replaceChildren();
+      document.getElementById('findingsContainer').replaceChildren();
+      document.getElementById('evidenceEmptyState').style.display = 'block';
+    }
+    updateMessageCount();
+    document.getElementById('inputTextField').focus();
+  });
+  document.getElementById('btnModuleDemo').addEventListener('click', reviewModuleSample);
+  document.getElementById('inputTextField').addEventListener('input', updateMessageCount);
   const modal = document.getElementById('contactModal');
   const closeBtn = document.getElementById('modalClose');
   const form = document.getElementById('assessmentForm');
@@ -621,8 +774,19 @@ function initModalInteractions() {
   }
 
   function handleFileSelect(file) {
+    if (file.size > (['document','offer'].includes(activeModule) ? 20 : ['screenshot','qr'].includes(activeModule) ? 10 : 50) * 1024 * 1024) {
+      showToast(['document','offer'].includes(activeModule) ? 'Choose a document smaller than 20 MiB' : ['screenshot','qr'].includes(activeModule) ? 'Choose an image smaller than 10 MiB' : 'Choose a file smaller than 50 MB');
+      return;
+    }
+    const supported = ['screenshot','qr'].includes(activeModule) ? /\.(png|jpe?g|webp)$/i : activeModule === 'document' ? /\.(pdf|docx)$/i : activeModule === 'offer' ? /\.(pdf|docx)$/i : /\.(mp4|webm|mov|mp3|wav|m4a|aac|png|jpe?g|webp)$/i;
+    if (!supported.test(file.name)) {
+      showToast('Choose a supported file type for this module');
+      return;
+    }
     activeSelectedFile = file;
-    if (selectedFileName) selectedFileName.textContent = file.name;
+    if (['screenshot','qr'].includes(activeModule)) showScreenshotPreview(file);
+    if (activeModule==='media') showMediaIntake(file);
+    if (selectedFileName) selectedFileName.textContent = `${file.name} · ${(file.size / (1024 * 1024)).toFixed(2)} MB`;
     if (fileSelectedInfo) fileSelectedInfo.style.display = 'flex';
     if (dropzonePrompt) dropzonePrompt.style.display = 'none';
   }
@@ -630,6 +794,10 @@ function initModalInteractions() {
   if (btnRemoveFile) {
     btnRemoveFile.addEventListener('click', (e) => {
       e.stopPropagation();
+      if (['screenshot','qr','document','media','offer'].includes(activeModule)) {
+        clearScreenshotInput();
+        return;
+      }
       activeSelectedFile = null;
       if (fileUploadInput) fileUploadInput.value = '';
       if (fileSelectedInfo) fileSelectedInfo.style.display = 'none';
@@ -656,7 +824,7 @@ function initModalInteractions() {
       e.preventDefault();
 
       const urlVal = document.getElementById('inputUrlField')?.value.trim() || '';
-      const textVal = document.getElementById('inputTextField')?.value.trim() || '';
+      const textVal = document.getElementById('inputTextField')?.value || '';
 
       // Validation
       if (activeModule === 'link' && !urlVal) {
@@ -667,85 +835,82 @@ function initModalInteractions() {
         showToast('Please enter message text to inspect');
         return;
       }
-      if (['screenshot', 'document', 'media'].includes(activeModule) && !activeSelectedFile) {
+      if (activeModule === 'offer' && !textVal && !activeSelectedFile) {
+        showToast('Please enter an offer or attach a PDF');
+        return;
+      }
+      if (['screenshot', 'qr', 'document', 'media'].includes(activeModule) && !activeSelectedFile) {
         showToast('Please select or upload a file for analysis');
         return;
       }
-      if (activeModule === 'qr' && !activeSelectedFile && !urlVal) {
-        showToast('Please upload a QR image or enter matrix text');
-        return;
-      }
+
 
       const overlay = document.getElementById('processingOverlay');
       const stageText = document.getElementById('processingStageText');
       const stageSub = document.getElementById('processingStageSub');
 
       if (overlay) overlay.classList.add('active');
-      if (stageText) stageText.textContent = 'Validating input & structure...';
-      if (stageSub) stageSub.textContent = 'Step 1 of 4: Content format and bounds verification';
+      if (stageText) stageText.textContent = 'Submitting content for analysis...';
+      if (stageSub) stageSub.textContent = ['link', 'message'].includes(activeModule) ? 'Waiting for live backend stage updates.' : 'Waiting for the backend response.';
 
       activeAbortController = new AbortController();
+      const requestController = activeAbortController;
+      const submittedModule = activeModule;
+      const uploadedScreenshot = ['screenshot','qr','document','media','offer'].includes(activeModule) ? activeSelectedFile : null;
 
       try {
         let response;
-        if (activeSelectedFile) {
-          const formData = new FormData();
-          formData.append('module_type', activeModule);
-          formData.append('file', activeSelectedFile);
-          if (textVal) formData.append('content_text', textVal);
-          if (urlVal) formData.append('target_url', urlVal);
-
-          // Simulated intermediate real-stage updates
-          setTimeout(() => {
-            if (stageText) stageText.textContent = 'Extracting content & machine-readable data...';
-            if (stageSub) stageSub.textContent = 'Step 2 of 4: Optical recognition / parsing active';
-          }, 350);
-
-          setTimeout(() => {
-            if (stageText) stageText.textContent = 'Running threat intelligence & heuristics...';
-            if (stageSub) stageSub.textContent = 'Step 3 of 4: DNS, reputation and pattern checking';
-          }, 700);
-
-          response = await fetch('/api/assessments', {
-            method: 'POST',
-            body: formData,
-            signal: activeAbortController.signal,
-          });
+        if (['link','message'].includes(submittedModule) || submittedModule==='offer' && !uploadedScreenshot) {
+          const body = submittedModule==='link'?{url:urlVal}:submittedModule==='message'?{message:textVal}:{offer:textVal};
+          response=await fetch(`/api/check/${submittedModule}?stream=true`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),signal:requestController.signal});
         } else {
-          setTimeout(() => {
-            if (stageText) stageText.textContent = 'Executing DNS resolution & network trace...';
-            if (stageSub) stageSub.textContent = 'Step 2 of 4: Reputation & heuristic checks';
-          }, 350);
-
-          setTimeout(() => {
-            if (stageText) stageText.textContent = 'Synthesizing evidence & risk assessment...';
-            if (stageSub) stageSub.textContent = 'Step 3 of 4: Determining policy verdict';
-          }, 700);
-
-          response = await fetch('/api/assessments', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              module_type: activeModule,
-              content_text: textVal,
-              target_url: urlVal,
-            }),
-            signal: activeAbortController.signal,
-          });
+          const formData=new FormData(); formData.append('file',uploadedScreenshot);
+          if(submittedModule!=='qr') formData.append('language',document.getElementById('screenshotLanguage').value);
+          if(submittedModule==='offer') formData.append('offer',textVal);
+          response=await fetch(`/api/check/${submittedModule}?stream=true`,{method:'POST',body:formData,signal:requestController.signal});
         }
 
         if (!response.ok) {
           const errData = await response.json().catch(() => ({}));
-          throw new Error(errData.detail || `Server error (${response.status})`);
+          const detail = Array.isArray(errData.detail) ? errData.detail.map(item => item.msg).join('; ') : errData.detail;
+          throw new Error(detail || `Backend unavailable (HTTP ${response.status})`);
         }
 
-        const assessmentData = await response.json();
-        
+        const assessmentData = ['link', 'message', 'screenshot', 'qr', 'document', 'media', 'offer'].includes(activeModule)
+          ? await readLinkCheckStream(response, stage => {
+              if (stageText) stageText.textContent = stage;
+              if (stageSub) stageSub.textContent = 'Live backend processing stage';
+            })
+          : await response.json();
+        if (requestController.signal.aborted) return;
+        if(submittedModule==='offer' && !uploadedScreenshot && assessmentData.submitted_text!==textVal) throw new Error('Offer input/result mismatch; retry your submission.');
+        if (uploadedScreenshot) {
+          const digest = await crypto.subtle.digest('SHA-256', await uploadedScreenshot.arrayBuffer());
+          const hash = Array.from(new Uint8Array(digest), byte => byte.toString(16).padStart(2, '0')).join('');
+          if (requestController.signal.aborted) return;
+          if ((assessmentData.image || assessmentData.file)?.sha256 !== hash) throw new Error('Upload/result mismatch: image evidence was not displayed. Retry your upload.');
+          if (submittedModule==='media') {
+            if(mediaResultUrl)URL.revokeObjectURL(mediaResultUrl); mediaFile=uploadedScreenshot;mediaResultId=assessmentData.id;mediaResultUrl=URL.createObjectURL(uploadedScreenshot);
+          } else if(submittedModule==='offer') { offerFile=uploadedScreenshot;offerResultId=assessmentData.id;offerText=textVal;
+          } else if (submittedModule === 'document') {
+            documentFile = uploadedScreenshot; documentResultId = assessmentData.id; documentLanguage = document.getElementById('screenshotLanguage').value;
+          } else if (submittedModule === 'qr') {
+            if (qrResultUrl) URL.revokeObjectURL(qrResultUrl);
+            qrFile = uploadedScreenshot; qrResultId = assessmentData.id; qrResultUrl = URL.createObjectURL(uploadedScreenshot);
+          } else {
+          if (screenshotResultUrl) URL.revokeObjectURL(screenshotResultUrl);
+          currentScreenshotFile = uploadedScreenshot;
+          screenshotResultId = assessmentData.id;
+          screenshotResultUrl = URL.createObjectURL(uploadedScreenshot);
+          }
+        }
+
+        if(submittedModule==='offer') { offerText=textVal;offerFile=uploadedScreenshot;offerResultId=assessmentData.id; }
         // Success
         closeModal();
         renderAssessment(assessmentData);
-        window.location.hash = `#/results/${assessmentData.id}`;
-        
+        window.history.replaceState(null, '', `#/results/${assessmentData.id}`);
+
         // Scroll to evidence section
         const archSec = document.getElementById('architecture');
         if (archSec) archSec.scrollIntoView({ behavior: 'smooth' });
@@ -756,11 +921,10 @@ function initModalInteractions() {
       } catch (err) {
         if (err.name === 'AbortError') return;
         console.error('Assessment failed:', err);
-        if (stageText) stageText.textContent = 'Assessment Error';
-        if (stageSub) stageSub.textContent = err.message || 'An unexpected error occurred during processing.';
-        showToast(`Error: ${err.message || 'Scan failed'}`);
+        if (overlay) overlay.classList.remove('active');
+        showToast(err.message === 'Failed to fetch' ? 'Cannot reach the backend. Start the API to run a real check.' : `Analysis failed: ${err.message}`);
       } finally {
-        activeAbortController = null;
+        if (activeAbortController === requestController) activeAbortController = null;
       }
     });
   }
@@ -782,8 +946,306 @@ function initModalInteractions() {
 /* --------------------------------------------------------------------------
    8. REAL-BACKEND ASSESSMENT RENDERING & EVIDENCE
    -------------------------------------------------------------------------- */
+function renderScreenshotOverview(data, overview) {
+  overview.replaceChildren();
+  const heading = document.createElement('div');
+  heading.className = 'module-risk-heading';
+  const verdict = document.createElement('strong');
+  verdict.textContent = data.risk_category;
+  const label = document.createElement('span');
+  label.textContent = `Screenshot Check · OCR ${data.ocr?.status || 'details not retained'}`;
+  heading.append(verdict, label);
+  const explanation = document.createElement('p');
+  explanation.textContent = data.explanation;
+  overview.append(heading, explanation);
+  const actions = document.createElement('div');
+  actions.className = 'screenshot-actions';
+  const back = document.createElement('button');
+  back.className = 'btn-secondary-action';
+  back.textContent = 'Back to input';
+  const openInput = () => {
+    setModalModule('screenshot');
+    if (currentScreenshotFile && screenshotResultId === data.id) {
+      activeSelectedFile = currentScreenshotFile;
+      showScreenshotPreview(currentScreenshotFile);
+      document.getElementById('selectedFileName').textContent = currentScreenshotFile.name;
+      document.getElementById('fileSelectedInfo').style.display = 'flex';
+      document.getElementById('dropzonePrompt').style.display = 'none';
+      document.getElementById('screenshotLanguage').value = data.ocr?.selected_language || 'en';
+    }
+    document.getElementById('contactModal').classList.add('open');
+  };
+  back.onclick = openInput;
+  actions.append(back);
+  if (!data.image) {
+    const notice = document.createElement('p');
+    notice.textContent = 'Only assessment metadata was saved. Upload the screenshot again to view OCR evidence.';
+    overview.append(actions, notice);
+    return;
+  }
+  const retry = document.createElement('button');
+  retry.className = 'btn-secondary-action';
+  retry.textContent = 'Retry screenshot';
+  retry.onclick = () => {
+    openInput();
+    if (activeSelectedFile) document.getElementById('assessmentForm').requestSubmit();
+  };
+  const reset = document.createElement('button');
+  reset.className = 'btn-secondary-action';
+  reset.textContent = 'Reset screenshot';
+  reset.onclick = () => clearScreenshotInput(true);
+  actions.append(retry, reset);
+  overview.append(actions);
+  const note = document.createElement('p');
+  note.className = 'screenshot-note';
+  note.textContent = `${data.image.original_filename} · ${data.image.validated_format} · ${data.image.width} × ${data.image.height}. ${data.ocr.region_count} real OCR regions. ${data.processing_coverage.uncertain_regions} uncertain. AI: ${data.message_analysis?.ai?.status || 'unavailable'}. Image authenticity and sender identity are unverified.`;
+  overview.append(note);
+  if (screenshotResultUrl && screenshotResultId === data.id) {
+    const stage = document.createElement('div');
+    stage.className = 'screenshot-evidence-stage';
+    const image = document.createElement('img');
+    image.src = screenshotResultUrl;
+    image.alt = 'Actual uploaded screenshot with real OCR evidence';
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('viewBox', `0 0 ${data.image.width} ${data.image.height}`);
+    svg.setAttribute('aria-label', 'Actual OCR region coordinates');
+    svg.setAttribute('role', 'img');
+    const paint = (ids = null) => {
+      svg.replaceChildren();
+      for (const region of data.ocr_regions) {
+        if (ids && !ids.includes(region.region_id)) continue;
+        const polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+        polygon.setAttribute('points', region.bounding_box.points.map(point => point.join(',')).join(' '));
+        polygon.setAttribute('fill', 'rgba(255,170,0,.10)');
+        polygon.setAttribute('stroke', ids ? '#d13b37' : '#0d9488');
+        polygon.setAttribute('stroke-width', '2');
+        polygon.setAttribute('vector-effect', 'non-scaling-stroke');
+        const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+        title.textContent = `${region.region_id}: ${region.text} · OCR confidence ${region.confidence ?? 'unavailable'}`;
+        polygon.append(title);
+        svg.append(polygon);
+      }
+    };
+    paint();
+    stage.append(image, svg);
+    overview.append(stage);
+    const controls = document.createElement('div');
+    controls.className = 'screenshot-actions';
+    for (const [label, ids] of [['Show all OCR boxes', null], ...(data.grounded_findings || []).map(item => [`Highlight: ${item.text}`, item.region_ids])]) {
+      const button = document.createElement('button');
+      button.className = 'btn-secondary-action';
+      button.textContent = label;
+      button.onclick = () => paint(ids);
+      controls.append(button);
+    }
+    overview.append(controls);
+  }
+  for (const [title, value] of [
+    ['Review details · Actual OCR text', data.extracted_text],
+    ['OCR regions · Confidence and bounding boxes', data.ocr_regions],
+    ['Grounded findings · Evidence mapped to regions', data.grounded_findings],
+    ['Embedded URLs · Actual Link Check results', data.url_assessments],
+    ['Uncertain URL candidates · Not contacted', data.uncertain_url_candidates],
+    ['Message and Qwen analysis', data.message_analysis],
+    ['Payment observations · Unverified identities', data.payment_observations],
+    ['QR evidence · Separate decoder', data.qr],
+    ['OCR models and processing coverage', { ocr: data.ocr, coverage: data.processing_coverage }],
+    ['Exact backend result · Available until refresh', data]
+  ]) {
+    const detail = document.createElement('details');
+    detail.className = 'module-protect';
+    detail.open = title === 'Review details · Actual OCR text';
+    const summary = document.createElement('summary');
+    summary.textContent = title;
+    const pre = document.createElement('pre');
+    pre.className = 'link-observation-json';
+    if (value === data) pre.id = 'screenshotResultJson';
+    pre.textContent = typeof value === 'string' ? value || 'No readable text recognized.' : JSON.stringify(value, null, 2);
+    detail.append(summary, pre);
+    overview.append(detail);
+  }
+}
+
+function renderMessageOverview(data, overview) {
+  overview.replaceChildren();
+  const heading = document.createElement('div');
+  heading.className = 'module-risk-heading';
+  const verdict = document.createElement('strong');
+  verdict.textContent = data.risk_category;
+  const label = document.createElement('span');
+  label.textContent = 'Message Check · No numeric score';
+  heading.append(verdict, label);
+  const explanation = document.createElement('p');
+  explanation.textContent = data.explanation;
+  overview.append(heading, explanation);
+  const back = document.createElement('button');
+  back.className = 'btn-secondary-action';
+  back.textContent = 'Back to input';
+  back.onclick = () => {
+    setModalModule('message');
+    document.getElementById('inputTextField').value = data.submitted_text || '';
+    updateMessageCount();
+    document.getElementById('contactModal').classList.add('open');
+    document.getElementById('inputTextField').focus();
+  };
+  overview.append(back);
+  if (typeof data.submitted_text !== 'string') {
+    const notice = document.createElement('p');
+    notice.textContent = 'Only assessment metadata was saved. Paste the message again to see evidence and detailed checks.';
+    overview.append(notice);
+    return;
+  }
+  const note = document.createElement('p');
+  note.textContent = `AI: ${data.ai?.status || 'unavailable'} · ${data.ai?.model_used || 'No model ran'}. ${data.ai?.error || ''} Original text and detailed results are not saved in history.`;
+  overview.append(note);
+  const detail = document.createElement('details');
+  detail.className = 'module-protect';
+  detail.open = true;
+  const summary = document.createElement('summary');
+  summary.textContent = 'Review details · Highlighted evidence';
+  const message = document.createElement('div');
+  message.className = 'message-evidence-text';
+  const chars = Array.from(data.submitted_text);
+  const spans = [...(data.deterministic_findings || []), ...(data.ai_interpretations || [])];
+  const boundaries = [...new Set([0, chars.length, ...spans.flatMap(item => [item.start, item.end])])].filter(n => n >= 0 && n <= chars.length).sort((a, b) => a - b);
+  for (let i = 0; i < boundaries.length - 1; i++) {
+    const start = boundaries[i], end = boundaries[i + 1];
+    const matching = spans.filter(item => item.start <= start && end <= item.end);
+    const node = document.createElement(matching.length ? 'mark' : 'span');
+    node.textContent = chars.slice(start, end).join('');
+    if (matching.length) node.title = matching.map(item => `${item.category} · ${item.context}`).join('\n');
+    message.append(node);
+  }
+  detail.append(summary, message);
+  overview.append(detail);
+  for (const [label, value] of [
+    ['Extracted entities · Exact text offsets', data.extracted_entities],
+    ['Deterministic rules · Context and evidence', data.deterministic_findings],
+    ['External URL observations · Real Link Check', data.url_assessments],
+    ['AI interpretation · Grounded Qwen output', data.ai],
+    ['Language coverage and limitations', data.language]
+  ]) {
+    const section = document.createElement('details');
+    section.className = 'module-protect';
+    const title = document.createElement('summary');
+    title.textContent = label;
+    const pre = document.createElement('pre');
+    pre.className = 'link-observation-json';
+    pre.textContent = JSON.stringify(value, null, 2);
+    section.append(title, pre);
+    overview.append(section);
+  }
+  const raw = document.createElement('details');
+  raw.className = 'module-protect';
+  const rawTitle = document.createElement('summary');
+  rawTitle.textContent = 'Exact backend result · Available until refresh';
+  const pre = document.createElement('pre');
+  pre.id = 'messageResultJson';
+  pre.className = 'link-observation-json';
+  pre.textContent = JSON.stringify(data, null, 2);
+  raw.append(rawTitle, pre);
+  overview.append(raw);
+}
+
+function renderQrOverview(data, overview) {
+  overview.replaceChildren();
+  const heading = document.createElement('div'); heading.className = 'module-risk-heading';
+  const title = document.createElement('strong'); title.textContent = data.risk_category;
+  const sub = document.createElement('span'); sub.textContent = `QR Check · ${data.qr_count ?? 0} decoded code(s) · No numeric score`;
+  heading.append(title, sub); overview.append(heading);
+  const explanation = document.createElement('p'); explanation.textContent = data.explanation; overview.append(explanation);
+  const actions = document.createElement('div'); actions.className = 'screenshot-actions';
+  const reopen = () => { setModalModule('qr'); clearScreenshotInput(); if (qrFile && qrResultId === data.id) { activeSelectedFile = qrFile; showScreenshotPreview(qrFile); document.getElementById('selectedFileName').textContent = qrFile.name; document.getElementById('fileSelectedInfo').style.display = 'flex'; document.getElementById('dropzonePrompt').style.display = 'none'; } document.getElementById('contactModal').classList.add('open'); };
+  for (const [label, action] of [['Back to input',reopen], ['Retry QR image',() => { reopen(); if (activeSelectedFile) document.getElementById('assessmentForm').requestSubmit(); }], ['Reset QR image',() => { clearScreenshotInput(true); }]]) {
+    const button=document.createElement('button'); button.type='button'; button.className='btn-secondary-action'; button.textContent=label; button.onclick=action; actions.append(button);
+  }
+  overview.append(actions);
+  if (qrResultUrl && qrResultId === data.id) { const image=document.createElement('img'); image.src=qrResultUrl; image.alt='Actual uploaded QR image'; image.className='screenshot-input-preview'; overview.append(image); }
+  const addDetails=(label,value,id) => { const details=document.createElement('details'); details.className='module-protect'; const summary=document.createElement('summary'); summary.textContent=label; const pre=document.createElement('pre'); pre.className='link-observation-json'; pre.textContent=typeof value==='string' ? value : JSON.stringify(value,null,2); if(id) pre.id=id; details.append(summary,pre); overview.append(details); };
+  if (!data.codes) { const notice=document.createElement('p'); notice.textContent='Only metadata was retained. Upload the image again to decode its QR payloads.'; overview.append(notice); return; }
+  for (const code of data.codes) {
+    const label=document.createElement('h4'); label.textContent=`QR ${code.id} · ${code.type} · ${code.risk_category}`; overview.append(label);
+    const raw=document.createElement('pre'); raw.className='link-observation-json'; raw.textContent=code.payload; raw.dataset.qrPayloadId=code.id; overview.append(raw);
+    const copy=document.createElement('button'); copy.type='button'; copy.className='btn-secondary-action'; copy.textContent=data.codes.length===1 ? 'Copy Destination' : `Copy Destination · QR ${code.id}`;
+    copy.onclick=async () => { try { await navigator.clipboard.writeText(code.payload); showToast('Copied original decoded payload'); } catch { showToast('Clipboard unavailable. Select the displayed raw payload to copy.'); } }; overview.append(copy);
+    addDetails(`QR ${code.id} · Review parsed fields · Self-declared`,code.parsed_fields);
+    addDetails(`QR ${code.id} · Link Check results`,code.link_results);
+    if (code.message_result) addDetails(`QR ${code.id} · Message Check result`,code.message_result);
+    if (code.parse_warnings.length) addDetails(`QR ${code.id} · Parsing limitations`,code.parse_warnings);
+  }
+  addDetails('QR decoder · Actual observations',data.decoder);
+  addDetails('Exact backend result · Temporary until refresh',data,'qrResultJson');
+}
+
+function mediaPreview(file,url,id) {
+  const node=document.createElement(file.type.startsWith('image/') || /\.(png|jpe?g|webp)$/i.test(file.name)?'img':file.type.startsWith('audio/') || /\.(wav|mp3|m4a|aac)$/i.test(file.name)?'audio':'video');
+  node.id=id;node.src=url;node.className='screenshot-input-preview';if(node.tagName!=='IMG'){node.controls=true;node.preload='metadata';}else node.alt='Actual uploaded media';
+  return node;
+}
+function showMediaIntake(file) {
+  document.getElementById('mediaIntakePreview')?.remove();
+  if(screenshotIntakeUrl)URL.revokeObjectURL(screenshotIntakeUrl);screenshotIntakeUrl=URL.createObjectURL(file);
+  document.getElementById('screenshotIntake').append(mediaPreview(file,screenshotIntakeUrl,'mediaIntakePreview'));
+}
+function renderMediaOfferOverview(data,overview) {
+  overview.replaceChildren();
+  const isMedia=data.module_type==='media';
+  const heading=document.createElement('div');heading.className='module-risk-heading';const title=document.createElement('strong');title.textContent=data.risk_category;
+  const sub=document.createElement('span');sub.textContent=isMedia?`Content: ${data.content_risk || 'details not retained'} · Authenticity: ${data.authenticity?.assessment || 'Unable to Assess'}`:`Offer: ${data.offer_type || 'unknown'} · ${data.input_source || 'details not retained'}`;heading.append(title,sub);overview.append(heading);
+  const note=document.createElement('p');note.textContent=data.explanation;overview.append(note);
+  const reopen=()=>{setModalModule(data.module_type);clearScreenshotInput();const file=isMedia?mediaFile:offerFile;const resultId=isMedia?mediaResultId:offerResultId;if(resultId===data.id){document.getElementById('inputTextField').value=isMedia?'':offerText;updateMessageCount();if(file){activeSelectedFile=file;document.getElementById('selectedFileName').textContent=file.name;document.getElementById('fileSelectedInfo').style.display='flex';document.getElementById('dropzonePrompt').style.display='none';if(isMedia)showMediaIntake(file);}}document.getElementById('contactModal').classList.add('open');};
+  const actions=document.createElement('div');actions.className='screenshot-actions';for(const [label,action] of [['Back to input',reopen],[isMedia?'Retry media':'Retry offer',()=>{reopen();document.getElementById('assessmentForm').requestSubmit();}],[isMedia?'Reset media':'Reset offer',()=>clearScreenshotInput(true)]]){const b=document.createElement('button');b.type='button';b.className='btn-secondary-action';b.textContent=label;b.onclick=action;actions.append(b);}overview.append(actions);
+  const detail=(label,value,id)=>{const d=document.createElement('details');d.className='module-protect';const summary=document.createElement('summary');summary.textContent=label;const pre=document.createElement('pre');pre.className='link-observation-json';pre.textContent=typeof value==='string'?value:JSON.stringify(value,(k,v)=>k==='preview_png'?'Preview bytes omitted':v,2);if(id)pre.id=id;d.append(summary,pre);overview.append(d);};
+  if(!data.file && data.submitted_text==null && !data.document_analysis) { const note=document.createElement('p');note.textContent='Only metadata was retained. Submit the original input again to view details.';overview.append(note);return; }
+  if(isMedia){
+    if(mediaFile&&mediaResultUrl&&mediaResultId===data.id)overview.append(mediaPreview(mediaFile,mediaResultUrl,'actualMediaPreview'));
+    detail('Review details · Actual file, metadata and coverage',{file:data.file,media:data.media,audio:data.audio_extraction,coverage:data.coverage});
+    detail('Authenticity · Detector availability and scope',data.authenticity);
+    for(const frame of data.frames || [])detail(`${frame.frame_id} · ${frame.status==='failed'?'Failed sample':frame.timestamp_seconds==null?'Image':frame.timestamp_seconds.toFixed(2)+'s'} · Actual OCR`,frame);
+    detail('Speech · Actual Whisper transcript and timestamps',data.transcript);
+    const times=[...(data.frames || []).map(f=>({start:f.timestamp_seconds,label:f.frame_id})),...(data.transcript?.segments || []).map(x=>({start:x.start,label:`Speech ${x.start.toFixed(2)}–${x.end.toFixed(2)}s`}))];
+    for(const x of times)if(x.start!=null){const b=document.createElement('button');b.type='button';b.className='btn-secondary-action';b.textContent=`Review at ${x.start.toFixed(2)}s · ${x.label}`;b.onclick=()=>{const player=document.getElementById('actualMediaPreview');if(player&&player.tagName!=='IMG'){player.currentTime=x.start;player.scrollIntoView({behavior:'smooth'});}};overview.append(b);}
+  }else{
+    detail('Original offer · Actual submitted text',data.submitted_text || 'Document input; inspect actual pages below.');
+    detail('Review details · Extracted offer entities',{classification:data.classification,entities:data.extracted_entities,coverage:data.coverage});
+    detail('Qwen · Actual grounded contextual results',data.ai || data.page_analyses?.map(p=>({reference:p.reference,ai:p.analysis.ai})));
+    if(data.document_analysis)detail('Offer document · Actual page extraction and evidence',data.document_analysis);
+  }
+  detail('Links · Real shared Link Check',data.url_assessments);
+  detail('Backend result · Actual assessment',data,isMedia?'mediaResultJson':'offerResultJson');
+}
+
+function renderDocumentOverview(data, overview) {
+  overview.replaceChildren();
+  const heading=document.createElement('div'); heading.className='module-risk-heading';
+  const title=document.createElement('strong'); title.textContent=data.risk_category;
+  const sub=document.createElement('span'); sub.textContent=`Document Check · ${data.document?.parse_status || 'details not retained'} · No numeric score`; heading.append(title,sub); overview.append(heading);
+  const explanation=document.createElement('p'); explanation.textContent=data.explanation; overview.append(explanation);
+  const actions=document.createElement('div'); actions.className='screenshot-actions';
+  const reopen=() => { setModalModule('document'); clearScreenshotInput(); if(documentFile && documentResultId===data.id) { activeSelectedFile=documentFile; document.getElementById('selectedFileName').textContent=documentFile.name; document.getElementById('fileSelectedInfo').style.display='flex'; document.getElementById('dropzonePrompt').style.display='none'; document.getElementById('screenshotLanguage').value=data.pages?.find(p=>p.ocr)?.ocr?.selected_language || documentLanguage; } document.getElementById('contactModal').classList.add('open'); };
+  for(const [label,action] of [['Back to input',reopen],['Retry document',()=>{reopen();if(activeSelectedFile)document.getElementById('assessmentForm').requestSubmit();}],['Reset document',()=>clearScreenshotInput(true)]]) { const b=document.createElement('button');b.type='button';b.className='btn-secondary-action';b.textContent=label;b.onclick=action;actions.append(b); } overview.append(actions);
+  if(!data.file) { const note=document.createElement('p');note.textContent='Only metadata was retained. Upload the document again to view page evidence.';overview.append(note);return; }
+  const meta=document.createElement('p');meta.className='screenshot-note';meta.textContent=`${data.file.original_filename} · ${data.file.validated_type} · ${(data.file.file_size_bytes/1024).toFixed(1)} KiB · ${data.coverage.total_pages ?? 'No fixed'} pages · ${data.coverage.pages_parsed ?? data.coverage.logical_blocks_parsed} processed · ${data.coverage.pages_ocr_processed} OCR · Malware: ${data.malware.status}. ${data.coverage.analysis_complete ? 'Required checks completed.' : 'Coverage/checks are incomplete.'}`;overview.append(meta);
+  const details=(label,value,id)=>{const d=document.createElement('details');d.className='module-protect';const summary=document.createElement('summary');summary.textContent=label;const pre=document.createElement('pre');pre.className='link-observation-json';pre.textContent=typeof value==='string'?value:JSON.stringify(value,(key,v)=>key==='preview_png'?'Rendered preview bytes omitted from JSON view':v,2);if(id)pre.id=id;d.append(summary,pre);overview.append(d);};
+  const preview=data.pages?.find(p=>p.preview_png);
+  if(preview) {const img=document.createElement('img');img.src=preview.preview_png;img.alt=`Actual document rendered preview · ${preview.reference}`;img.className='screenshot-input-preview';overview.append(img);}
+  details('Review details · File metadata and actual PDF/DOCX structure',{file:data.file,document:data.document});
+  details('Malware scan · Actual ClamAV result',data.malware);
+  details('Processing coverage · Unreadable and skipped pages',data.coverage);
+  for(const page of data.pages) {
+    details(`${page.reference} · Actual ${page.source} text · ${page.status}`,page.text || 'No meaningful readable text found');
+    if(page.ocr)details(`${page.reference} · Actual OCR regions and confidence`,page.ocr);
+    if(page.message_analysis)details(`${page.reference} · Grounded Message Check`,page.message_analysis);
+  }
+  details('Embedded and visible links · Real Link Check results',data.url_assessments);
+  details('Page-linked evidence · Grounded findings',data.grounded_findings);
+  details('Backend result · Preview bytes omitted',data,'documentResultJson');
+}
+
 function renderAssessment(data) {
   currentAssessment = data;
+  const evidenceTab = document.querySelector('[data-tab="tab-findings"]');
+  if (evidenceTab?.firstChild) evidenceTab.firstChild.textContent = data.module_type === 'screenshot' ? 'Evidence & Findings (' : 'Findings & Anomalies (';
   const emptyState = document.getElementById('evidenceEmptyState');
   const activeState = document.getElementById('evidenceActiveState');
   if (!emptyState || !activeState) return;
@@ -801,10 +1263,55 @@ function renderAssessment(data) {
   if (badgeModule) badgeModule.textContent = (data.module_type || 'CHECK').toUpperCase();
   if (title) title.textContent = `${(data.module_type || 'Threat').toUpperCase()} Assessment`;
   if (inputSummary) inputSummary.textContent = data.input_summary || 'Submitted content';
-  
+  activeState.querySelector('.url-excerpt-box > span').textContent = data.demo ? 'Illustrative sample content' : 'Analyzed submission';
+  let overview = document.getElementById('assessmentOverview');
+  if (!overview) {
+    overview = document.createElement('div');
+    overview.id = 'assessmentOverview';
+    overview.className = 'assessment-overview';
+    activeState.querySelector('.evidence-tabs').before(overview);
+  }
+  overview.hidden = !data.demo && !['link', 'message', 'screenshot', 'qr', 'document', 'media', 'offer'].includes(data.module_type);
+  if (data.demo) {
+    overview.innerHTML = `<div class="module-risk-heading"><strong>Clarity for your next step.</strong><span>${data.demo_score === null ? 'Unable to assess' : `${data.demo_score} / 100 · Demo score`}</span></div>
+      <div class="module-risk-scale"><span>Low</span><span>Medium</span><span>High</span></div>
+      <p>Illustrative assessment · Demo. ${data.demo_score === null ? 'Authenticity cannot be determined from this example.' : 'Do not pay or share private information before verifying.'} No live checks were performed.</p>
+      <details class="module-protect"><summary>Protect yourself · View details</summary><ul>${data.recommended_actions.map(action => `<li>${escapeHtml(action)}</li>`).join('')}</ul></details>`;
+  }
+  if (data.module_type === 'link' && !data.demo) {
+    overview.innerHTML = `<div class="module-risk-heading"><strong>${escapeHtml(data.risk_category)}</strong><span>Live Link Check · No numeric score</span></div><p>${escapeHtml(data.explanation)}</p>`;
+    const observations = data.provider_info?.link_analysis || data;
+    for (const [name, label] of [['dns', 'DNS observations'], ['rdap', 'Domain registration · RDAP'], ['reputation', 'Reputation provider result'], ['redirects', 'Redirect chain · HEAD inspection']]) {
+      const detail = document.createElement('details');
+      detail.className = 'module-protect';
+      const summary = document.createElement('summary');
+      summary.textContent = `${label} · ${observations[name]?.status || 'unavailable'}`;
+      const pre = document.createElement('pre');
+      pre.className = 'link-observation-json';
+      pre.textContent = JSON.stringify(observations[name] || { status: 'unavailable' }, null, 2);
+      detail.append(summary, pre);
+      overview.appendChild(detail);
+    }
+    const raw = document.createElement('details');
+    raw.className = 'module-protect';
+    raw.innerHTML = '<summary>Exact backend result</summary>';
+    const pre = document.createElement('pre');
+    pre.id = 'linkResultJson';
+    pre.className = 'link-observation-json';
+    pre.textContent = JSON.stringify(data, null, 2);
+    raw.appendChild(pre);
+    overview.appendChild(raw);
+  }
+  if (data.module_type === 'message' && !data.demo) renderMessageOverview(data, overview);
+  if (data.module_type === 'screenshot' && !data.demo) renderScreenshotOverview(data, overview);
+  if (data.module_type === 'qr' && !data.demo) renderQrOverview(data, overview);
+  if (data.module_type === 'document' && !data.demo) renderDocumentOverview(data, overview);
+  if (['media','offer'].includes(data.module_type) && !data.demo) renderMediaOfferOverview(data,overview);
+  document.getElementById('evidencePolicyDisclaimer').textContent = data.demo ? 'Illustrative sample only. No uploaded content was analyzed and no live reputation, OCR, or authenticity check was performed.' : 'SafeLens combines heuristic rules, DNS verification, and local machine learning to identify risks. Missing or inconclusive checks are explicitly reported.';
+
   if (timestamp) {
     try {
-      const dt = new Date(data.created_at);
+      const dt = new Date(data.created_at_iso || data.created_at);
       timestamp.textContent = dt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' · ' + dt.toLocaleDateString();
     } catch {
       timestamp.textContent = 'Just now';
@@ -839,7 +1346,7 @@ function renderAssessment(data) {
     if (!data.findings || data.findings.length === 0) {
       findingsContainer.innerHTML = `
         <div style="padding: 20px; text-align: center; color: #64748b; font-size: 13.5px;">
-          No explicit threat anomalies detected in submitted content.
+          ${['screenshot', 'message', 'qr', 'document', 'media', 'offer'].includes(data.module_type) ? 'No grounded findings are available in this view. Review checks and limitations; absent evidence does not establish safety.' : 'No explicit threat anomalies detected in submitted content.'}
         </div>
       `;
     } else {
@@ -848,7 +1355,7 @@ function renderAssessment(data) {
         card.className = 'finding-card';
         card.innerHTML = `
           <div class="finding-header">
-            <span class="finding-source-tag">${escapeHtml(f.source)}</span>
+            <span class="finding-source-tag">${escapeHtml(f.source)}${f.timestamp_seconds!=null?' · '+Number(f.timestamp_seconds).toFixed(2)+'s':''}${f.reference ? ' · ' + escapeHtml(f.reference) : f.page_number ? ' · Page ' + f.page_number : ''}</span>
             <span class="status-pill status-${f.risk_level === 'High Risk' ? 'flagged' : (f.risk_level === 'Caution' ? 'hops' : 'low-risk')}">${escapeHtml(f.risk_level)}</span>
           </div>
           <div class="finding-obs">${escapeHtml(f.observation)}</div>
@@ -871,7 +1378,7 @@ function renderAssessment(data) {
         evBox.className = 'url-excerpt-box';
         evBox.style.marginBottom = '10px';
         evBox.innerHTML = `
-          <span style="font-size: 11px; font-weight: 700; color: #0d9488; text-transform: uppercase; display: block; margin-bottom: 4px;">Source: ${escapeHtml(ev.source_type)} ${ev.page_number ? `(Page ${ev.page_number})` : ''}</span>
+          <span style="font-size: 11px; font-weight: 700; color: #0d9488; text-transform: uppercase; display: block; margin-bottom: 4px;">Source: ${escapeHtml(ev.source_type)} ${ev.timestamp_seconds!=null?Number(ev.timestamp_seconds).toFixed(2)+'s':''} ${ev.page_number ? `(Page ${ev.page_number})` : ev.reference ? escapeHtml(ev.reference) : ''}</span>
           <code>${escapeHtml(ev.snippet)}</code>
           ${ev.detail ? `<div style="font-size: 12px; color: #64748b; margin-top: 4px;">${escapeHtml(ev.detail)}</div>` : ''}
         `;
@@ -941,7 +1448,7 @@ function renderAssessment(data) {
   // Copy Destination Button
   const btnCopy = document.getElementById('btnCopyDestination');
   if (btnCopy) {
-    if (['link', 'qr'].includes(data.module_type)) {
+    if (data.module_type === 'link') {
       btnCopy.style.display = 'inline-flex';
       btnCopy.onclick = () => {
         const textToCopy = data.input_summary || '';
@@ -961,6 +1468,11 @@ function renderAssessment(data) {
       const modal = document.getElementById('contactModal');
       if (modal) {
         setModalModule(data.module_type);
+        if (['message','offer'].includes(data.module_type)) {
+          document.getElementById('inputTextField').value = '';
+          updateMessageCount();
+        }
+        if (['screenshot','qr','document','media','offer'].includes(data.module_type)) clearScreenshotInput();
         modal.classList.add('open');
       }
     };
@@ -1027,7 +1539,7 @@ async function loadDashboardData() {
           items.forEach((item) => {
             const row = document.createElement('div');
             row.className = 'assessment-item';
-            
+
             let badgeClass = 'badge-unable';
             if (item.risk_category === 'High Risk') badgeClass = 'badge-high-risk';
             else if (item.risk_category === 'Caution') badgeClass = 'badge-caution';
@@ -1099,7 +1611,16 @@ function initRouter() {
       }
     } else if (hash.startsWith('#/results/')) {
       const id = hash.replace('#/results/', '');
-      if (id) loadAssessmentById(id);
+      if (id.startsWith('demo-')) {
+        const moduleType = id.slice(5);
+        if (['link', 'message', 'screenshot', 'qr', 'document', 'media', 'offer'].includes(moduleType)) {
+          setModalModule(moduleType);
+          document.getElementById('contactModal').classList.add('open');
+        } else if (Object.hasOwn(moduleExperiences, moduleType)) {
+          activeModule = moduleType;
+          if (currentAssessment?.id !== id) reviewModuleSample();
+        }
+      } else if (id) loadAssessmentById(id);
     } else if (hash === '#/dashboard' || hash === '#/history') {
       const histSec = document.getElementById('history');
       if (histSec) histSec.scrollIntoView({ behavior: 'smooth' });

@@ -1,0 +1,261 @@
+{
+  "submitted_input": "Job offer. Pay INR 3000 registration fee today. Send your OTP.",
+  "http_status": 200,
+  "elapsed_seconds": 0.08140899999852991,
+  "result": {
+    "module_type": "offer",
+    "input_summary": "Offer content not retained",
+    "submitted_text": "Job offer. Pay INR 3000 registration fee today. Send your OTP.",
+    "input_source": "text",
+    "offset_unit": "unicode_codepoints",
+    "offer_type": "job",
+    "classification": {
+      "offer_type": "job",
+      "method": "Keyword observations, not certified classification",
+      "candidates": [
+        "job"
+      ],
+      "evidence": [
+        {
+          "start": 0,
+          "end": 3,
+          "text": "Job",
+          "category": "offer_type_cue"
+        }
+      ]
+    },
+    "extracted_entities": [
+      {
+        "start": 15,
+        "end": 23,
+        "text": "INR 3000",
+        "category": "amount"
+      },
+      {
+        "start": 41,
+        "end": 46,
+        "text": "today",
+        "category": "urgency"
+      }
+    ],
+    "contacts": [],
+    "organisations": [],
+    "payment_amounts": [
+      {
+        "start": 15,
+        "end": 23,
+        "text": "INR 3000",
+        "category": "amount"
+      }
+    ],
+    "payment_instructions": [
+      {
+        "start": 24,
+        "end": 40,
+        "text": "registration fee",
+        "category": "advance_payment",
+        "source": "offer_deterministic",
+        "context": "direct_or_uncertain",
+        "interpretation": "Observed fee/deposit wording; verify whether this is an active request and whether payment is justified."
+      },
+      {
+        "start": 11,
+        "end": 40,
+        "text": "Pay INR 3000 registration fee",
+        "category": "advance_payment",
+        "source": "deterministic",
+        "context": "direct_or_uncertain",
+        "interpretation": "An observed request or pressure pattern; sender legitimacy is not verified."
+      }
+    ],
+    "deterministic_findings": [
+      {
+        "start": 11,
+        "end": 40,
+        "text": "Pay INR 3000 registration fee",
+        "category": "advance_payment",
+        "source": "deterministic",
+        "context": "direct_or_uncertain",
+        "interpretation": "An observed request or pressure pattern; sender legitimacy is not verified."
+      },
+      {
+        "start": 41,
+        "end": 46,
+        "text": "today",
+        "category": "urgency",
+        "source": "deterministic",
+        "context": "direct_or_uncertain",
+        "interpretation": "Pressure or an identity claim accompanying an observed request; not an authenticated identity."
+      },
+      {
+        "start": 48,
+        "end": 61,
+        "text": "Send your OTP",
+        "category": "credential_request",
+        "source": "deterministic",
+        "context": "direct_or_uncertain",
+        "interpretation": "An observed request or pressure pattern; sender legitimacy is not verified."
+      },
+      {
+        "start": 24,
+        "end": 40,
+        "text": "registration fee",
+        "category": "advance_payment",
+        "source": "offer_deterministic",
+        "context": "direct_or_uncertain",
+        "interpretation": "Observed fee/deposit wording; verify whether this is an active request and whether payment is justified."
+      }
+    ],
+    "url_assessments": [],
+    "ai": {
+      "provider": "Local Ollama / Qwen",
+      "lookup_time": "2026-10-13T19:29:44.743714+00:00",
+      "status": "unavailable",
+      "installed": true,
+      "running": true,
+      "model_available": true,
+      "requested_model": "qwen2.5:3b",
+      "model_used": null,
+      "interpretations": [],
+      "structured_output": null,
+      "grounding_failures": [],
+      "attempts": 0,
+      "model_digest": "357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b",
+      "error": "Full message and evidence exceed the conservative local model context budget; shorten the message. No text was truncated."
+    },
+    "ai_interpretations": [],
+    "findings": [
+      {
+        "source": "deterministic · advance_payment",
+        "observation": "Pay INR 3000 registration fee",
+        "interpretation": "An observed request or pressure pattern; sender legitimacy is not verified. Context: direct_or_uncertain.",
+        "action": "Verify requests using contact details obtained independently.",
+        "risk_level": "Caution"
+      },
+      {
+        "source": "deterministic · urgency",
+        "observation": "today",
+        "interpretation": "Pressure or an identity claim accompanying an observed request; not an authenticated identity. Context: direct_or_uncertain.",
+        "action": "Verify requests using contact details obtained independently.",
+        "risk_level": "Caution"
+      },
+      {
+        "source": "deterministic · credential_request",
+        "observation": "Send your OTP",
+        "interpretation": "An observed request or pressure pattern; sender legitimacy is not verified. Context: direct_or_uncertain.",
+        "action": "Verify requests using contact details obtained independently.",
+        "risk_level": "High Risk"
+      },
+      {
+        "source": "Offer deterministic · advance_payment",
+        "observation": "registration fee",
+        "interpretation": "Observed fee/deposit wording; verify whether this is an active request and whether payment is justified. Context: direct_or_uncertain",
+        "action": "Verify the issuer and claims independently before payment or sharing credentials.",
+        "risk_level": "Caution",
+        "text_offset": {
+          "start": 24,
+          "end": 40
+        }
+      }
+    ],
+    "evidence": [
+      {
+        "source_type": "deterministic",
+        "snippet": "Pay INR 3000 registration fee",
+        "text_offset": {
+          "start": 11,
+          "end": 40
+        },
+        "detail": "advance_payment · direct_or_uncertain"
+      },
+      {
+        "source_type": "deterministic",
+        "snippet": "today",
+        "text_offset": {
+          "start": 41,
+          "end": 46
+        },
+        "detail": "urgency · direct_or_uncertain"
+      },
+      {
+        "source_type": "deterministic",
+        "snippet": "Send your OTP",
+        "text_offset": {
+          "start": 48,
+          "end": 61
+        },
+        "detail": "credential_request · direct_or_uncertain"
+      },
+      {
+        "source_type": "offer_deterministic",
+        "snippet": "registration fee",
+        "text_offset": {
+          "start": 24,
+          "end": 40
+        },
+        "detail": "advance_payment · direct_or_uncertain"
+      }
+    ],
+    "risk_category": "High Risk",
+    "score": null,
+    "explanation": "Offer content risk: High Risk. Observed claims and requests are indicators, not independent proof of fraud or legitimacy. Regulatory status, market prices, employer identity and contact ownership were not independently verified.",
+    "checks_performed": [
+      {
+        "name": "Content adequacy",
+        "status": "passed",
+        "detail": "62 Unicode code points; original text preserved"
+      },
+      {
+        "name": "Entity extraction",
+        "status": "passed",
+        "detail": "2 actual entity span(s)"
+      },
+      {
+        "name": "Context-aware deterministic rules",
+        "status": "flagged",
+        "detail": "3 evidence span(s); negation/quotation considered"
+      },
+      {
+        "name": "Embedded Link Check",
+        "status": "passed",
+        "detail": "0 distinct URL(s) processed"
+      },
+      {
+        "name": "Offer classification and contextual deterministic indicators",
+        "status": "flagged",
+        "detail": "job · 1 exact spans; quoted/negated wording distinguished"
+      }
+    ],
+    "unavailable_checks": [
+      {
+        "name": "Grounded Qwen contextual interpretation",
+        "status": "unavailable",
+        "detail": "Full message and evidence exceed the conservative local model context budget; shorten the message. No text was truncated."
+      },
+      {
+        "name": "Organisation, regulatory, price and contact verification",
+        "status": "unavailable",
+        "detail": "No independent registry, regulator, price, phone or bank ownership source connected"
+      }
+    ],
+    "recommended_actions": [
+      "Verify the offer through independently obtained organisation contact details.",
+      "Do not disclose credentials or pay advance fees solely on an unsolicited promise.",
+      "A suspicious indicator does not prove an organisation is fake."
+    ],
+    "provider_info": {
+      "engine": "SafeLens Offer orchestration over Message/Link/Document",
+      "model_used": null,
+      "raw_content_retained": false
+    },
+    "coverage": {
+      "contextual_ai": "unavailable",
+      "all_urls_checked": 0,
+      "external_claims_verified": false
+    },
+    "id": "asmt_8401aaad4da2",
+    "created_at": "2026-10-13T19:29:44.770309+00:00",
+    "created_at_iso": "2026-10-13T19:29:44.770309+00:00",
+    "retention_expiry": "2026-10-14T19:29:44.770311"
+  }
+}

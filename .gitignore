@@ -18,6 +18,8 @@ __pycache__/
 safelens.db
 *.db-journal
 backend/storage/*
+backend/ocr_models/
+tests/screenshot-fixtures/
 !backend/storage/.gitkeep
 
 # Build and distribution
@@ -27,3 +29,17 @@ build/
 # OS artifacts
 .DS_Store
 Thumbs.db
+
+tests/qr-fixtures/
+
+tests/document-fixtures/
+
+tests/media-fixtures/
+
+# Local secrets and runtime sidecars
+.env.*
+!.env.example
+!backend/.env.example
+*.db-wal
+*.db-shm
+*.log

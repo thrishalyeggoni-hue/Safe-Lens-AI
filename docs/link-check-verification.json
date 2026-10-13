@@ -1,0 +1,248 @@
+{
+  "id": "asmt_9b1b5e529b03",
+  "created_at": "2026-10-13T15:45:42.999229+00:00",
+  "created_at_iso": "2026-10-13T15:45:42.999229+00:00",
+  "module_type": "link",
+  "input_summary": "https://example.org/",
+  "risk_category": "Unable to Assess",
+  "explanation": "Required checks are unavailable or inconclusive. The available evidence is insufficient to classify this URL as Low Risk.",
+  "findings": [],
+  "evidence": [
+    {
+      "source_type": "URL normalization",
+      "snippet": "https://example.org/",
+      "detail": "Actual submitted URL; fragment and embedded credentials omitted."
+    }
+  ],
+  "checks_performed": [
+    {
+      "name": "URL normalization / bundled Public Suffix List",
+      "status": "passed",
+      "detail": "Canonical host: example.org; registered domain: example.org"
+    },
+    {
+      "name": "DNS / public address validation",
+      "status": "passed",
+      "detail": "104.20.26.136, 172.66.157.237, 2606:4700:10::ac42:9ded, 2606:4700:10::6814:1a88"
+    },
+    {
+      "name": "RDAP registration",
+      "status": "passed",
+      "detail": "Retrieved from https://rdap.publicinterestregistry.org/rdap/domain/example.org"
+    },
+    {
+      "name": "Safe HEAD redirect inspection",
+      "status": "passed",
+      "detail": "0 redirects; final URL: https://example.org/"
+    },
+    {
+      "name": "Deterministic URL heuristics",
+      "status": "passed",
+      "detail": "0 weak indicator(s); no AI interpretation"
+    }
+  ],
+  "unavailable_checks": [
+    {
+      "name": "Google Web Risk Lookup API",
+      "status": "unavailable",
+      "detail": "GOOGLE_WEB_RISK_API_KEY is not configured"
+    }
+  ],
+  "recommended_actions": [
+    "Verify the source and exact domain independently.",
+    "Do not share OTPs, passwords, or pay based on an unsolicited link.",
+    "A reputation non-match does not guarantee safety."
+  ],
+  "provider_info": {
+    "engine": "SafeLens deterministic Link Inspector v2",
+    "tldextract_version": "5.4.0",
+    "registered_domain": "example.org",
+    "target_host": "example.org",
+    "link_analysis": {
+      "dns": {
+        "provider": "dnspython / system-configured DNS resolver",
+        "lookup_time": "2026-10-13T15:45:40.014722+00:00",
+        "hostname": "example.org",
+        "status": "resolved",
+        "addresses": [
+          "104.20.26.136",
+          "172.66.157.237",
+          "2606:4700:10::ac42:9ded",
+          "2606:4700:10::6814:1a88"
+        ],
+        "records": {
+          "A": [
+            "104.20.26.136",
+            "172.66.157.237"
+          ],
+          "AAAA": [
+            "2606:4700:10::ac42:9ded",
+            "2606:4700:10::6814:1a88"
+          ]
+        },
+        "errors": []
+      },
+      "rdap": {
+        "provider": "IANA RDAP bootstrap / registry RDAP",
+        "lookup_time": "2026-10-13T15:45:40.022145+00:00",
+        "status": "available",
+        "registered_domain": "example.org",
+        "bootstrap_source": "https://data.iana.org/rdap/dns.json",
+        "source_url": "https://rdap.publicinterestregistry.org/rdap/domain/example.org",
+        "registration_date": "1995-08-31T04:00:00Z",
+        "expiry_date": "2027-08-30T04:00:00Z",
+        "registrar": "ICANN",
+        "nameservers": [
+          "katelyn.ns.cloudflare.com",
+          "mitch.ns.cloudflare.com"
+        ],
+        "domain_status": [
+          "server delete prohibited",
+          "server transfer prohibited",
+          "server update prohibited",
+          "auto renew period"
+        ],
+        "age_days": 11366
+      },
+      "reputation": {
+        "provider": "Google Web Risk Lookup API",
+        "source_url": "https://webrisk.googleapis.com/v1/uris:search",
+        "lookup_time": "2026-10-13T15:45:41.673593+00:00",
+        "status": "unavailable",
+        "threats": [],
+        "error": "GOOGLE_WEB_RISK_API_KEY is not configured",
+        "lookups": [
+          {
+            "provider": "Google Web Risk Lookup API",
+            "source_url": "https://webrisk.googleapis.com/v1/uris:search",
+            "lookup_time": "2026-10-13T15:45:41.673593+00:00",
+            "status": "unavailable",
+            "threats": [],
+            "error": "GOOGLE_WEB_RISK_API_KEY is not configured",
+            "url": "https://example.org/"
+          }
+        ]
+      },
+      "redirects": {
+        "provider": "httpx / pinned public IP / verified TLS / HEAD only",
+        "lookup_time": "2026-10-13T15:45:41.673746+00:00",
+        "status": "completed",
+        "chain": [
+          {
+            "source": "https://example.org/",
+            "status_code": 200,
+            "destination": null,
+            "resolved_addresses": [
+              "104.20.26.136",
+              "172.66.157.237",
+              "2606:4700:10::ac42:9ded",
+              "2606:4700:10::6814:1a88"
+            ],
+            "lookup_time": "2026-10-13T15:45:41.684906+00:00"
+          }
+        ],
+        "final_url": "https://example.org/",
+        "redirect_count": 0,
+        "downloaded_body_bytes": 0
+      },
+      "normalized_url": "https://example.org/",
+      "hostname": "example.org",
+      "registered_domain": "example.org",
+      "heuristic_findings": [],
+      "checked_at": "2026-10-13T15:45:42.999166+00:00"
+    }
+  },
+  "score": null,
+  "retention_expiry": "2026-10-14T15:45:42.999315",
+  "dns": {
+    "provider": "dnspython / system-configured DNS resolver",
+    "lookup_time": "2026-10-13T15:45:40.014722+00:00",
+    "hostname": "example.org",
+    "status": "resolved",
+    "addresses": [
+      "104.20.26.136",
+      "172.66.157.237",
+      "2606:4700:10::ac42:9ded",
+      "2606:4700:10::6814:1a88"
+    ],
+    "records": {
+      "A": [
+        "104.20.26.136",
+        "172.66.157.237"
+      ],
+      "AAAA": [
+        "2606:4700:10::ac42:9ded",
+        "2606:4700:10::6814:1a88"
+      ]
+    },
+    "errors": []
+  },
+  "rdap": {
+    "provider": "IANA RDAP bootstrap / registry RDAP",
+    "lookup_time": "2026-10-13T15:45:40.022145+00:00",
+    "status": "available",
+    "registered_domain": "example.org",
+    "bootstrap_source": "https://data.iana.org/rdap/dns.json",
+    "source_url": "https://rdap.publicinterestregistry.org/rdap/domain/example.org",
+    "registration_date": "1995-08-31T04:00:00Z",
+    "expiry_date": "2027-08-30T04:00:00Z",
+    "registrar": "ICANN",
+    "nameservers": [
+      "katelyn.ns.cloudflare.com",
+      "mitch.ns.cloudflare.com"
+    ],
+    "domain_status": [
+      "server delete prohibited",
+      "server transfer prohibited",
+      "server update prohibited",
+      "auto renew period"
+    ],
+    "age_days": 11366
+  },
+  "reputation": {
+    "provider": "Google Web Risk Lookup API",
+    "source_url": "https://webrisk.googleapis.com/v1/uris:search",
+    "lookup_time": "2026-10-13T15:45:41.673593+00:00",
+    "status": "unavailable",
+    "threats": [],
+    "error": "GOOGLE_WEB_RISK_API_KEY is not configured",
+    "lookups": [
+      {
+        "provider": "Google Web Risk Lookup API",
+        "source_url": "https://webrisk.googleapis.com/v1/uris:search",
+        "lookup_time": "2026-10-13T15:45:41.673593+00:00",
+        "status": "unavailable",
+        "threats": [],
+        "error": "GOOGLE_WEB_RISK_API_KEY is not configured",
+        "url": "https://example.org/"
+      }
+    ]
+  },
+  "redirects": {
+    "provider": "httpx / pinned public IP / verified TLS / HEAD only",
+    "lookup_time": "2026-10-13T15:45:41.673746+00:00",
+    "status": "completed",
+    "chain": [
+      {
+        "source": "https://example.org/",
+        "status_code": 200,
+        "destination": null,
+        "resolved_addresses": [
+          "104.20.26.136",
+          "172.66.157.237",
+          "2606:4700:10::ac42:9ded",
+          "2606:4700:10::6814:1a88"
+        ],
+        "lookup_time": "2026-10-13T15:45:41.684906+00:00"
+      }
+    ],
+    "final_url": "https://example.org/",
+    "redirect_count": 0,
+    "downloaded_body_bytes": 0
+  },
+  "normalized_url": "https://example.org/",
+  "hostname": "example.org",
+  "registered_domain": "example.org",
+  "heuristic_findings": [],
+  "checked_at": "2026-10-13T15:45:42.999166+00:00"
+}

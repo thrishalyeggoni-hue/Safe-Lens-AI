@@ -263,7 +263,7 @@
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                 <path d="m9 12 2 2 4-4"/>
               </svg>
-              <span>Client-side QR decoding</span>
+              <span>Local backend QR decoding</span>
             </div>
 
             <div class="feature-badge-item">
@@ -669,7 +669,7 @@
                 </div>
                 <div class="card-bottom-info">
                   <h3 class="service-card-title">Screenshot Check</h3>
-                  <p class="service-card-desc">Inspect payment slips and receipts for pixel forgery.</p>
+                  <p class="service-card-desc">Read screenshot text, payment requests and embedded links.</p>
                   <div class="card-meta-row">
                     <span class="service-tagline">See the hidden clues.</span>
                     <span class="service-format-tag">PNG · JPG Receipts</span>
@@ -685,7 +685,7 @@
                 <div class="lime-content-body">
                   <h4 class="lime-service-title">Screenshot &amp; Slip Review</h4>
                   <p class="lime-service-desc">
-                    Inspect payment slips, balance confirmations, and marketplace proofs for visual forgery, clone stamps, and altered digits.
+                    Extract real OCR text and boxes, inspect links, and review payment requests. Screenshot authenticity and payee identity are not verified.
                   </p>
                   <div class="lime-format-tag">PNG · JPG · WebP Images</div>
                   <div class="lime-action-row">
@@ -716,7 +716,7 @@
                 </div>
                 <div class="card-bottom-info">
                   <h3 class="service-card-title">QR Check</h3>
-                  <p class="service-card-desc">Decode QR matrices locally in browser before opening.</p>
+                  <p class="service-card-desc">Decode actual QR images and check destinations before opening.</p>
                   <div class="card-meta-row">
                     <span class="service-tagline">Know where it leads.</span>
                     <span class="service-format-tag">Matrix Decode</span>
@@ -1261,7 +1261,7 @@
 
     <!-- INTERACTIVE REAL-BACKEND ASSESSMENT MODAL -->
     <div class="modal-overlay" id="contactModal">
-      <div class="modal-dialog">
+      <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="assessmentModalTitle">
         <button class="modal-close" id="modalClose" aria-label="Close modal">&times;</button>
         
         <!-- Processing State Overlay -->
@@ -1289,6 +1289,7 @@
           <button type="button" class="module-pill-btn" data-module="offer">Offer</button>
         </div>
 
+        <div id="moduleExperience" class="module-experience"></div>
         <form class="modal-form" id="assessmentForm">
           <!-- Input Group 1: URL Input (Link, QR URL fallback) -->
           <div class="form-group" id="groupUrlInput">
@@ -1300,6 +1301,10 @@
           <div class="form-group" id="groupTextInput" style="display: none;">
             <label for="inputTextField">Message / Offer Body Text</label>
             <textarea id="inputTextField" placeholder="Paste suspicious SMS, chat message, email, or investment pitch here..."></textarea>
+            <span id="messageCharacterCount" class="module-character-count" aria-live="polite"></span>
+            <div id="messageInputActions" class="message-input-actions" hidden>
+              <button type="button" class="btn-secondary-action" id="btnResetMessage">Reset message</button>
+            </div>
           </div>
 
           <!-- Input Group 3: File Upload Dropzone (Screenshot, QR, Document, Media) -->
@@ -1321,9 +1326,21 @@
               <span id="selectedFileName">file.png</span>
               <button type="button" class="file-remove-btn" id="btnRemoveFile" title="Remove file">&times;</button>
             </div>
+            <div id="screenshotIntake" hidden>
+              <label for="screenshotLanguage">Screenshot language</label>
+              <select id="screenshotLanguage"><option value="en">English</option><option value="hi">Hindi</option><option value="te">Telugu</option><option value="mixed">Mixed English / Hindi / Telugu</option></select>
+              <p class="screenshot-note">Choose the language shown. OCR can misread text; mixed recognition has limited coverage.</p>
+              <img id="screenshotInputPreview" class="screenshot-input-preview" alt="Your selected screenshot" hidden />
+              <button type="button" class="btn-secondary-action" id="btnResetScreenshot">Reset screenshot</button>
+            </div>
           </div>
 
-          <div style="margin: 12px 0 16px 0; font-size: 12px; color: #64748b; line-height: 1.4;">
+          <div id="moduleSignals" class="module-signal-grid"></div>
+          <div class="module-demo-actions">
+            <button type="button" class="btn-secondary-action" id="btnModuleDemo">Review sample</button>
+            <span>Demo uses an illustrative example. Your uploads are not analyzed in demo mode.</span>
+          </div>
+          <div id="intakePrivacyNote" style="margin: 12px 0 16px 0; font-size: 12px; color: #64748b; line-height: 1.4;">
             <span style="color: #2dd4bf; font-weight: 600;">Transient evaluation:</span> Uploads are analyzed in isolated backend memory and purged automatically according to data retention policy.
           </div>
 

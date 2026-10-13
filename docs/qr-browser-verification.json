@@ -1,0 +1,587 @@
+{
+  "notice": "Actual browser uploads of agent-authored controlled QR images; no application fixture responses.",
+  "https_result": {
+    "module_type": "qr",
+    "input_summary": "QR content not retained",
+    "original_filename": "https.png",
+    "image": {
+      "original_filename": "https.png",
+      "validated_format": "PNG",
+      "validated_mime": "image/png",
+      "upload_bytes": 967,
+      "sha256": "10cce75b8701aab97ca9f333c116b6fdf90fe9eaee075a8b28c599b9f0df9429",
+      "encoded_width": 198,
+      "encoded_height": 198,
+      "width": 198,
+      "height": 198,
+      "exif_orientation": 1,
+      "coordinate_space": "EXIF-oriented original image; same orientation used by the browser preview",
+      "preprocessing": [
+        "Content validation",
+        "EXIF orientation unchanged",
+        "RGB conversion with transparent pixels composited on white"
+      ],
+      "authenticity": "Container metadata does not verify image authenticity or sender identity"
+    },
+    "decoder": {
+      "engine": "ZXing-C++",
+      "binding": "zxing-cpp",
+      "version": "3.1.1",
+      "available": true,
+      "decode_timeout_seconds": 15,
+      "max_codes": 32,
+      "max_payload_characters": 12000,
+      "formats": [
+        "QR_CODE"
+      ],
+      "multiple_codes": true,
+      "status": "completed"
+    },
+    "qr_count": 1,
+    "codes": [
+      {
+        "format": "QR_CODE",
+        "payload": "https://example.com",
+        "payload_bytes_hex": "68747470733a2f2f6578616d706c652e636f6d",
+        "position": [
+          [
+            24,
+            24
+          ],
+          [
+            174,
+            24
+          ],
+          [
+            174,
+            174
+          ],
+          [
+            24,
+            174
+          ]
+        ],
+        "id": 1,
+        "source": "QR decoder observation",
+        "link_results": [
+          {
+            "original_url": "https://example.com",
+            "result": {
+              "module_type": "link",
+              "input_summary": "https://example.com/",
+              "normalized_url": "https://example.com/",
+              "hostname": "example.com",
+              "registered_domain": "example.com",
+              "risk_category": "Unable to Assess",
+              "explanation": "Required checks are unavailable or inconclusive. The available evidence is insufficient to classify this URL as Low Risk.",
+              "findings": [],
+              "evidence": [
+                {
+                  "source_type": "URL normalization",
+                  "snippet": "https://example.com/",
+                  "detail": "Actual submitted URL; fragment and embedded credentials omitted."
+                }
+              ],
+              "checks_performed": [
+                {
+                  "name": "URL normalization / bundled Public Suffix List",
+                  "status": "passed",
+                  "detail": "Canonical host: example.com; registered domain: example.com"
+                },
+                {
+                  "name": "DNS / public address validation",
+                  "status": "passed",
+                  "detail": "172.66.147.243, 104.20.23.154, 2606:4700:10::ac42:93f3, 2606:4700:10::6814:179a"
+                },
+                {
+                  "name": "RDAP registration",
+                  "status": "passed",
+                  "detail": "Retrieved from https://rdap.verisign.com/com/v1/domain/example.com"
+                },
+                {
+                  "name": "Safe HEAD redirect inspection",
+                  "status": "passed",
+                  "detail": "0 redirects; final URL: https://example.com/"
+                },
+                {
+                  "name": "Deterministic URL heuristics",
+                  "status": "passed",
+                  "detail": "0 weak indicator(s); no AI interpretation"
+                }
+              ],
+              "unavailable_checks": [
+                {
+                  "name": "Google Web Risk Lookup API",
+                  "status": "unavailable",
+                  "detail": "GOOGLE_WEB_RISK_API_KEY is not configured"
+                }
+              ],
+              "heuristic_findings": [],
+              "recommended_actions": [
+                "Verify the source and exact domain independently.",
+                "Do not share OTPs, passwords, or pay based on an unsolicited link.",
+                "A reputation non-match does not guarantee safety."
+              ],
+              "score": null,
+              "checked_at": "2026-10-13T16:50:32.573803+00:00",
+              "dns": {
+                "provider": "dnspython / system-configured DNS resolver",
+                "lookup_time": "2026-10-13T16:50:32.393211+00:00",
+                "hostname": "example.com",
+                "status": "resolved",
+                "addresses": [
+                  "172.66.147.243",
+                  "104.20.23.154",
+                  "2606:4700:10::ac42:93f3",
+                  "2606:4700:10::6814:179a"
+                ],
+                "records": {
+                  "A": [
+                    "172.66.147.243",
+                    "104.20.23.154"
+                  ],
+                  "AAAA": [
+                    "2606:4700:10::ac42:93f3",
+                    "2606:4700:10::6814:179a"
+                  ]
+                },
+                "errors": []
+              },
+              "rdap": {
+                "provider": "IANA RDAP bootstrap / registry RDAP",
+                "lookup_time": "2026-10-13T16:50:32.396998+00:00",
+                "status": "available",
+                "registered_domain": "example.com",
+                "bootstrap_source": "https://data.iana.org/rdap/dns.json",
+                "source_url": "https://rdap.verisign.com/com/v1/domain/example.com",
+                "registration_date": "1995-08-14T04:00:00Z",
+                "expiry_date": "2027-08-13T04:00:00Z",
+                "registrar": "RESERVED-Internet Assigned Numbers Authority",
+                "nameservers": [
+                  "ELLIOTT.NS.CLOUDFLARE.COM",
+                  "HERA.NS.CLOUDFLARE.COM"
+                ],
+                "domain_status": [
+                  "client delete prohibited",
+                  "client transfer prohibited",
+                  "client update prohibited"
+                ],
+                "age_days": 11383
+              },
+              "reputation": {
+                "provider": "Google Web Risk Lookup API",
+                "source_url": "https://webrisk.googleapis.com/v1/uris:search",
+                "lookup_time": "2026-10-13T16:50:32.549857+00:00",
+                "status": "unavailable",
+                "threats": [],
+                "error": "GOOGLE_WEB_RISK_API_KEY is not configured",
+                "lookups": [
+                  {
+                    "provider": "Google Web Risk Lookup API",
+                    "source_url": "https://webrisk.googleapis.com/v1/uris:search",
+                    "lookup_time": "2026-10-13T16:50:32.549857+00:00",
+                    "status": "unavailable",
+                    "threats": [],
+                    "error": "GOOGLE_WEB_RISK_API_KEY is not configured",
+                    "url": "https://example.com/"
+                  }
+                ]
+              },
+              "redirects": {
+                "provider": "httpx / pinned public IP / verified TLS / HEAD only",
+                "lookup_time": "2026-10-13T16:50:32.549873+00:00",
+                "status": "completed",
+                "chain": [
+                  {
+                    "source": "https://example.com/",
+                    "status_code": 200,
+                    "destination": null,
+                    "resolved_addresses": [
+                      "172.66.147.243",
+                      "104.20.23.154",
+                      "2606:4700:10::ac42:93f3",
+                      "2606:4700:10::6814:179a"
+                    ],
+                    "lookup_time": "2026-10-13T16:50:32.557889+00:00"
+                  }
+                ],
+                "final_url": "https://example.com/",
+                "redirect_count": 0,
+                "downloaded_body_bytes": 0
+              },
+              "provider_info": {
+                "engine": "SafeLens deterministic Link Inspector v2",
+                "tldextract_version": "5.4.0",
+                "registered_domain": "example.com",
+                "target_host": "example.com",
+                "link_analysis": {
+                  "dns": {
+                    "provider": "dnspython / system-configured DNS resolver",
+                    "lookup_time": "2026-10-13T16:50:32.393211+00:00",
+                    "hostname": "example.com",
+                    "status": "resolved",
+                    "addresses": [
+                      "172.66.147.243",
+                      "104.20.23.154",
+                      "2606:4700:10::ac42:93f3",
+                      "2606:4700:10::6814:179a"
+                    ],
+                    "records": {
+                      "A": [
+                        "172.66.147.243",
+                        "104.20.23.154"
+                      ],
+                      "AAAA": [
+                        "2606:4700:10::ac42:93f3",
+                        "2606:4700:10::6814:179a"
+                      ]
+                    },
+                    "errors": []
+                  },
+                  "rdap": {
+                    "provider": "IANA RDAP bootstrap / registry RDAP",
+                    "lookup_time": "2026-10-13T16:50:32.396998+00:00",
+                    "status": "available",
+                    "registered_domain": "example.com",
+                    "bootstrap_source": "https://data.iana.org/rdap/dns.json",
+                    "source_url": "https://rdap.verisign.com/com/v1/domain/example.com",
+                    "registration_date": "1995-08-14T04:00:00Z",
+                    "expiry_date": "2027-08-13T04:00:00Z",
+                    "registrar": "RESERVED-Internet Assigned Numbers Authority",
+                    "nameservers": [
+                      "ELLIOTT.NS.CLOUDFLARE.COM",
+                      "HERA.NS.CLOUDFLARE.COM"
+                    ],
+                    "domain_status": [
+                      "client delete prohibited",
+                      "client transfer prohibited",
+                      "client update prohibited"
+                    ],
+                    "age_days": 11383
+                  },
+                  "reputation": {
+                    "provider": "Google Web Risk Lookup API",
+                    "source_url": "https://webrisk.googleapis.com/v1/uris:search",
+                    "lookup_time": "2026-10-13T16:50:32.549857+00:00",
+                    "status": "unavailable",
+                    "threats": [],
+                    "error": "GOOGLE_WEB_RISK_API_KEY is not configured",
+                    "lookups": [
+                      {
+                        "provider": "Google Web Risk Lookup API",
+                        "source_url": "https://webrisk.googleapis.com/v1/uris:search",
+                        "lookup_time": "2026-10-13T16:50:32.549857+00:00",
+                        "status": "unavailable",
+                        "threats": [],
+                        "error": "GOOGLE_WEB_RISK_API_KEY is not configured",
+                        "url": "https://example.com/"
+                      }
+                    ]
+                  },
+                  "redirects": {
+                    "provider": "httpx / pinned public IP / verified TLS / HEAD only",
+                    "lookup_time": "2026-10-13T16:50:32.549873+00:00",
+                    "status": "completed",
+                    "chain": [
+                      {
+                        "source": "https://example.com/",
+                        "status_code": 200,
+                        "destination": null,
+                        "resolved_addresses": [
+                          "172.66.147.243",
+                          "104.20.23.154",
+                          "2606:4700:10::ac42:93f3",
+                          "2606:4700:10::6814:179a"
+                        ],
+                        "lookup_time": "2026-10-13T16:50:32.557889+00:00"
+                      }
+                    ],
+                    "final_url": "https://example.com/",
+                    "redirect_count": 0,
+                    "downloaded_body_bytes": 0
+                  },
+                  "normalized_url": "https://example.com/",
+                  "hostname": "example.com",
+                  "registered_domain": "example.com",
+                  "heuristic_findings": [],
+                  "checked_at": "2026-10-13T16:50:32.573819+00:00"
+                }
+              }
+            }
+          }
+        ],
+        "message_result": null,
+        "type": "URL",
+        "parsed_fields": {
+          "original_url": "https://example.com"
+        },
+        "urls": [
+          "https://example.com"
+        ],
+        "parse_warnings": [],
+        "risk_category": "Unable to Assess"
+      }
+    ],
+    "risk_category": "Unable to Assess",
+    "explanation": "Decoded 1 actual QR code(s). Decoding establishes readability only; review each payload and the external checks. Self-declared identities and payment authorization remain unverified.",
+    "score": null,
+    "findings": [],
+    "evidence": [
+      {
+        "snippet": "https://example.com",
+        "source_type": "qr",
+        "detail": "Actual ZXing-C++ decoded payload · QR 1 · URL"
+      }
+    ],
+    "checks_performed": [
+      {
+        "name": "Content-validated image",
+        "status": "passed",
+        "detail": "PNG"
+      },
+      {
+        "name": "Real QR decoding",
+        "status": "passed",
+        "detail": "1 readable QR codes; completed"
+      },
+      {
+        "name": "QR 1 Link · URL normalization / bundled Public Suffix List",
+        "status": "passed",
+        "detail": "Canonical host: example.com; registered domain: example.com"
+      },
+      {
+        "name": "QR 1 Link · DNS / public address validation",
+        "status": "passed",
+        "detail": "172.66.147.243, 104.20.23.154, 2606:4700:10::ac42:93f3, 2606:4700:10::6814:179a"
+      },
+      {
+        "name": "QR 1 Link · RDAP registration",
+        "status": "passed",
+        "detail": "Retrieved from https://rdap.verisign.com/com/v1/domain/example.com"
+      },
+      {
+        "name": "QR 1 Link · Safe HEAD redirect inspection",
+        "status": "passed",
+        "detail": "0 redirects; final URL: https://example.com/"
+      },
+      {
+        "name": "QR 1 Link · Deterministic URL heuristics",
+        "status": "passed",
+        "detail": "0 weak indicator(s); no AI interpretation"
+      },
+      {
+        "name": "QR 1 payload classification",
+        "status": "passed",
+        "detail": "URL"
+      }
+    ],
+    "unavailable_checks": [
+      {
+        "name": "QR 1 Link · Google Web Risk Lookup API",
+        "status": "unavailable",
+        "detail": "GOOGLE_WEB_RISK_API_KEY is not configured"
+      }
+    ],
+    "recommended_actions": [
+      "Review the original decoded payload before acting.",
+      "Verify the source and payee independently.",
+      "No destination, payment, contact or Wi-Fi action is executed automatically."
+    ],
+    "provider_info": {
+      "engine": "ZXing-C++ QR orchestration",
+      "raw_content_retained": false
+    },
+    "id": "asmt_f40e133ff6f5",
+    "created_at": "2026-10-13T16:50:32.573926+00:00",
+    "created_at_iso": "2026-10-13T16:50:32.573926+00:00",
+    "retention_expiry": "2026-10-14T16:50:32.573937"
+  },
+  "upi_result": {
+    "module_type": "qr",
+    "input_summary": "QR content not retained",
+    "original_filename": "upi.png",
+    "image": {
+      "original_filename": "upi.png",
+      "validated_format": "PNG",
+      "validated_mime": "image/png",
+      "upload_bytes": 1596,
+      "sha256": "648a846f3c789c52f78d5b9fe8603bfd65743041042704dfef2fde5ff19d7b7c",
+      "encoded_width": 270,
+      "encoded_height": 270,
+      "width": 270,
+      "height": 270,
+      "exif_orientation": 1,
+      "coordinate_space": "EXIF-oriented original image; same orientation used by the browser preview",
+      "preprocessing": [
+        "Content validation",
+        "EXIF orientation unchanged",
+        "RGB conversion with transparent pixels composited on white"
+      ],
+      "authenticity": "Container metadata does not verify image authenticity or sender identity"
+    },
+    "decoder": {
+      "engine": "ZXing-C++",
+      "binding": "zxing-cpp",
+      "version": "3.1.1",
+      "available": true,
+      "decode_timeout_seconds": 15,
+      "max_codes": 32,
+      "max_payload_characters": 12000,
+      "formats": [
+        "QR_CODE"
+      ],
+      "multiple_codes": true,
+      "status": "completed"
+    },
+    "qr_count": 1,
+    "codes": [
+      {
+        "format": "QR_CODE",
+        "payload": "upi://pay?pa=controlled%40upi&pn=Controlled+Test&am=12.50&cu=INR&tn=Test&tr=reference-1&custom=preserved",
+        "payload_bytes_hex": "7570693a2f2f7061793f70613d636f6e74726f6c6c656425343075706926706e3d436f6e74726f6c6c65642b5465737426616d3d31322e35302663753d494e5226746e3d546573742674723d7265666572656e63652d3126637573746f6d3d707265736572766564",
+        "position": [
+          [
+            24,
+            24
+          ],
+          [
+            246,
+            24
+          ],
+          [
+            246,
+            246
+          ],
+          [
+            24,
+            246
+          ]
+        ],
+        "id": 1,
+        "source": "QR decoder observation",
+        "link_results": [],
+        "message_result": null,
+        "type": "UPI_PAYMENT",
+        "parsed_fields": {
+          "parameters": {
+            "pa": [
+              "controlled@upi"
+            ],
+            "pn": [
+              "Controlled Test"
+            ],
+            "am": [
+              "12.50"
+            ],
+            "cu": [
+              "INR"
+            ],
+            "tn": [
+              "Test"
+            ],
+            "tr": [
+              "reference-1"
+            ],
+            "custom": [
+              "preserved"
+            ]
+          },
+          "unknown_parameters": {
+            "custom": [
+              "preserved"
+            ]
+          },
+          "identity_verified": false,
+          "payee_address": [
+            "controlled@upi"
+          ],
+          "payee_name": [
+            "Controlled Test"
+          ],
+          "amount": [
+            "12.50"
+          ],
+          "currency": [
+            "INR"
+          ],
+          "transaction_note": [
+            "Test"
+          ],
+          "transaction_reference": [
+            "reference-1"
+          ]
+        },
+        "urls": [],
+        "parse_warnings": [],
+        "risk_category": "Unable to Assess"
+      }
+    ],
+    "risk_category": "Unable to Assess",
+    "explanation": "Decoded 1 actual QR code(s). Decoding establishes readability only; review each payload and the external checks. Self-declared identities and payment authorization remain unverified.",
+    "score": null,
+    "findings": [],
+    "evidence": [
+      {
+        "snippet": "upi://pay?pa=controlled%40upi&pn=Controlled+Test&am=12.50&cu=INR&tn=Test&tr=reference-1&custom=preserved",
+        "source_type": "qr",
+        "detail": "Actual ZXing-C++ decoded payload · QR 1 · UPI_PAYMENT"
+      }
+    ],
+    "checks_performed": [
+      {
+        "name": "Content-validated image",
+        "status": "passed",
+        "detail": "PNG"
+      },
+      {
+        "name": "Real QR decoding",
+        "status": "passed",
+        "detail": "1 readable QR codes; completed"
+      },
+      {
+        "name": "QR 1 payload classification",
+        "status": "passed",
+        "detail": "UPI_PAYMENT"
+      }
+    ],
+    "unavailable_checks": [
+      {
+        "name": "QR 1 payment ownership",
+        "status": "unavailable",
+        "detail": "Payment parameters are self-declared. Payee ownership, legitimacy and authorization are not verified."
+      }
+    ],
+    "recommended_actions": [
+      "Review the original decoded payload before acting.",
+      "Verify the source and payee independently.",
+      "No destination, payment, contact or Wi-Fi action is executed automatically."
+    ],
+    "provider_info": {
+      "engine": "ZXing-C++ QR orchestration",
+      "raw_content_retained": false
+    },
+    "id": "asmt_9fee3038e47d",
+    "created_at": "2026-10-13T16:51:38.368341+00:00",
+    "created_at_iso": "2026-10-13T16:51:38.368341+00:00",
+    "retention_expiry": "2026-10-14T16:51:38.368370"
+  },
+  "copy_verification": {
+    "copied_raw_payload": "https://example.com",
+    "method": "Copy Destination clicked; pasted into Message input with keyboard; DOM value matched exactly."
+  },
+  "controls_verified": [
+    "upload",
+    "original preview",
+    "remove",
+    "analyse",
+    "cancel during multi-URL contact inspection",
+    "retry with retained real file and new assessment id",
+    "reset input and temporary result",
+    "back to input",
+    "check another blank intake",
+    "review parsed details",
+    "Evidence tab",
+    "Checks tab"
+  ],
+  "drag_drop": "Uses the existing shared file selection handler; not separately exercised by browser automation."
+}

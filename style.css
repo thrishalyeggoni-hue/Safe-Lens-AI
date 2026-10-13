@@ -1535,11 +1535,51 @@ body {
   border-radius: 28px;
   padding: 40px;
   width: 100%;
-  max-width: 520px;
+  max-width: 620px;
+  max-height: calc(100dvh - 40px);
+  overflow-y: auto;
   position: relative;
   box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
   transform: scale(0.95);
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.module-experience { margin: 18px 0; }
+.module-reference-image {
+  height: 180px;
+  border-radius: 16px;
+  background-size: 300% auto;
+  background-repeat: no-repeat;
+  background-color: #edf1f4;
+}
+.module-explanation { color: #b7bac4; font-size: 13px; line-height: 1.7; margin-top: 12px; }
+.module-signal-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 16px 0; }
+.module-signal { display: flex; align-items: flex-start; gap: 6px; padding: 12px 9px; border: 1px solid #ffffff20; border-radius: 12px; font-size: 11px; color: #d8dbe3; line-height: 1.5; }
+.module-signal-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--color-lime); flex-shrink: 0; margin-top: 5px; }
+.module-character-count { align-self: flex-end; font-size: 11px; color: #a0a5b1; }
+.module-review-steps { list-style: none; display: flex; justify-content: space-between; gap: 12px; padding: 12px 0 0; color: var(--color-lime); font-size: 12px; }
+.module-demo-actions { display: flex; align-items: center; gap: 14px; margin: 16px 0; }
+.module-demo-actions[hidden] { display: none; }
+.link-observation-json { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 11px; line-height: 1.65; padding: 12px 0; max-height: 350px; overflow-y: auto; }
+.module-demo-actions button { flex-shrink: 0; color: var(--color-lime); border-color: #ffffff30; }
+.module-demo-actions > span { font-size: 11px; color: #a0a5b1; line-height: 1.6; }
+.assessment-overview { padding: 20px; border: 1px solid #dce4e8; background: #f8fafb; border-radius: 16px; margin-bottom: 20px; color: #0f172a; }
+.module-risk-heading { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.module-risk-heading strong { font-size: 20px; }
+.module-risk-heading > span { font-weight: 700; font-size: 14px; }
+.module-risk-scale { display: flex; gap: 10px; margin: 16px 0; font-size: 12px; text-align: center; }
+.module-risk-scale span { flex: 1; border-top: 7px solid #9dcfc8; border-radius: 5px; padding-top: 6px; }
+.module-risk-scale span:nth-child(2) { border-color: #ffd98a; }
+.module-risk-scale span:nth-child(3) { border-color: #ff4c55; }
+.assessment-overview p { font-size: 12px; line-height: 1.7; color: #64748b; }
+.module-protect { border-top: 1px solid #dce4e8; padding-top: 12px; margin-top: 12px; font-size: 13px; }
+.module-protect summary { cursor: pointer; color: #0d9488; font-weight: 700; }
+.module-protect ul { padding-left: 20px; line-height: 1.9; margin-top: 10px; }
+@media (max-width: 600px) {
+  .modal-dialog { padding: 30px 18px; }
+  .module-reference-image { height: 130px; }
+  .module-signal-grid { grid-template-columns: 1fr; }
+  .module-demo-actions { align-items: flex-start; flex-direction: column; }
 }
 
 .modal-overlay.open .modal-dialog {
@@ -3026,3 +3066,17 @@ body {
   }
 }
 
+/* Message evidence retains exact whitespace and safely wraps pasted content. */
+.message-evidence-text { white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.7; padding: 18px 0; }
+.message-evidence-text mark { background: rgba(212,255,0,.23); color: inherit; border-radius: 3px; }
+.message-input-actions { margin-top: 12px; }
+.message-input-actions[hidden] { display: none; }
+.screenshot-input-preview { display:block; width:100%; max-height:260px; object-fit:contain; margin:16px 0; border-radius:12px; }
+.screenshot-input-preview[hidden], #screenshotIntake[hidden] { display:none; }
+#screenshotLanguage { width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:9px; background:#fff; color:#111827; }
+.screenshot-note { font-size:12px; line-height:1.6; color:#64748b; }
+.screenshot-evidence-stage { position:relative; margin:18px 0; width:100%; }
+.screenshot-evidence-stage img { display:block; width:100%; height:auto; border-radius:10px; }
+.screenshot-evidence-stage svg { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+.screenshot-actions { display:flex; gap:8px; flex-wrap:wrap; margin:12px 0; }
+.screenshot-actions button { max-width:100%; white-space:normal; overflow-wrap:anywhere; }

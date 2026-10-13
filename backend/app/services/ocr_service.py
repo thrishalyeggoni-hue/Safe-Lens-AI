@@ -1,214 +1,132 @@
-import os
-import re
-from typing import Dict, Any, List
-from PIL import Image, ImageEnhance, ImageOps
-import pytesseract
-from .url_service import analyze_link
+"""Screenshot extraction and orchestration; real PaddleOCR + existing Message/Link."""
+import asyncio
+import io
+from pathlib import Path
+from ..config import settings
+from .dns_service import now
+from .screenshot_image import decode_image
+from .paddle_service import run_paddle
+from .screenshot_grounding import valid_regions, merge_reading_order, map_evidence, payment_observations, uncertain_urls
 from .message_service import analyze_message
-from ..schemas import FindingItem, CheckItem, EvidenceItem
 
-URL_REGEX = re.compile(r'(?:https?://|www\.)[^\s<>"\'{}|\\^`]+', re.IGNORECASE)
-UPI_REGEX = re.compile(r'[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z]{2,64}')
 
-def preprocess_image(image: Image.Image) -> Image.Image:
-    """Improve contrast and grayscale for OCR clarity."""
+async def decode_qr(image):
+    """Independent actual ZXing decoder. It does not generate OCR evidence."""
     try:
-        gray = ImageOps.grayscale(image)
-        enhancer = ImageEnhance.Contrast(gray)
-        enhanced = enhancer.enhance(1.8)
-        return enhanced
-    except Exception:
-        return image
+        import zxingcpp
+        result=zxingcpp.read_barcodes(image)
+        return {'status':'completed','source':'ZXing-C++ QR/barcode decoder','payloads':[{'text':r.text,'format':str(r.format),
+            'bounding_box':{'points':[[r.position.top_left.x,r.position.top_left.y],[r.position.top_right.x,r.position.top_right.y],
+                                     [r.position.bottom_right.x,r.position.bottom_right.y],[r.position.bottom_left.x,r.position.bottom_left.y]]}} for r in result],
+            'limitation':'QR payloads are separate from OCR text. No payment ownership verification; QR-only destination safety is not evaluated by this screenshot flow.'}
+    except ImportError:
+        return {'status':'unavailable','payloads':[],'error':'Local QR decoder is not installed'}
+    except Exception as exc:
+        return {'status':'unavailable','payloads':[],'error':type(exc).__name__}
 
-async def analyze_screenshot(image_path: str, original_filename: str) -> Dict[str, Any]:
-    evidence: List[EvidenceItem] = []
-    findings: List[FindingItem] = []
-    checks_performed: List[CheckItem] = []
-    unavailable_checks: List[CheckItem] = []
-    recommended_actions: List[str] = []
 
-    try:
-        with Image.open(image_path) as img:
-            width, height = img.size
-            format_name = img.format or "IMAGE"
-            processed_img = preprocess_image(img)
-            
-            # 1. OCR Extraction using Tesseract
-            try:
-                ocr_data = pytesseract.image_to_data(processed_img, output_type=pytesseract.Output.DICT)
-                extracted_words = []
-                confidences = []
-                
-                n_boxes = len(ocr_data['text'])
-                for i in range(n_boxes):
-                    word = ocr_data['text'][i].strip()
-                    conf = int(ocr_data['conf'][i])
-                    if word and conf > 0:
-                        extracted_words.append(word)
-                        confidences.append(conf)
-                        
-                extracted_text = " ".join(extracted_words)
-                avg_confidence = round(sum(confidences) / len(confidences), 1) if confidences else 0.0
-                
-            except Exception as ocr_err:
-                extracted_text = ""
-                avg_confidence = 0.0
-                checks_performed.append(CheckItem(
-                    name="Optical Character Recognition (OCR)",
-                    status="unavailable",
-                    detail=f"OCR engine failure: {str(ocr_err)}"
-                ))
-
-    except Exception as img_err:
-        return {
-            "module_type": "screenshot",
-            "input_summary": original_filename,
-            "risk_category": "Unable to Assess",
-            "explanation": f"Unable to decode image container: {str(img_err)}",
-            "findings": [],
-            "evidence": [],
-            "checks_performed": [CheckItem(name="Image Container Decoding", status="flagged", detail=str(img_err))],
-            "unavailable_checks": [],
-            "recommended_actions": ["Upload a standard PNG, JPG, or WebP screenshot."],
-            "score": 0,
-            "provider_info": {"engine": "SafeLens Screenshot Inspector"}
-        }
-
-    checks_performed.append(CheckItem(
-        name="Image Container Decoding",
-        status="passed",
-        detail=f"Decoded {format_name} image ({width}x{height}px)"
-    ))
-
-    if not extracted_text:
-        checks_performed.append(CheckItem(
-            name="Optical Character Recognition (OCR)",
-            status="inconclusive",
-            detail="No readable textual content or payment receipts identified in this screenshot"
-        ))
-        return {
-            "module_type": "screenshot",
-            "input_summary": f"{original_filename} ({width}x{height}px)",
-            "risk_category": "Unable to Assess",
-            "explanation": "No readable text or payment details could be extracted from this image. SafeLens does not infer low risk from OCR absence.",
-            "findings": [],
-            "evidence": [EvidenceItem(snippet="No text detected", source_type="ocr", detail=f"{width}x{height}px")],
-            "checks_performed": checks_performed,
-            "unavailable_checks": unavailable_checks,
-            "recommended_actions": ["Ensure the screenshot has clear, unblurred text and adequate contrast."],
-            "score": 20,
-            "provider_info": {
-                "engine": "SafeLens Tesseract OCR v5.5",
-                "ocr_confidence": 0.0
-            }
-        }
-
-    checks_performed.append(CheckItem(
-        name="Optical Character Recognition (OCR)",
-        status="passed",
-        detail=f"Extracted {len(extracted_words)} words with average confidence {avg_confidence}%"
-    ))
-
-    evidence.append(EvidenceItem(
-        snippet=extracted_text[:200] + ("..." if len(extracted_text) > 200 else ""),
-        source_type="ocr",
-        detail=f"OCR confidence: {avg_confidence}% across {len(extracted_words)} words"
-    ))
-
-    # 2. Check for extracted URLs
-    found_urls = URL_REGEX.findall(extracted_text)
-    if found_urls:
-        checks_performed.append(CheckItem(
-            name="Visual URL Extraction",
-            status="flagged",
-            detail=f"Detected {len(found_urls)} URL(s) rendered in image"
-        ))
-        for url in found_urls[:2]:
-            link_eval = await analyze_link(url)
-            for f in link_eval.get("findings", []):
-                findings.append(FindingItem(
-                    source=f"Visible URL ({url})",
-                    observation=f.get("observation", ""),
-                    interpretation=f.get("interpretation", ""),
-                    action=f.get("action", ""),
-                    risk_level=f.get("risk_level", "Caution")
-                ))
+async def analyze_screenshot_bytes(raw, filename, language='en', on_stage=None):
+    def stage(value):
+        if on_stage: on_stage(value)
+    stage('Validating actual uploaded image contents and dimensions')
+    image,metadata=await asyncio.to_thread(decode_image,raw,filename)
+    stage('Preparing image · EXIF orientation and RGB conversion')
+    ocr=await run_paddle(image,language,on_stage)
+    regions,rejected=valid_regions(ocr['regions'],image.width,image.height)
+    text,regions=merge_reading_order(regions)
+    url_candidates=uncertain_urls(text,regions)
+    ocr.pop('regions',None)
+    # Runs contain original actual output but no redundant per-run copies in the response.
+    ocr['runs']=[{k:v for k,v in run.items() if k!='regions'} for run in ocr.get('runs',[])]
+    ocr.update(region_count=len(regions),rejected_regions=rejected,
+               reading_order='Spatial rows ordered top-to-bottom, left-to-right. Adjacent same-line pieces joined with spaces; distant columns separated. Complex chat blocks/columns may be ambiguous.',
+               preprocessing_limitation='No blind thresholding or forced rescaling. Arbitrary rotation and layout authenticity are not inferred.')
+    if rejected: ocr['status']='partial'
+    stage('Extracting grounded text and links from actual OCR regions')
+    message=None; error=None; mapped=[]; payments=[]; rejected_findings=0
+    if text and len(text)<=settings.MESSAGE_MAX_CHARACTERS:
+        def confident_url(url):
+            if any(url in item['original_ocr_text'] for item in url_candidates): return False
+            starts=[]; pos=0
+            while (pos:=text.find(url,pos))>=0:
+                item=map_evidence({'text':url,'start':pos,'end':pos+len(url)},text,regions)
+                starts.append(bool(item and item['ocr_certainty']=='readable'))
+                pos+=len(url)
+            return bool(starts) and all(starts)
+        stage('Analysing OCR message · reusing real Message Check and Link Check')
+        try:
+            message=await analyze_message(text,on_stage=on_stage,url_filter=confident_url)
+            for item in message['deterministic_findings']+message['ai_interpretations']:
+                grounded=map_evidence(item,text,regions)
+                if grounded: mapped.append(grounded)
+                else: rejected_findings+=1
+            for link in message['url_assessments']:
+                if link['analysis']['risk_category'] in ('High Risk','Caution'):
+                    for occurrence in link['occurrences']:
+                        grounded=map_evidence({**occurrence,'source':'external_link_observation','context':'direct_or_uncertain',
+                                               'interpretation':link['analysis']['explanation'],'risk_level':link['analysis']['risk_category']},text,regions)
+                        if grounded: mapped.append(grounded)
+            payments=payment_observations(text,regions,message['extracted_entities'])
+        except Exception as exc:
+            error=str(exc) if isinstance(exc,ValueError) else type(exc).__name__
+    elif text:
+        error='OCR text exceeded the Message Check limit; no content was silently truncated'
     else:
-        checks_performed.append(CheckItem(
-            name="Visual URL Extraction",
-            status="passed",
-            detail="No web URLs detected in screenshot text"
-        ))
+        error='Insufficient readable text; OCR absence does not imply safety'
+    stage('Checking QR/barcode evidence separately from OCR')
+    qr=await decode_qr(image)
+    stage('Combining grounded OCR evidence and actual analysis coverage')
+    uncertain=[r for r in regions if r.get('confidence') is None or r['confidence']<settings.SCREENSHOT_MIN_CONFIDENCE]
+    risk='Unable to Assess'; explanation=error or 'OCR is unavailable or insufficient; screenshot content could not be reliably assessed.'
+    if message:
+        risk=message['risk_category']; explanation=message['explanation']
+        direct=[x for x in mapped if x.get('context')=='direct_or_uncertain']
+        authoritative=any(link['analysis'].get('reputation',{}).get('status')=='listed' for link in message['url_assessments'])
+        clear_otp=any(x['category']=='credential_request' and x['source']=='deterministic' and x['ocr_certainty']=='readable' for x in direct)
+        if risk=='High Risk' and not authoritative and not clear_otp and (not direct or any(x['ocr_certainty']!='readable' for x in direct)):
+            risk='Caution'; explanation='Potentially concerning wording was recognized with uncertain OCR; its exact wording needs a clearer screenshot.'
+        if risk=='Low Risk' and (ocr['status']!='completed' or uncertain or rejected_findings or qr.get('payloads') or language=='mixed' or url_candidates):
+            risk='Unable to Assess'; explanation='Incomplete OCR, mixed-language/layout uncertainty or unevaluated QR content prevents a reliable Low Risk assessment.'
+        explanation+=' Screenshot text cannot verify sender identity, payment authenticity or image manipulation.'
+    checks=[{'name':'Image content validation','status':'passed','detail':f"{metadata['validated_format']} · {image.width}×{image.height} pixels"},
+            {'name':'PaddleOCR','status':'passed' if ocr['status']=='completed' and regions else 'inconclusive','detail':f"{len(regions)} real regions; {len(uncertain)} uncertain regions"},
+            {'name':'OCR evidence grounding','status':'passed' if not rejected_findings else 'inconclusive','detail':f'{len(mapped)} mapped findings; {rejected_findings} rejected unsupported findings'},
+            {'name':'Independent QR decoding','status':'passed' if qr['status']=='completed' else 'inconclusive','detail':f"{len(qr['payloads'])} actual payload(s); separate evidence source"}]
+    unavailable=[]
+    if ocr['status']!='completed' or not regions:
+        unavailable.append({'name':'OCR coverage','status':'unavailable','detail':ocr.get('error') or 'No readable text regions were recognized'})
+    if uncertain: unavailable.append({'name':'OCR readability','status':'unavailable','detail':'Some recognized text is uncertain. Upload a clearer screenshot; confidence values are model output, not a safety percentage.'})
+    if url_candidates: unavailable.append({'name':'OCR URL reconstruction','status':'unavailable','detail':'URL-like text is damaged or split across regions. Inferred candidates were recorded but not contacted; verify the original URL manually.'})
+    if error: unavailable.append({'name':'Message Check','status':'unavailable','detail':error})
+    if message:
+        checks.extend(message['checks_performed']); unavailable.extend(message['unavailable_checks'])
+    if qr['status']!='completed' or qr['payloads']:
+        unavailable.append({'name':'QR destination/payment verification','status':'unavailable','detail':qr.get('error',qr.get('limitation'))})
+    findings=[{'source':f"{x['source']} · {x['category']}",'observation':x['text'],
+               'interpretation':x.get('interpretation','Observed OCR text')+f" OCR: {x['ocr_certainty']}; context: {x.get('context','unverified')}.",
+               'action':x.get('recommended_action','Verify independently; upload a clearer screenshot if uncertain.'),
+               'risk_level':x.get('risk_level') or ('Informational' if x.get('context')!='direct_or_uncertain' else 'High Risk' if x['category']=='credential_request' and x['ocr_certainty']=='readable' else 'Caution'),
+               'region_ids':x['region_ids'],'bounding_boxes':x['bounding_boxes']} for x in mapped]
+    evidence=[{'source_type':x['source'],'snippet':x['text'],'detail':f"{x['category']} · {x['ocr_certainty']}",'region_ids':x['region_ids'],
+               'bounding_boxes':x['bounding_boxes'],'ocr_confidences':x['ocr_confidences'],'text_offset':{'start':x['start'],'end':x['end']}} for x in mapped]
+    urls=[]
+    if message:
+        for link in message['url_assessments']:
+            occurrences=[map_evidence(item,text,regions) for item in link['occurrences']]
+            urls.append({**link,'occurrences':[x for x in occurrences if x]})
+    image.close()
+    return {'module_type':'screenshot','original_filename':metadata['original_filename'],'input_summary':'Screenshot content not retained',
+            'image':metadata,'ocr':ocr,'extracted_text':text,'ocr_regions':regions,'grounded_findings':mapped,
+            'url_assessments':urls,'uncertain_url_candidates':url_candidates,'payment_observations':payments,'qr':qr,'message_analysis':message,
+            'risk_category':risk,'explanation':explanation,'findings':findings,'evidence':evidence,
+            'checks_performed':checks,'unavailable_checks':unavailable,'score':None,'content_saved':False,'checked_at':now(),
+            'processing_coverage':{'ocr':ocr['status'],'readable_regions':len(regions)-len(uncertain),'uncertain_regions':len(uncertain),
+                                   'message':bool(message),'qr':qr['status'],'image_authenticity':'not verified','rejected_evidence':rejected_findings,
+                                   'url_repair':'No inferred domains. URLs split across regions are not silently joined; check them manually.'},
+            'recommended_actions':message['recommended_actions'] if message else ['Upload a clear screenshot in the correct language and orientation.','Verify requests independently before paying or sharing credentials.'],
+            'provider_info':{'engine':'SafeLens PaddleOCR screenshot orchestration','raw_image_retained':False,'ocr_version':ocr.get('package_version')}}
 
-    # 3. Check for Payment VPA / UPI / Transaction Lures
-    vpa_matches = UPI_REGEX.findall(extracted_text)
-    # filter out common email addresses if not typical UPI banks
-    upi_handles = [v for v in vpa_matches if any(bank in v.lower() for bank in ["@ok", "@paytm", "@ibl", "@ybl", "@axl", "@sbi", "@icici", "@hdfc"])]
-    if upi_handles:
-        findings.append(FindingItem(
-            source="Visual Payment Identifier",
-            observation=f"Payment VPA / UPI handle detected: {', '.join(upi_handles)}.",
-            interpretation="Receipts or requests displaying personal UPI handles should be verified against official merchant settlement channels.",
-            action="Do not approve reverse charge or collect requests sent to this UPI handle.",
-            risk_level="Caution"
-        ))
-        checks_performed.append(CheckItem(
-            name="Payment Identifier Check",
-            status="flagged",
-            detail=f"Found UPI identifier(s): {', '.join(upi_handles)}"
-        ))
-    else:
-        checks_performed.append(CheckItem(
-            name="Payment Identifier Check",
-            status="passed",
-            detail="No unstructured UPI handles or payment collect requests found"
-        ))
 
-    # 4. Contextual Analysis of Extracted Text
-    msg_analysis = await analyze_message(extracted_text)
-    for f in msg_analysis.get("findings", []):
-        findings.append(FindingItem(
-            source=f"Screenshot Context ({f.get('source', '')})",
-            observation=f.get("observation", ""),
-            interpretation=f.get("interpretation", ""),
-            action=f.get("action", ""),
-            risk_level=f.get("risk_level", "Caution")
-        ))
-    for act in msg_analysis.get("recommended_actions", []):
-        if act not in recommended_actions:
-            recommended_actions.append(act)
-
-    # Determine risk category
-    has_high = any(f.risk_level == "High Risk" for f in findings)
-    has_caution = any(f.risk_level == "Caution" for f in findings)
-
-    if has_high:
-        risk_category = "High Risk"
-        explanation = "The screenshot displays high-risk indicators such as known phishing URLs, credential requests, or fraudulent advance fee lures."
-        score = 85
-    elif has_caution:
-        risk_category = "Caution"
-        explanation = "The screenshot contains urgency cues, unverified payment handles, or suspicious wording that requires caution."
-        score = 55
-    else:
-        risk_category = "Low Risk"
-        explanation = "No overt fraudulent lures, suspicious URLs, or urgent payment coercion identified in the visible text."
-        score = 15
-
-    return {
-        "module_type": "screenshot",
-        "input_summary": f"{original_filename} ({width}x{height}px)",
-        "risk_category": risk_category,
-        "explanation": explanation,
-        "findings": [f.model_dump() for f in findings],
-        "evidence": [e.model_dump() for e in evidence],
-        "checks_performed": [c.model_dump() for c in checks_performed],
-        "unavailable_checks": [u.model_dump() for u in unavailable_checks],
-        "recommended_actions": recommended_actions or ["Review all transaction numbers directly on the official banking app."],
-        "score": score,
-        "provider_info": {
-            "engine": "SafeLens Tesseract OCR v5.5",
-            "ocr_confidence": avg_confidence,
-            "words_extracted": len(extracted_words)
-        }
-    }
+async def analyze_screenshot(image_path, original_filename, on_stage=None):
+    raw=await asyncio.to_thread(Path(image_path).read_bytes)
+    return await analyze_screenshot_bytes(raw,original_filename,on_stage=on_stage)

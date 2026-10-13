@@ -1,5 +1,5 @@
 import json
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Generator
 from sqlalchemy import create_engine, Column, String, DateTime, Integer, Text, Boolean
 from sqlalchemy.orm import declarative_base, sessionmaker, Session
@@ -33,7 +33,7 @@ class AssessmentModel(Base):
     retention_expiry = Column(DateTime, nullable=False)
 
     def to_dict(self):
-        return {
+        output = {
             "id": self.id,
             "created_at": self.created_at.strftime("%d %b, %H:%M") if self.created_at else "",
             "created_at_iso": self.created_at.isoformat() if self.created_at else "",
@@ -50,6 +50,18 @@ class AssessmentModel(Base):
             "score": self.score,
             "retention_expiry": self.retention_expiry.isoformat() if self.retention_expiry else ""
         }
+        if self.module_type == 'link':
+            output.update(output['provider_info'].get('link_analysis', {}))
+        if self.module_type in ('link', 'message', 'screenshot', 'qr', 'document', 'media', 'offer'):
+            output['created_at'] = self.created_at.replace(tzinfo=timezone.utc).isoformat()
+            output['created_at_iso'] = output['created_at']
+        if self.module_type == 'message':
+            output['content_saved'] = False
+            output['message_details_retained'] = False
+        if self.module_type in ('screenshot','qr','document','media','offer'):
+            output['content_saved'] = False
+            output[f'{self.module_type}_details_retained'] = False
+        return output
 
 class JobModel(Base):
     __tablename__ = "jobs"

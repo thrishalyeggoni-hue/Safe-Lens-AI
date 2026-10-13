@@ -1,0 +1,23 @@
+{
+  "queued": {
+    "job_id": "job_e3628a4e3bbe",
+    "status": "queued"
+  },
+  "foreign_session_status": 404,
+  "cancel": {
+    "job_id": "job_e3628a4e3bbe",
+    "status": "cancelled",
+    "current_stage": "Cancelled",
+    "stages": [],
+    "assessment_id": null,
+    "error": null
+  },
+  "final_status": {
+    "job_id": "job_e3628a4e3bbe",
+    "status": "cancelled",
+    "current_stage": "Cancelled",
+    "stages": [],
+    "assessment_id": null,
+    "error": null
+  }
+}

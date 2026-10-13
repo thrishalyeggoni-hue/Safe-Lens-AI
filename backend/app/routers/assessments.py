@@ -5,17 +5,19 @@ import shutil
 from datetime import datetime, timedelta, timezone
 from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, Request, Response
+from starlette.datastructures import UploadFile as StarletteUploadFile
 from sqlalchemy.orm import Session
 from ..database import get_db, AssessmentModel, JobModel
 from ..config import settings
 from ..schemas import AssessmentResponse, JobStatusResponse
 from ..services.url_service import analyze_link
 from ..services.message_service import analyze_message
-from ..services.ocr_service import analyze_screenshot
-from ..services.qr_service import analyze_qr_image
-from ..services.document_service import analyze_document
-from ..services.media_service import analyze_media
-from ..services.offer_service import analyze_offer
+from ..services.message_storage import persist_message_metadata
+from ..services.ocr_service import analyze_screenshot_bytes
+from ..services.qr_service import analyze_qr_bytes
+from ..services.document_service import analyze_document, analyze_document_bytes
+from ..services.media_service import analyze_media_bytes
+from ..services.offer_service import analyze_offer_input
 
 router = APIRouter(prefix="/api", tags=["Assessments"])
 
@@ -59,7 +61,7 @@ async def create_assessment(
         content_text = form.get("content_text")
         target_url = form.get("target_url")
         raw_file = form.get("file")
-        if isinstance(raw_file, UploadFile):
+        if isinstance(raw_file, StarletteUploadFile):
             file = raw_file
 
     if not module_type:
@@ -80,77 +82,61 @@ async def create_assessment(
         elif module_type == "screenshot":
             if not file:
                 raise HTTPException(status_code=400, detail="Image screenshot file is required")
-            temp_path = os.path.join(settings.STORAGE_DIR, f"{assessment_id}_{file.filename}")
-            with open(temp_path, "wb") as buffer:
-                shutil.copyfileobj(file.file, buffer)
             try:
-                result = await analyze_screenshot(temp_path, file.filename)
+                raw = await file.read(settings.SCREENSHOT_MAX_BYTES + 1)
+                result = await analyze_screenshot_bytes(raw, file.filename)
             finally:
-                if os.path.exists(temp_path):
-                    os.remove(temp_path)
+                await file.close()
 
         elif module_type == "qr":
             if not file:
                 raise HTTPException(status_code=400, detail="QR image file is required")
-            temp_path = os.path.join(settings.STORAGE_DIR, f"{assessment_id}_{file.filename}")
-            with open(temp_path, "wb") as buffer:
-                shutil.copyfileobj(file.file, buffer)
+            raw = await file.read(settings.SCREENSHOT_MAX_BYTES + 1)
             try:
-                result = await analyze_qr_image(temp_path, file.filename)
+                result = await analyze_qr_bytes(raw, file.filename)
+            except ValueError as exc:
+                raise HTTPException(422, detail=str(exc)) from None
             finally:
-                if os.path.exists(temp_path):
-                    os.remove(temp_path)
+                await file.close()
 
         elif module_type == "document":
             if not file:
                 raise HTTPException(status_code=400, detail="PDF document file is required")
-            temp_path = os.path.join(settings.STORAGE_DIR, f"{assessment_id}_{file.filename}")
-            with open(temp_path, "wb") as buffer:
-                shutil.copyfileobj(file.file, buffer)
+            raw = await file.read(20 * 1024 * 1024 + 1)
             try:
-                result = await analyze_document(temp_path, file.filename)
+                result = await analyze_document_bytes(raw, file.filename)
             finally:
-                if os.path.exists(temp_path):
-                    os.remove(temp_path)
+                await file.close()
 
         elif module_type == "media":
             if not file:
                 raise HTTPException(status_code=400, detail="Media file is required")
-            temp_path = os.path.join(settings.STORAGE_DIR, f"{assessment_id}_{file.filename}")
-            with open(temp_path, "wb") as buffer:
-                shutil.copyfileobj(file.file, buffer)
             try:
-                result = await analyze_media(temp_path, file.filename)
+                raw = await file.read(50 * 1024 * 1024 + 1)
+                result = await analyze_media_bytes(raw, file.filename)
             finally:
-                if os.path.exists(temp_path):
-                    os.remove(temp_path)
+                await file.close()
 
         elif module_type == "offer":
-            text = content_text or ""
-            # Support optional document in offer check
-            if file and not text:
-                temp_path = os.path.join(settings.STORAGE_DIR, f"{assessment_id}_{file.filename}")
-                with open(temp_path, "wb") as buffer:
-                    shutil.copyfileobj(file.file, buffer)
-                try:
-                    doc_res = await analyze_document(temp_path, file.filename)
-                    # Use extracted text
-                    evidence_texts = [e.get("snippet", "") for e in doc_res.get("evidence", [])]
-                    text = " ".join(evidence_texts)
-                finally:
-                    if os.path.exists(temp_path):
-                        os.remove(temp_path)
-            result = await analyze_offer(text)
+            raw = None
+            if file:
+                try: raw = await file.read(20 * 1024 * 1024 + 1)
+                finally: await file.close()
+            result = await analyze_offer_input(content_text or '', raw, file.filename if file else None)
 
         else:
             raise HTTPException(status_code=400, detail=f"Unsupported threat module type: {module_type}")
 
     except HTTPException:
         raise
+    except ValueError as e:
+        raise HTTPException(status_code=422, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Assessment processing failed: {str(e)}")
 
     # 2. Persist real assessment to database for this session
+    if module_type in ('message', 'screenshot', 'qr', 'document', 'media', 'offer'):
+        return persist_message_metadata(result, session_id, db)
     record = AssessmentModel(
         id=assessment_id,
         session_id=session_id,
