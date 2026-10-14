@@ -34,7 +34,7 @@ def test_assessment_flow_session_isolation():
     assert r1.status_code == 200
     data1 = r1.json()
     asmt_id = data1["id"]
-    assert data1["risk_category"] in ["Low Risk", "Caution", "High Risk"]
+    assert data1["risk_category"] in ["Low Risk", "Caution", "High Risk", "Unable to Assess"]
     
     # Session 1 can fetch it
     fetch_r1 = s1.get(f"/api/assessments/{asmt_id}")

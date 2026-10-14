@@ -1,3 +1,5 @@
+import { summarizeResult, plainSignal } from './result-summary.js';
+
 /* ==========================================================================
    SAFELENS AI — INTERACTIVE CANVAS & EXPERIENCE ENGINE
    ========================================================================== */
@@ -26,7 +28,7 @@ function initCustomCursor() {
   let isVisible = false;
 
   window.addEventListener('pointermove', (e) => {
-    if (e.pointerType === 'touch') return;
+    if (e.pointerType === 'touch') { hideCursor(); return; }
 
     // Both layers use the same coordinates in the same event, without easing.
     const position = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`;
@@ -37,6 +39,7 @@ function initCustomCursor() {
       isVisible = true;
       cursor.style.opacity = '1';
       follower.style.opacity = '1';
+      document.body.classList.add('custom-cursor-active');
     }
 
     // Detect if cursor is over a light / white container
@@ -58,6 +61,7 @@ function initCustomCursor() {
     cursor.style.opacity = '0';
     follower.style.opacity = '0';
     isVisible = false;
+    document.body.classList.remove('custom-cursor-active');
   }
   document.documentElement.addEventListener('pointerleave', hideCursor);
   window.addEventListener('blur', hideCursor);
@@ -1073,7 +1077,7 @@ function renderMessageOverview(data, overview) {
   const verdict = document.createElement('strong');
   verdict.textContent = data.risk_category;
   const label = document.createElement('span');
-  label.textContent = 'Message Check · No numeric score';
+  label.textContent = 'Message Check · Detailed check evidence';
   heading.append(verdict, label);
   const explanation = document.createElement('p');
   explanation.textContent = data.explanation;
@@ -1151,7 +1155,7 @@ function renderQrOverview(data, overview) {
   overview.replaceChildren();
   const heading = document.createElement('div'); heading.className = 'module-risk-heading';
   const title = document.createElement('strong'); title.textContent = data.risk_category;
-  const sub = document.createElement('span'); sub.textContent = `QR Check · ${data.qr_count ?? 0} decoded code(s) · No numeric score`;
+  const sub = document.createElement('span'); sub.textContent = `QR Check · ${data.qr_count ?? 0} decoded code(s) · Detailed check evidence`;
   heading.append(title, sub); overview.append(heading);
   const explanation = document.createElement('p'); explanation.textContent = data.explanation; overview.append(explanation);
   const actions = document.createElement('div'); actions.className = 'screenshot-actions';
@@ -1219,7 +1223,7 @@ function renderDocumentOverview(data, overview) {
   overview.replaceChildren();
   const heading=document.createElement('div'); heading.className='module-risk-heading';
   const title=document.createElement('strong'); title.textContent=data.risk_category;
-  const sub=document.createElement('span'); sub.textContent=`Document Check · ${data.document?.parse_status || 'details not retained'} · No numeric score`; heading.append(title,sub); overview.append(heading);
+  const sub=document.createElement('span'); sub.textContent=`Document Check · ${data.document?.parse_status || 'details not retained'} · Detailed check evidence`; heading.append(title,sub); overview.append(heading);
   const explanation=document.createElement('p'); explanation.textContent=data.explanation; overview.append(explanation);
   const actions=document.createElement('div'); actions.className='screenshot-actions';
   const reopen=() => { setModalModule('document'); clearScreenshotInput(); if(documentFile && documentResultId===data.id) { activeSelectedFile=documentFile; document.getElementById('selectedFileName').textContent=documentFile.name; document.getElementById('fileSelectedInfo').style.display='flex'; document.getElementById('dropzonePrompt').style.display='none'; document.getElementById('screenshotLanguage').value=data.pages?.find(p=>p.ocr)?.ocr?.selected_language || documentLanguage; } document.getElementById('contactModal').classList.add('open'); };
@@ -1242,10 +1246,62 @@ function renderDocumentOverview(data, overview) {
   details('Backend result · Preview bytes omitted',data,'documentResultJson');
 }
 
+function renderPlainResult(data, overview) {
+  const result = summarizeResult(data);
+  const technical = document.createElement('details');
+  technical.className = 'result-technical';
+  const technicalTitle = document.createElement('summary');
+  technicalTitle.textContent = 'See full evidence and technical details';
+  const body = document.createElement('div');
+  body.className = 'result-technical-body';
+  const visible = [];
+  for (const child of [...overview.children]) {
+    // Retain original input/retry controls and actual visual previews beside the simple result.
+    if (child.matches('.screenshot-actions, .screenshot-evidence-stage, .screenshot-input-preview, video, audio') || child.tagName === 'BUTTON' && child.textContent === 'Back to input') visible.push(child);
+    else body.append(child);
+  }
+  body.querySelectorAll('details').forEach(d => d.open = false);
+  technical.append(technicalTitle, body);
+  overview.replaceChildren();
+  const icon = name => {
+    const paths = {shield:'<path d="M12 3 4 6v6c0 5 8 9 8 9s8-4 8-9V6z"/><path d="m8 12 3 3 5-6"/>',lock:'<rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',money:'<rect x="3" y="5" width="18" height="14" rx="3"/><circle cx="12" cy="12" r="3"/><path d="M6 12h1m10 0h1"/>'};
+    return `<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name] || paths.shield}</svg>`;
+  };
+  const hero = document.createElement('section');
+  hero.className = `simple-result simple-result--${result.tone}`;
+  hero.setAttribute('aria-label', 'Your result in simple terms');
+  const percent = result.score ?? 0;
+  hero.innerHTML = `<div class="simple-result-top"><div class="result-ring ${result.score===null?'result-ring--empty':''}" style="--points:${percent}" role="img" aria-label="${result.score===null?'Score unavailable':percent+' out of 100 warning points'}"><div><strong>${result.score ?? '—'}</strong><span>/ 100</span></div></div><div class="simple-result-copy"><span class="result-eyebrow">${data.demo?'Illustrative example':'YOUR RESULT'} · WARNING SCORE</span><h3>${escapeHtml(result.title)}</h3><p>${escapeHtml(result.description)}</p><span class="result-completeness">${result.incomplete?'◐ Some checks are missing':'✓ Available checks completed'}</span></div></div><div class="result-meter" aria-hidden="true"><span></span><span></span><span></span><i style="left:${percent}%"></i></div><div class="result-meter-labels"><span>Fewer warning signs</span><span>More warning signs</span></div><p class="result-score-note">${result.score===null?'Submit the original content again for a live score.':'Higher points mean stronger observed warnings. This is not a percentage chance of fraud.'} ${result.incomplete?'Missing checks are unknown; a low score does not mean safe.':''}</p>`;
+  overview.append(hero);
+  const stats = document.createElement('div'); stats.className='result-stats';
+  for (const [value,label,tone] of [[result.score===null?'—':result.findings.length,'Warning signs','warning'],[result.score===null?'—':result.completed,'Checks completed','done'],[result.score===null?'—':result.missing,'Checks need attention','missing']]) {
+    const item=document.createElement('div');item.className=`result-stat result-stat--${tone}`;
+    item.innerHTML=`${icon(tone==='warning'?'shield':tone==='missing'?'clock':'shield')}<strong>${value}</strong><span>${label}</span>`;stats.append(item);
+  }
+  overview.append(stats);
+  const signals=document.createElement('div');signals.className='result-signals';
+  const seen=new Set();
+  for (const finding of result.findings) {
+    const signal=plainSignal(finding);if(seen.has(signal.title))continue;seen.add(signal.title);
+    const card=document.createElement('div');card.className='result-signal';
+    card.innerHTML=`<div class="result-signal-icon">${icon(signal.icon)}</div><div><h4>${escapeHtml(signal.title)}</h4><p>${escapeHtml(signal.detail)}</p><blockquote>${escapeHtml(String(finding.observation || '').slice(0,240))}</blockquote></div>`;
+    signals.append(card);if(seen.size===3)break;
+  }
+  if(!signals.children.length){const p=document.createElement('p');p.className='result-no-signals';p.textContent=result.score===null?'Detailed evidence is not available in this saved view.':'No warning signs found by the checks that ran. This does not confirm the content is genuine.';signals.append(p);}
+  overview.append(signals);
+  const next=document.createElement('div');next.className='result-next-step';
+  next.innerHTML=`${icon('shield')}<div><span>YOUR NEXT STEP</span><strong>${escapeHtml(result.nextStep)}</strong></div>`;overview.append(next);
+  if(data.module_type==='media'){const p=document.createElement('p');p.className='result-score-note';p.textContent='This score reviews suspicious content. Deepfake and voice-clone detection are unavailable; it does not measure whether media is real.';overview.append(p);}
+  if(result.missing){const limits=document.createElement('details');limits.className='result-missing-details';const title=document.createElement('summary');title.textContent='What could we not check?';limits.append(title);const ul=document.createElement('ul');
+    const names=new Set();for(const c of [...(data.unavailable_checks || []),...(data.checks_performed || []).filter(c=>!['passed','flagged','completed'].includes(c.status))]){if(names.has(c.name))continue;names.add(c.name);const li=document.createElement('li');const n=String(c.name||'');li.textContent=/reputation|web risk/i.test(n)?'Known dangerous-link lists could not be checked.':/AI|Qwen|contextual/i.test(n)?'The AI review could not complete.':/RDAP|registration/i.test(n)?'We could not confirm the website registration details.':/HEAD|redirect/i.test(n)?'We could not fully follow the link destination.':/authentic|identity|organisation|regulat/i.test(n)?'The sender, organisation or authenticity has not been independently verified.':/coverage|page/i.test(n)?'Some content could not be fully read or checked.':n;ul.append(li);}limits.append(ul);overview.append(limits);}
+  overview.append(...visible,technical);
+  const method=document.createElement('details');method.className='result-missing-details';method.innerHTML='<summary>How is the score calculated?</summary><p>A unique strong warning adds 85 points; a caution adds 30. Further distinct warnings add 15% of their points, capped at 99. A known dangerous-link match sets at least 95; a malware signature match sets 100. Repeated copies of the same evidence count once. Missing tools add no points and are shown separately. This is a display guide, not a validated fraud probability.</p>';overview.append(method);
+}
+
 function renderAssessment(data) {
   currentAssessment = data;
   const evidenceTab = document.querySelector('[data-tab="tab-findings"]');
-  if (evidenceTab?.firstChild) evidenceTab.firstChild.textContent = data.module_type === 'screenshot' ? 'Evidence & Findings (' : 'Findings & Anomalies (';
+  if (evidenceTab?.firstChild) evidenceTab.firstChild.textContent = data.module_type === 'screenshot' ? 'Evidence & Findings (' : 'Warning signs (';
   const emptyState = document.getElementById('evidenceEmptyState');
   const activeState = document.getElementById('evidenceActiveState');
   if (!emptyState || !activeState) return;
@@ -1261,7 +1317,7 @@ function renderAssessment(data) {
   const inputSummary = document.getElementById('evidenceInputSummary');
 
   if (badgeModule) badgeModule.textContent = (data.module_type || 'CHECK').toUpperCase();
-  if (title) title.textContent = `${(data.module_type || 'Threat').toUpperCase()} Assessment`;
+  if (title) title.textContent = `${(data.module_type || 'Threat')[0].toUpperCase()}${(data.module_type || 'Threat').slice(1)} check result`;
   if (inputSummary) inputSummary.textContent = data.input_summary || 'Submitted content';
   activeState.querySelector('.url-excerpt-box > span').textContent = data.demo ? 'Illustrative sample content' : 'Analyzed submission';
   let overview = document.getElementById('assessmentOverview');
@@ -1279,7 +1335,7 @@ function renderAssessment(data) {
       <details class="module-protect"><summary>Protect yourself · View details</summary><ul>${data.recommended_actions.map(action => `<li>${escapeHtml(action)}</li>`).join('')}</ul></details>`;
   }
   if (data.module_type === 'link' && !data.demo) {
-    overview.innerHTML = `<div class="module-risk-heading"><strong>${escapeHtml(data.risk_category)}</strong><span>Live Link Check · No numeric score</span></div><p>${escapeHtml(data.explanation)}</p>`;
+    overview.innerHTML = `<div class="module-risk-heading"><strong>${escapeHtml(data.risk_category)}</strong><span>Live Link Check · Detailed check evidence</span></div><p>${escapeHtml(data.explanation)}</p>`;
     const observations = data.provider_info?.link_analysis || data;
     for (const [name, label] of [['dns', 'DNS observations'], ['rdap', 'Domain registration · RDAP'], ['reputation', 'Reputation provider result'], ['redirects', 'Redirect chain · HEAD inspection']]) {
       const detail = document.createElement('details');
@@ -1307,6 +1363,7 @@ function renderAssessment(data) {
   if (data.module_type === 'qr' && !data.demo) renderQrOverview(data, overview);
   if (data.module_type === 'document' && !data.demo) renderDocumentOverview(data, overview);
   if (['media','offer'].includes(data.module_type) && !data.demo) renderMediaOfferOverview(data,overview);
+  renderPlainResult(data, overview);
   document.getElementById('evidencePolicyDisclaimer').textContent = data.demo ? 'Illustrative sample only. No uploaded content was analyzed and no live reputation, OCR, or authenticity check was performed.' : 'SafeLens combines heuristic rules, DNS verification, and local machine learning to identify risks. Missing or inconclusive checks are explicitly reported.';
 
   if (timestamp) {
@@ -1322,7 +1379,7 @@ function renderAssessment(data) {
   if (riskBadge) {
     riskBadge.className = 'item-status-badge';
     const risk = data.risk_category || 'Unable to Assess';
-    riskBadge.textContent = risk;
+    riskBadge.textContent = {'High Risk':'High risk','Caution':'Be careful','Low Risk':'Few warning signs','Unable to Assess':'Incomplete check'}[risk] || risk;
 
     if (risk === 'High Risk') {
       riskBadge.classList.add('badge-high-risk');

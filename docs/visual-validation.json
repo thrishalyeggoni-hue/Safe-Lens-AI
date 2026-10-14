@@ -1,0 +1,248 @@
+{
+  "scope": "Display consistency with the previous real API responses. This is not a detector-accuracy benchmark. Scoring was newly introduced by the frontend; previous backend numeric scores were null.",
+  "comparison": [
+    {
+      "module": "link",
+      "case": "normal",
+      "previousVerdict": "Unable to Assess",
+      "visualTakeaway": "We could not finish every check",
+      "warningPoints": 0,
+      "originalWarningObservations": 0,
+      "uniqueWarningObservations": 0,
+      "completedChecks": 5,
+      "missingChecks": 1,
+      "incompleteDisclosed": true,
+      "originalResultUnchanged": true
+    },
+    {
+      "module": "link",
+      "case": "provider_test",
+      "previousVerdict": "Caution",
+      "visualTakeaway": "Be careful. Check the source first.",
+      "warningPoints": 30,
+      "originalWarningObservations": 1,
+      "uniqueWarningObservations": 1,
+      "completedChecks": 4,
+      "missingChecks": 2,
+      "incompleteDisclosed": true,
+      "originalResultUnchanged": true
+    },
+    {
+      "module": "message",
+      "case": "otp_request",
+      "previousVerdict": "High Risk",
+      "visualTakeaway": "Stop and verify before you act",
+      "warningPoints": 94,
+      "originalWarningObservations": 3,
+      "uniqueWarningObservations": 3,
+      "completedChecks": 4,
+      "missingChecks": 1,
+      "incompleteDisclosed": true,
+      "originalResultUnchanged": true
+    },
+    {
+      "module": "message",
+      "case": "ordinary",
+      "previousVerdict": "Unable to Assess",
+      "visualTakeaway": "We could not finish every check",
+      "warningPoints": 0,
+      "originalWarningObservations": 0,
+      "uniqueWarningObservations": 0,
+      "completedChecks": 4,
+      "missingChecks": 1,
+      "incompleteDisclosed": true,
+      "originalResultUnchanged": true
+    },
+    {
+      "module": "screenshot",
+      "case": "otp",
+      "previousVerdict": "High Risk",
+      "visualTakeaway": "Stop and verify before you act",
+      "warningPoints": 99,
+      "originalWarningObservations": 4,
+      "uniqueWarningObservations": 4,
+      "completedChecks": 8,
+      "missingChecks": 3,
+      "incompleteDisclosed": true,
+      "originalResultUnchanged": true
+    },
+    {
+      "module": "screenshot",
+      "case": "ordinary",
+      "previousVerdict": "Unable to Assess",
+      "visualTakeaway": "We could not finish every check",
+      "warningPoints": 0,
+      "originalWarningObservations": 0,
+      "uniqueWarningObservations": 0,
+      "completedChecks": 8,
+      "missingChecks": 1,
+      "incompleteDisclosed": true,
+      "originalResultUnchanged": true
+    },
+    {
+      "module": "qr",
+      "case": "normal_url",
+      "previousVerdict": "Unable to Assess",
+      "visualTakeaway": "We could not finish every check",
+      "warningPoints": 0,
+      "originalWarningObservations": 0,
+      "uniqueWarningObservations": 0,
+      "completedChecks": 5,
+      "missingChecks": 4,
+      "incompleteDisclosed": true,
+      "originalResultUnchanged": true
+    },
+    {
+      "module": "qr",
+      "case": "provider_test",
+      "previousVerdict": "Caution",
+      "visualTakeaway": "Be careful. Check the source first.",
+      "warningPoints": 30,
+      "originalWarningObservations": 1,
+      "uniqueWarningObservations": 1,
+      "completedChecks": 7,
+      "missingChecks": 2,
+      "incompleteDisclosed": true,
+      "originalResultUnchanged": true
+    },
+    {
+      "module": "document",
+      "case": "job_offer",
+      "previousVerdict": "High Risk",
+      "visualTakeaway": "Stop and verify before you act",
+      "warningPoints": 99,
+      "originalWarningObservations": 4,
+      "uniqueWarningObservations": 4,
+      "completedChecks": 13,
+      "missingChecks": 4,
+      "incompleteDisclosed": true,
+      "originalResultUnchanged": true
+    },
+    {
+      "module": "document",
+      "case": "ordinary",
+      "previousVerdict": "Unable to Assess",
+      "visualTakeaway": "We could not finish every check",
+      "warningPoints": 0,
+      "originalWarningObservations": 0,
+      "uniqueWarningObservations": 0,
+      "completedChecks": 8,
+      "missingChecks": 1,
+      "incompleteDisclosed": true,
+      "originalResultUnchanged": true
+    },
+    {
+      "module": "media",
+      "case": "otp_video",
+      "previousVerdict": "High Risk",
+      "visualTakeaway": "Stop and verify before you act",
+      "warningPoints": 99,
+      "originalWarningObservations": 15,
+      "uniqueWarningObservations": 6,
+      "completedChecks": 34,
+      "missingChecks": 11,
+      "incompleteDisclosed": true,
+      "originalResultUnchanged": true
+    },
+    {
+      "module": "media",
+      "case": "ordinary_image",
+      "previousVerdict": "Unable to Assess",
+      "visualTakeaway": "We could not finish every check",
+      "warningPoints": 0,
+      "originalWarningObservations": 0,
+      "uniqueWarningObservations": 0,
+      "completedChecks": 5,
+      "missingChecks": 4,
+      "incompleteDisclosed": true,
+      "originalResultUnchanged": true
+    },
+    {
+      "module": "offer",
+      "case": "otp_offer",
+      "previousVerdict": "High Risk",
+      "visualTakeaway": "Stop and verify before you act",
+      "warningPoints": 85,
+      "originalWarningObservations": 1,
+      "uniqueWarningObservations": 1,
+      "completedChecks": 5,
+      "missingChecks": 2,
+      "incompleteDisclosed": true,
+      "originalResultUnchanged": true
+    },
+    {
+      "module": "offer",
+      "case": "ordinary",
+      "previousVerdict": "Unable to Assess",
+      "visualTakeaway": "We could not finish every check",
+      "warningPoints": 0,
+      "originalWarningObservations": 0,
+      "uniqueWarningObservations": 0,
+      "completedChecks": 5,
+      "missingChecks": 2,
+      "incompleteDisclosed": true,
+      "originalResultUnchanged": true
+    },
+    {
+      "module": "message",
+      "case": "qwen_live",
+      "previousVerdict": "High Risk",
+      "visualTakeaway": "Stop and verify before you act",
+      "warningPoints": 85,
+      "originalWarningObservations": 2,
+      "uniqueWarningObservations": 1,
+      "completedChecks": 5,
+      "missingChecks": 0,
+      "incompleteDisclosed": false,
+      "originalResultUnchanged": true
+    },
+    {
+      "module": "offer",
+      "case": "qwen_live",
+      "previousVerdict": "High Risk",
+      "visualTakeaway": "Stop and verify before you act",
+      "warningPoints": 85,
+      "originalWarningObservations": 3,
+      "uniqueWarningObservations": 1,
+      "completedChecks": 6,
+      "missingChecks": 1,
+      "incompleteDisclosed": true,
+      "originalResultUnchanged": true
+    }
+  ],
+  "currentBrowser": {
+    "assessmentId": "asmt_be7ad3a1bf0f",
+    "module": "link",
+    "backendVerdict": "Unable to Assess",
+    "visualScore": 0,
+    "completedChecks": 5,
+    "missingChecks": 1,
+    "warningSigns": 0,
+    "countsMatch": true
+  },
+  "cursor": {
+    "reductionPercent": 20,
+    "previousDiameters": {
+      "dot": 8,
+      "ring": 40,
+      "hoverRing": 58
+    },
+    "newDiameters": {
+      "dot": 6.4,
+      "ring": 32,
+      "hoverRing": 46.4
+    },
+    "browserMeasuredCenters": {
+      "dot": [
+        410,
+        366
+      ],
+      "ring": [
+        410,
+        366
+      ]
+    },
+    "sameTransform": true
+  },
+  "validation": "10 Node tests passed; Vite production build passed; git diff --check passed"
+}

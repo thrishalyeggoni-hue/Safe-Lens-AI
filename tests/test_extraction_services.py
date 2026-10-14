@@ -6,6 +6,7 @@ from pypdf import PdfWriter
 from backend.app.services.ocr_service import analyze_screenshot
 from backend.app.services.qr_service import analyze_qr_image
 from backend.app.services.document_service import analyze_document
+from backend.app.services.document_scan import stop_scanner
 
 @pytest.mark.asyncio
 async def test_ocr_extraction_on_image():
@@ -43,9 +44,11 @@ async def test_pdf_document_extraction():
 
         res = await analyze_document(temp_pdf_path, "test_document.pdf")
         assert res["module_type"] == "document"
-        pdf_check = next((c for c in res["checks_performed"] if "Structure" in c["name"]), None)
+        pdf_check = next((c for c in res["checks_performed"] if c["name"] == "Isolated document parser"), None)
         assert pdf_check is not None
         assert pdf_check["status"] == "passed"
     finally:
+        # Direct service tests own the scanner lifecycle; retire it on this event loop.
+        await stop_scanner()
         if os.path.exists(temp_pdf_path):
             os.remove(temp_pdf_path)
